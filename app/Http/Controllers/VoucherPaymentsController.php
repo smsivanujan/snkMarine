@@ -11,7 +11,7 @@ class VoucherPaymentsController extends Controller
 {
     public function index()
     {
-        $voucherpayments = DB::table('voucherpayments')
+        $voucherpayments = DB::table('voucher_payments')
             ->select(
                 'voucher_payments.id',
                 'voucher_payments.voucher_id',
@@ -23,7 +23,7 @@ class VoucherPaymentsController extends Controller
                 'voucher_payments.paying_local',
                 'vouchers.voucher_no'
             )
-            ->join('vouchers', 'voucherpayments.voucher_id', '=', 'vouchers.id')
+            ->join('vouchers', 'voucher_payments.voucher_id', '=', 'vouchers.id')
             ->get();
 
         return $voucherpayments;
@@ -32,7 +32,7 @@ class VoucherPaymentsController extends Controller
     public function showById(Request $request)
     {
         $id = $request->id;
-        $voucherpayments = DB::table('voucherpayments')
+        $voucherpayments = DB::table('voucher_payments')
             ->select(
                 'voucher_payments.id',
                 'voucher_payments.voucher_id',
@@ -44,7 +44,7 @@ class VoucherPaymentsController extends Controller
                 'voucher_payments.paying_local',
                 'vouchers.voucher_no'
             )
-            ->join('vouchers', 'voucherpayments.voucher_id', '=', 'vouchers.id')
+            ->join('vouchers', 'voucher_payments.voucher_id', '=', 'vouchers.id')
             ->where('vouchers.id', '=', $id)
             ->get();
 

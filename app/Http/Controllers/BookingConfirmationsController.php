@@ -52,24 +52,18 @@ class BookingConfirmationsController extends Controller
                 'portloading.port_name',
                 'portloading.sub_code',
                 'portloading.country_id',
-                'ports.port_code',
-                'ports.port_name',
-                'ports.sub_code',
-                'ports.country_id',
                 'portdischarge.port_code',
                 'portdischarge.port_name',
                 'portdischarge.sub_code',
                 'portdischarge.country_id',
-                'currencies.currency_code',
-                'currencies.currency_name',
-                'countries.country_name',
-                'countries.capital_city_name',
-                'igmindiavoyages.voyage',
+                'Cload.country_name',
+                'Cload.capital_city_name',
+                'Cdischarge.country_name',
+                'Cdischarge.capital_city_name',
+                'igm_india_voyages.voyage',
                 'type_of_units.type_of_unit',
                 'yard.vendor_code',
-                'yard.vendor_name',
-                'Cload.country_name',
-                'Cdischarge.country_name'
+                'yard.vendor_name'
             )
             ->join('clients as shipper', 'booking_confirmations.client_id_shipper', '=', 'shipper.id')
             ->join('clients', 'booking_confirmations.client_id', '=', 'clients.id')
@@ -78,7 +72,7 @@ class BookingConfirmationsController extends Controller
             ->join('ports as portdischarge', 'booking_confirmations.port_id_discharge', '=', 'portdischarge.id')
             ->join('countries as Cload', 'portloading.country_id', '=', 'Cload.id')
             ->join('countries as Cdischarge', 'portdischarge.country_id', '=', 'Cdischarge.id')
-            ->join('igmindiavoyages', 'booking_confirmations.igm_india_voyage_id', '=', 'igmindiavoyages.id')
+            ->join('igm_india_voyages', 'booking_confirmations.igm_india_voyage_id', '=', 'igm_india_voyages.id')
             ->join('type_of_units', 'booking_confirmations.type_of_unit_id', '=', 'type_of_units.id')
             ->join('vendors as yard', 'booking_confirmations.vendor_id_yard', '=', 'yard.id')
             ->get();
@@ -130,24 +124,18 @@ class BookingConfirmationsController extends Controller
                 'portloading.port_name',
                 'portloading.sub_code',
                 'portloading.country_id',
-                'ports.port_code',
-                'ports.port_name',
-                'ports.sub_code',
-                'ports.country_id',
                 'portdischarge.port_code',
                 'portdischarge.port_name',
                 'portdischarge.sub_code',
                 'portdischarge.country_id',
-                'currencies.currency_code',
-                'currencies.currency_name',
-                'countries.country_name',
-                'countries.capital_city_name',
-                'igmindiavoyages.voyage',
+                'Cload.country_name',
+                'Cload.capital_city_name',
+                'Cdischarge.country_name',
+                'Cdischarge.capital_city_name',
+                'igm_india_voyages.voyage',
                 'type_of_units.type_of_unit',
                 'yard.vendor_code',
-                'yard.vendor_name',
-                'Cload.country_name',
-                'Cdischarge.country_name'
+                'yard.vendor_name'
             )
             ->join('clients as shipper', 'booking_confirmations.client_id_shipper', '=', 'shipper.id')
             ->join('clients', 'booking_confirmations.client_id', '=', 'clients.id')
@@ -156,10 +144,10 @@ class BookingConfirmationsController extends Controller
             ->join('ports as portdischarge', 'booking_confirmations.port_id_discharge', '=', 'portdischarge.id')
             ->join('countries as Cload', 'portloading.country_id', '=', 'Cload.id')
             ->join('countries as Cdischarge', 'portdischarge.country_id', '=', 'Cdischarge.id')
-            ->join('igmindiavoyages', 'booking_confirmations.igm_india_voyage_id', '=', 'igmindiavoyages.id')
+            ->join('igm_india_voyages', 'booking_confirmations.igm_india_voyage_id', '=', 'igm_india_voyages.id')
             ->join('type_of_units', 'booking_confirmations.type_of_unit_id', '=', 'type_of_units.id')
             ->join('vendors as yard', 'booking_confirmations.vendor_id_yard', '=', 'yard.id')
-            ->where('bookingconfirmations.id', '=', $id)
+            ->where('booking_confirmations.id', '=', $id)
             ->get();
 
         return $bookingconfirmations;
@@ -183,6 +171,7 @@ class BookingConfirmationsController extends Controller
             $bookingconfirmation->client_id_shipper = $request->client_id_shipper;
             $bookingconfirmation->client_id = $request->client_id;
             $bookingconfirmation->port_net_ref = $request->port_net_ref;
+            $bookingconfirmation->vendor_id = $request->vendor_id;
             $bookingconfirmation->port_id_loading = $request->port_id_loading;
             $bookingconfirmation->port_id_discharge = $request->port_id_discharge;
             $bookingconfirmation->place_of_delivery = $request->place_of_delivery;
@@ -193,6 +182,7 @@ class BookingConfirmationsController extends Controller
             $bookingconfirmation->etd = $request->etd;
             $bookingconfirmation->eta_pod = $request->eta_pod;
             $bookingconfirmation->igm_india_voyage_id = $request->igm_india_voyage_id;
+            $bookingconfirmation->voyage_number = $request->voyage_number;
             $bookingconfirmation->measurement = $request->measurement;
             $bookingconfirmation->type_of_shipment = $request->type_of_shipment;
             $bookingconfirmation->release_reference = $request->release_reference;

@@ -13,6 +13,7 @@ class DetentionInvoicesController extends Controller
     {
         $detentioninvoices = DB::table('detention_invoices')
             ->select(
+                'detention_invoices.id',
                 'detention_invoices.date',
                 'detention_invoices.detention_no',
                 'detention_invoices.bill_of_landing_id',
@@ -49,7 +50,6 @@ class DetentionInvoicesController extends Controller
                 'detention_invoices.status',
                 'detention_invoices.status2',
                 'detention_invoices.deleted',
-                'bill_of_landings.owner_code',
                 'shipper.client_code',
                 'shipper.client_name',
                 'consignee.client_code',
@@ -60,11 +60,11 @@ class DetentionInvoicesController extends Controller
                 'portloading.port_name',
                 'discharge.port_code',
                 'discharge.port_name',
-                'igmindiavoyages.voyage',
+                'igm_india_voyages.voyage',
                 'forign.currency_code',
-                'forign.currency_name',
-                'local.currency_code',
-                'local.currency_name'
+                'forign.currency_name'
+                // 'local.currency_code',
+                // 'local.currency_name'
                 
             )
             ->join('bill_of_landings', 'detention_invoices.bill_of_landing_id', '=', 'bill_of_landings.id')
@@ -74,9 +74,9 @@ class DetentionInvoicesController extends Controller
             ->join('ports as portloading', 'detention_invoices.port_id_loading', '=', 'portloading.id')
             ->join('ports as discharge', 'detention_invoices.port_id_discharge', '=', 'discharge.id')
             ->join('igm_india_voyages', 'detention_invoices.igm_india_voyage_id', '=', 'igm_india_voyages.id')
+            ->join('detention_traffies', 'detention_invoices.tariff_id', '=', 'detention_traffies.id')
             ->join('currencies as forign', 'detention_invoices.forign_currency_id', '=', 'forign.id')
-            ->join('tariffies', 'detention_invoices.tariff_id', '=', 'tariffies.id')
-            ->join('currencies as local ', 'detention_invoices.local_currency_id', '=', 'local.id')
+            // ->join('currencies as local ', 'detention_invoices.local_currency_id', '=', 'local.id')
             ->get();
 
             return $detentioninvoices;
@@ -87,6 +87,7 @@ class DetentionInvoicesController extends Controller
         $id = $request->id;
         $detentioninvoices = DB::table('detention_invoices')
             ->select(
+                'detention_invoices.id',
                 'detention_invoices.date',
                 'detention_invoices.detention_no',
                 'detention_invoices.bill_of_landing_id',
@@ -123,7 +124,6 @@ class DetentionInvoicesController extends Controller
                 'detention_invoices.status',
                 'detention_invoices.status2',
                 'detention_invoices.deleted',
-                'bill_of_landings.bill_of_landing_number',
                 'shipper.client_code',
                 'shipper.client_name',
                 'consignee.client_code',
@@ -134,11 +134,12 @@ class DetentionInvoicesController extends Controller
                 'portloading.port_name',
                 'discharge.port_code',
                 'discharge.port_name',
-                'igmindiavoyages.voyage',
+                'igm_india_voyages.voyage',
                 'forign.currency_code',
-                'forign.currency_name',
-                'local.currency_code',
-                'local.currency_name'
+                'forign.currency_name'
+                // 'local.currency_code',
+                // 'local.currency_name'
+                
             )
             ->join('bill_of_landings', 'detention_invoices.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('clients as shipper', 'detention_invoices.client_id_shipper', '=', 'shipper.id')
@@ -147,9 +148,9 @@ class DetentionInvoicesController extends Controller
             ->join('ports as portloading', 'detention_invoices.port_id_loading', '=', 'portloading.id')
             ->join('ports as discharge', 'detention_invoices.port_id_discharge', '=', 'discharge.id')
             ->join('igm_india_voyages', 'detention_invoices.igm_india_voyage_id', '=', 'igm_india_voyages.id')
+            ->join('detention_traffies', 'detention_invoices.tariff_id', '=', 'detention_traffies.id')
             ->join('currencies as forign', 'detention_invoices.forign_currency_id', '=', 'forign.id')
-            ->join('tariffies', 'detention_invoices.tariff_id', '=', 'tariffies.id')
-            ->join('currencies as local ', 'detention_invoices.local_currency_id', '=', 'local.id')
+            // ->join('currencies as local ', 'detention_invoices.local_currency_id', '=', 'local.id')
             ->where('detention_invoices.id', '=', $id)
             ->get();
 
@@ -197,7 +198,6 @@ class DetentionInvoicesController extends Controller
             $detentioninvoice->discount_type = $request->discount_type;
             $detentioninvoice->previous_bill = $request->previous_bill;
             $detentioninvoice->discount_input = $request->discount_input;
-            $detentioninvoice->previous_bill = $request->previous_bill;
             $detentioninvoice->total_amount = $request->total_amount;
             $detentioninvoice->final_amount = $request->final_amount;
             $detentioninvoice->nos_units = $request->nos_units;

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('detention_traff_subs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('detention_traffic_id')->unsigned();
-            $table->integer('tariff_name')->unsigned()->nullable();
+            $table->string('tariff_name');
             $table->integer('slab_days')->nullable();
             $table->integer('slab_rate')->nullable();
             $table->integer('deleted')->nullable();

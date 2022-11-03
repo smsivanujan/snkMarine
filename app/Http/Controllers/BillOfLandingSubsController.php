@@ -43,64 +43,8 @@ class BillOfLandingSubsController extends Controller
                 'bill_of_landing_subs.other_expenses',
                 'bill_of_landing_subs.other_expenses_remarks',
                 'bill_of_landing_subs.deleted',
-                'countries.country_name',
-                'countries.capital_city_name',
-                'ports.port_code',
-                'ports.port_name',
-                'ports.sub_code',
-                'ports.country_id',
-                'currencies.currency_code',
-                'currencies.currency_name'
-            )
-            ->join('bill_of_landings', 'bill_of_landing_subs.bill_of_landing_id', '=', 'bill_of_landings.id')
-            ->join('equipments', 'bill_of_landing_subs.equipment_id', '=', 'equipments.id')
-            ->join('bill_confirmations', 'bill_of_landing_subs.bill_confirmation_id', '=', 'bill_confirmations.id')
-            ->join('clients as agent', 'bill_of_landing_subs.client_id_agent', '=', 'agent.id')
-            ->join('clients as ex_agent', 'bill_of_landing_subs.client_id_ex_agent', '=', 'ex_agent.id')
-            ->join('vendor_id_yard', 'bill_of_landing_subs.bill_confirmation_id', '=', 'vendors.id')
-            ->get();
-
-        return $billoflandingsubs;
-    }
-
-    public function showById(Request $request)
-    {
-        $id = $request->id;
-        $billoflandingsubs = DB::table('bill_of_landing_subs')
-            ->select(
-                'bill_of_landing_subs.id',
-                'bill_of_landing_subs.date',
-                'bill_of_landing_subs.bill_of_landing_id',
-                'bill_of_landing_subs.equipment_id',
-                'bill_of_landing_subs.seal_no',
-                'bill_of_landing_subs.marks',
-                'bill_of_landing_subs.package_quantity',
-                'bill_of_landing_subs.description',
-                'bill_of_landing_subs.gross_weight',
-                'bill_of_landing_subs.measurement',
-                'bill_of_landing_subs.bill_confirmation_id',
-                'bill_of_landing_subs.status',
-                'bill_of_landing_subs.ignore_data',
-                'bill_of_landing_subs.reserved_date',
-                'bill_of_landing_subs.shipper_date',
-                'bill_of_landing_subs.on_job_date',
-                'bill_of_landing_subs.yard_in_date',
-                'bill_of_landing_subs.client_id_agent',
-                'bill_of_landing_subs.client_id_ex_agent',
-                'bill_of_landing_subs.vendor_id_yard',
-                'bill_of_landing_subs.free_days',
-                'bill_of_landing_subs.free_days_standard',
-                'bill_of_landing_subs.ata_fpd',
-                'bill_of_landing_subs.payed_till',
-                'bill_of_landing_subs.soa_status_exp',
-                'bill_of_landing_subs.soa_status_imp',
-                'bill_of_landing_subs.lift_on_off',
-                'bill_of_landing_subs.other_expenses',
-                'bill_of_landing_subs.other_expenses_remarks',
-                'bill_of_landing_subs.deleted',
                 'bill_of_landings.bill_of_landing_number',
                 'equipments.equipment_number',
-                'bill_confirmations.booking_confirmation_number',
                 'agent.client_code',
                 'agent.client_name',
                 'ex_agent.client_code',
@@ -110,10 +54,63 @@ class BillOfLandingSubsController extends Controller
             )
             ->join('bill_of_landings', 'bill_of_landing_subs.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('equipments', 'bill_of_landing_subs.equipment_id', '=', 'equipments.id')
-            ->join('bill_confirmations', 'bill_of_landing_subs.bill_confirmation_id', '=', 'bill_confirmations.id')
             ->join('clients as agent', 'bill_of_landing_subs.client_id_agent', '=', 'agent.id')
             ->join('clients as ex_agent', 'bill_of_landing_subs.client_id_ex_agent', '=', 'ex_agent.id')
             ->join('vendors as yard', 'bill_of_landing_subs.vendor_id_yard', '=', 'yard.id')
+            ->get();
+
+        return $billoflandingsubs;
+    }
+
+    public function showById(Request $request)
+    {
+        $id = $request->id;
+        $billoflandingsubs = DB::table('bill_of_landing_subs')
+        ->select(
+            'bill_of_landing_subs.id',
+            'bill_of_landing_subs.date',
+            'bill_of_landing_subs.bill_of_landing_id',
+            'bill_of_landing_subs.equipment_id',
+            'bill_of_landing_subs.seal_no',
+            'bill_of_landing_subs.marks',
+            'bill_of_landing_subs.package_quantity',
+            'bill_of_landing_subs.description',
+            'bill_of_landing_subs.gross_weight',
+            'bill_of_landing_subs.measurement',
+            'bill_of_landing_subs.bill_confirmation_id',
+            'bill_of_landing_subs.status',
+            'bill_of_landing_subs.ignore_data',
+            'bill_of_landing_subs.reserved_date',
+            'bill_of_landing_subs.shipper_date',
+            'bill_of_landing_subs.on_job_date',
+            'bill_of_landing_subs.yard_in_date',
+            'bill_of_landing_subs.client_id_agent',
+            'bill_of_landing_subs.client_id_ex_agent',
+            'bill_of_landing_subs.vendor_id_yard',
+            'bill_of_landing_subs.free_days',
+            'bill_of_landing_subs.free_days_standard',
+            'bill_of_landing_subs.ata_fpd',
+            'bill_of_landing_subs.payed_till',
+            'bill_of_landing_subs.soa_status_exp',
+            'bill_of_landing_subs.soa_status_imp',
+            'bill_of_landing_subs.lift_on_off',
+            'bill_of_landing_subs.other_expenses',
+            'bill_of_landing_subs.other_expenses_remarks',
+            'bill_of_landing_subs.deleted',
+            'bill_of_landings.bill_of_landing_number',
+            'equipments.equipment_number',
+            'agent.client_code',
+            'agent.client_name',
+            'ex_agent.client_code',
+            'ex_agent.client_name',
+            'yard.vendor_code',
+            'yard.vendor_name'
+        )
+        ->join('bill_of_landings', 'bill_of_landing_subs.bill_of_landing_id', '=', 'bill_of_landings.id')
+        ->join('equipments', 'bill_of_landing_subs.equipment_id', '=', 'equipments.id')
+        ->join('clients as agent', 'bill_of_landing_subs.client_id_agent', '=', 'agent.id')
+        ->join('clients as ex_agent', 'bill_of_landing_subs.client_id_ex_agent', '=', 'ex_agent.id')
+        ->join('vendors as yard', 'bill_of_landing_subs.vendor_id_yard', '=', 'yard.id')
             ->where('bill_of_landing_subs.id', '=', $id)
             ->get();
 
@@ -124,9 +121,17 @@ class BillOfLandingSubsController extends Controller
     {
         $id = $request->id;
 
-        $billoflandingsubs = new bill_of_landing_subs();
+
+        if ($id == 0) { // create
+
+            $billoflandingsubs = new bill_of_landing_subs();
+        } else { // update
+
+            $billoflandingsubs = bill_of_landing_subs::find($id);
+        }
 
         try {
+            $billoflandingsubs->date = $request->date;
             $billoflandingsubs->bill_of_landing_id = $request->bill_of_landing_id;
             $billoflandingsubs->equipment_id = $request->equipment_id;
             $billoflandingsubs->seal_no = $request->seal_no;

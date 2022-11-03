@@ -14,7 +14,7 @@ class BillOfLandingSubsImpsController extends Controller
         $billoflanding_subsimps = DB::table('bill_of_landing_subs_imps')
             ->select(
                 'bill_of_landing_subs_imps.id',
-                'bill_of_landing_subs_imps.blsn_invent_id',
+                'bill_of_landing_subs_imps.bill_of_landing_sub_id',
                 'bill_of_landing_subs_imps.imp_freight_charge_in',
                 'bill_of_landing_subs_imps.imp_doc_fee',
                 'bill_of_landing_subs_imps.imp_thc_phc',
@@ -32,7 +32,7 @@ class BillOfLandingSubsImpsController extends Controller
                 'bill_of_landing_subs_imps.imp_final_amount',
                 'bill_of_landing_subs_imps.imp_remarks'
             )
-            ->join('bill_of_landing_sub_non_inventories', 'bill_of_landing_sub_non_inventories_exps.blsn_invent_id', '=', 'bill_of_landing_sub_non_inventories_exps.id')
+            ->join('bill_of_landing_subs', 'bill_of_landing_subs_imps.bill_of_landing_sub_id', '=', 'bill_of_landing_subs.id')
             ->get();
 
         return $billoflanding_subsimps;
@@ -44,7 +44,7 @@ class BillOfLandingSubsImpsController extends Controller
         $billoflanding_subsimps = DB::table('bill_of_landing_subs_imps')
             ->select(
                 'bill_of_landing_subs_imps.id',
-                'bill_of_landing_subs_imps.blsn_invent_id',
+                'bill_of_landing_subs_imps.bill_of_landing_sub_id',
                 'bill_of_landing_subs_imps.imp_freight_charge_in',
                 'bill_of_landing_subs_imps.imp_doc_fee',
                 'bill_of_landing_subs_imps.imp_thc_phc',
@@ -62,8 +62,8 @@ class BillOfLandingSubsImpsController extends Controller
                 'bill_of_landing_subs_imps.imp_final_amount',
                 'bill_of_landing_subs_imps.imp_remarks'
             )
-            ->join('bill_of_landing_sub_non_inventories', 'bill_of_landing_sub_non_inventories_exps.blsn_invent_id', '=', 'bill_of_landing_sub_non_inventories_exps.id')
-            ->where('bill_of_landing_sub_non_inventories.id', '=', $id)
+            ->join('bill_of_landing_subs', 'bill_of_landing_subs_imps.bill_of_landing_sub_id', '=', 'bill_of_landing_subs.id')
+            ->where('bill_of_landing_subs_imps.id', '=', $id)
             ->get();
 
         return $billoflanding_subsimps;
@@ -74,12 +74,17 @@ class BillOfLandingSubsImpsController extends Controller
         $id = $request->id;
 
 
+        if ($id == 0) { // create
 
-        $billoflandingsubsimps = new bill_of_landing_subs_imps();
+            $billoflandingsubsimps = new bill_of_landing_subs_imps();
+        } else { // update
+
+            $billoflandingsubsimps = bill_of_landing_subs_imps::find($id);
+        }
         
 
         try {
-            $billoflandingsubsimps->blsn_invent_id = $request->blsn_invent_id;
+            $billoflandingsubsimps->bill_of_landing_sub_id = $request->bill_of_landing_sub_id;
             $billoflandingsubsimps->imp_freight_charge_in = $request->imp_freight_charge_in;
             $billoflandingsubsimps->imp_doc_fee = $request->imp_doc_fee;
             $billoflandingsubsimps->imp_thc_phc = $request->imp_thc_phc;

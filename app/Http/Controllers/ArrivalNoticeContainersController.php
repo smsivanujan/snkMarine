@@ -19,11 +19,11 @@ class ArrivalNoticeContainersController extends Controller
                 'arrival_notice_containers.seal_no',
                 'arrival_notice_containers.marks',
                 'arrival_notice_containers.type_of_unit_id',
-                'arrival_notices.arrival_notice_no',
+                'arrival_noticies.arrival_notice_no',
                 'equipments.equipment_number',
                 'type_of_units.type_of_unit',
             )
-            ->join('arrival_notices', 'arrival_notice_containers.arrival_notice_id', '=', 'arrival_notices.id')
+            ->join('arrival_noticies', 'arrival_notice_containers.arrival_notice_id', '=', 'arrival_noticies.id')
             ->join('equipments', 'arrival_notice_containers.equipment_id', '=', 'equipments.id')
             ->join('type_of_units', 'arrival_notice_containers.type_of_unit_id', '=', 'type_of_units.id')
             ->get();
@@ -42,14 +42,14 @@ class ArrivalNoticeContainersController extends Controller
                 'arrival_notice_containers.seal_no',
                 'arrival_notice_containers.marks',
                 'arrival_notice_containers.type_of_unit_id',
-                'arrival_notices.arrival_notice_no',
+                'arrival_noticies.arrival_notice_no',
                 'equipments.equipment_number',
                 'type_of_units.type_of_unit',
             )
-            ->join('arrival_notices', 'arrival_notice_containers.arrival_notice_id', '=', 'arrival_notices.id')
+            ->join('arrival_noticies', 'arrival_notice_containers.arrival_notice_id', '=', 'arrival_noticies.id')
             ->join('equipments', 'arrival_notice_containers.equipment_id', '=', 'equipments.id')
             ->join('type_of_units', 'arrival_notice_containers.type_of_unit_id', '=', 'type_of_units.id')
-            ->where('arrival_notices.id', '=', $id)
+            ->where('arrival_noticies.id', '=', $id)
             ->get();
 
         return $arrivalnoticecontainers;
@@ -59,7 +59,13 @@ class ArrivalNoticeContainersController extends Controller
     {
         $id = $request->id;
 
-        $arrivalnoticecontainers = new arrival_notice_containers();
+
+        if ($id == 0) { // create
+
+            $arrivalnoticecontainers = new arrival_notice_containers();
+        } else { // update
+            $arrivalnoticecontainers = arrival_notice_containers::find($id);
+        }
 
 
         try {

@@ -32,15 +32,14 @@ class InvoiceChargesController extends Controller
                 'invoice_charges.total_cost_in',
                 'invoice_charges.profit',
                 'invoice_charges.profit_in',
-                'arrival_notices.arrival_notice_no',
                 'currencies.currency_code',
                 'currencies.currency_name',
                 'mycurrency.currency_code',
                 'mycurrency.currency_name',
             )
-            ->join('invoices', 'arrivalnoticechargess.invoice_id', '=', 'invoices.id')
-            ->join('currencies', 'arrivalnoticechargess.currency_id', '=', 'currencies.id')
-            ->join('currencies as mycurrency', 'arrivalnoticechargess.currency_id_mycurrency', '=', 'mycurrency.id')
+            ->join('invoices', 'invoice_charges.invoice_id', '=', 'invoices.id')
+            ->join('currencies', 'invoice_charges.currency_id', '=', 'currencies.id')
+            ->join('currencies as mycurrency', 'invoice_charges.currency_id_mycurrency', '=', 'mycurrency.id')
             ->get();
 
         return $invoicecharges;
@@ -70,16 +69,15 @@ class InvoiceChargesController extends Controller
                 'invoice_charges.total_cost_in',
                 'invoice_charges.profit',
                 'invoice_charges.profit_in',
-                'arrival_notices.arrival_notice_no',
                 'currencies.currency_code',
                 'currencies.currency_name',
                 'mycurrency.currency_code',
                 'mycurrency.currency_name',
             )
-            ->join('invoices', 'arrivalnoticechargess.invoice_id', '=', 'invoices.id')
-            ->join('currencies', 'arrivalnoticechargess.currency_id', '=', 'currencies.id')
-            ->join('currencies as mycurrency', 'arrivalnoticechargess.currency_id_mycurrency', '=', 'mycurrency.id')
-            ->where('arrival_notices.id', '=', $id)
+            ->join('invoices', 'invoice_charges.invoice_id', '=', 'invoices.id')
+            ->join('currencies', 'invoice_charges.currency_id', '=', 'currencies.id')
+            ->join('currencies as mycurrency', 'invoice_charges.currency_id_mycurrency', '=', 'mycurrency.id')
+            ->where('invoice_charges.id', '=', $id)
             ->get();
 
         return $invoicecharges;
@@ -89,12 +87,17 @@ class InvoiceChargesController extends Controller
     {
         $id = $request->id;
 
-   
-            $invoicecharge = new invoice_charges();
+            if ($id == 0) { // create
+    
+                $invoicecharge = new invoice_charges();
+            } else { // update
+    
+                $invoicecharge = invoice_charges::find($id);
+            }
 
 
         try {
-            $invoicecharge->arrival_notice_id = $request->arrival_notice_id;
+            $invoicecharge->invoice_id = $request->invoice_id;
             $invoicecharge->description = $request->description;
             $invoicecharge->unit = $request->unit;
             $invoicecharge->unit_cost = $request->unit_cost;
@@ -111,7 +114,7 @@ class InvoiceChargesController extends Controller
             $invoicecharge->total_cost = $request->total_cost;
             $invoicecharge->total_cost_in = $request->total_cost_in;
             $invoicecharge->profit = $request->profit;
-            $invoicecharge->profit_in = $request->profit;
+            $invoicecharge->profit_in = $request->profit_in;
             $invoicecharge->save();
 
             $data = [

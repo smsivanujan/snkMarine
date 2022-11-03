@@ -14,7 +14,7 @@ class BillOfLandingSubSwitchesExpsController extends Controller
         $billoflandingsubswitchesexps = DB::table('bill_of_landing_sub_switches_exps')
             ->select(
                 'bill_of_landing_sub_switches_exps.id',
-                'bill_of_landing_sub_switches_exps.blsn_invent_id',
+                'bill_of_landing_sub_switches_exps.bls_switch_id',
                 'bill_of_landing_sub_switches_exps.ex_bc_id',
                 'bill_of_landing_sub_switches_exps.ex_reserved_date',
                 'bill_of_landing_sub_switches_exps.ex_shipper_date',
@@ -35,7 +35,7 @@ class BillOfLandingSubSwitchesExpsController extends Controller
                 'bill_of_landing_sub_switches_exps.exp_approved_date',
                 'booking_confirmations.booking_confirmation_number'
             )
-            ->join('bill_of_landing_sub_non_inventories', 'bill_of_landing_sub_switches_exps.blsn_invent_id', '=', 'bill_of_landing_sub_switches_exps.id')
+            ->join('bill_of_landing_sub_non_inventories', 'bill_of_landing_sub_switches_exps.bls_switch_id', '=', 'bill_of_landing_sub_switches_exps.id')
             ->join('booking_confirmations', 'bill_of_landing_sub_switches_exps.ex_bc_id', '=', 'booking_confirmations.id')
             ->get();
 
@@ -48,7 +48,7 @@ class BillOfLandingSubSwitchesExpsController extends Controller
         $billoflandingsubswitchesexps = DB::table('bill_of_landing_sub_switches_exps')
             ->select(
                 'bill_of_landing_sub_switches_exps.id',
-                'bill_of_landing_sub_switches_exps.blsn_invent_id',
+                'bill_of_landing_sub_switches_exps.bls_switch_id',
                 'bill_of_landing_sub_switches_exps.ex_bc_id',
                 'bill_of_landing_sub_switches_exps.ex_reserved_date',
                 'bill_of_landing_sub_switches_exps.ex_shipper_date',
@@ -69,7 +69,7 @@ class BillOfLandingSubSwitchesExpsController extends Controller
                 'bill_of_landing_sub_switches_exps.exp_approved_date',
                 'booking_confirmations.booking_confirmation_number'
             )
-            ->join('bill_of_landing_sub_non_inventories', 'bill_of_landing_sub_switches_exps.blsn_invent_id', '=', 'bill_of_landing_sub_switches_exps.id')
+            ->join('bill_of_landing_sub_non_inventories', 'bill_of_landing_sub_switches_exps.bls_switch_id', '=', 'bill_of_landing_sub_switches_exps.id')
             ->join('booking_confirmations', 'bill_of_landing_sub_switches_exps.ex_bc_id', '=', 'booking_confirmations.id')
             ->where('bill_of_landing_sub_non_inventories.id', '=', $id)
             ->get();
@@ -79,12 +79,18 @@ class BillOfLandingSubSwitchesExpsController extends Controller
 
     public function store(Request $request)
     {
+        $id = $request->id;
+            if ($id == 0) { // create
 
-            $bls_switches_exps = new bill_of_landing_sub_switches_exps();
+                $bls_switches_exps = new bill_of_landing_sub_switches_exps();
+            } else { // update
+    
+                $bls_switches_exps = bill_of_landing_sub_switches_exps::find($id);
+            }
         
 
         try {
-            $bls_switches_exps->blsn_invent_id = $request->blsn_invent_id;
+            $bls_switches_exps->bls_switch_id = $request->bls_switch_id;
             $bls_switches_exps->ex_bc_id = $request->ex_bc_id;
             $bls_switches_exps->ex_reserved_date = $request->ex_reserved_date;
             $bls_switches_exps->ex_shipper_date = $request->ex_shipper_date;
@@ -95,6 +101,7 @@ class BillOfLandingSubSwitchesExpsController extends Controller
             $bls_switches_exps->exp_total_in = $request->exp_total_in;
             $bls_switches_exps->exp_slot_fees = $request->exp_slot_fees;
             $bls_switches_exps->exp_dc_surcharge_ex = $request->exp_dc_surcharge_ex;
+            $bls_switches_exps->exp_agent_comm = $request->exp_agent_comm;
             $bls_switches_exps->exp_phc = $request->exp_phc;
             $bls_switches_exps->exp_total_expenses = $request->exp_total_expenses;
             $bls_switches_exps->exp_final_amount = $request->exp_final_amount;

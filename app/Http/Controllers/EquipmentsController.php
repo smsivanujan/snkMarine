@@ -16,21 +16,21 @@ class EquipmentsController extends Controller
                 'equipments.id',
                 'equipments.equipment_number',
                 'equipments.owner_id',
-                'equipments.typeofunit_id',
+                'equipments.type_of_unit_id',
                 'equipments.grade',
                 'equipments.status',
                 'equipments.vendor_id_yard',
                 'equipments.client_id_agent',
                 'owners.owner_code',
                 'owners.owner_name',
-                'typeofunits.type_of_unit',
+                'type_of_units.type_of_unit',
                 'vendors.vendor_code',
                 'vendors.vendor_name',
                 'clients.client_code',
                 'clients.client_name'
             )
             ->join('owners', 'equipments.owner_id', '=', 'owners.id')
-            ->join('typeofunits', 'equipments.typeofunit_id', '=', 'typeofunits.id')
+            ->join('type_of_units', 'equipments.type_of_unit_id', '=', 'type_of_units.id')
             ->join('vendors', 'equipments.vendor_id_yard', '=', 'vendors.id')
             ->join('clients', 'equipments.client_id_agent', '=', 'clients.id')
             ->get();
@@ -46,21 +46,21 @@ class EquipmentsController extends Controller
                 'equipments.id',
                 'equipments.equipment_number',
                 'equipments.owner_id',
-                'equipments.typeofunit_id',
+                'equipments.type_of_unit_id',
                 'equipments.grade',
                 'equipments.status',
                 'equipments.vendor_id_yard',
                 'equipments.client_id_agent',
                 'owners.owner_code',
                 'owners.owner_name',
-                'typeofunits.type_of_unit',
+                'type_of_units.type_of_unit',
                 'vendors.vendor_code',
                 'vendors.vendor_name',
                 'clients.client_code',
                 'clients.client_name'
             )
             ->join('owners', 'equipments.owner_id', '=', 'owners.id')
-            ->join('typeofunits', 'equipments.typeofunit_id', '=', 'typeofunits.id')
+            ->join('type_of_units', 'equipments.type_of_unit_id', '=', 'type_of_units.id')
             ->join('vendors', 'equipments.vendor_id_yard', '=', 'vendors.id')
             ->join('clients', 'equipments.client_id_agent', '=', 'clients.id')
             ->where('equipments.id', '=', $id)
@@ -93,7 +93,7 @@ class EquipmentsController extends Controller
         try {
             $equipment->equipment_number = $request->equipment_number;
             $equipment->owner_id = $request->owner_id;
-            $equipment->typeofunit_id = $request->typeofunit_id;
+            $equipment->type_of_unit_id = $request->type_of_unit_id;
             $equipment->grade = $request->grade;
             $equipment->status = $request->status;
             $equipment->vendor_id_yard = $request->vendor_id_yard;

@@ -84,7 +84,7 @@ class BillOfLandingNonInventoriesController extends Controller
             ->join('countries as origin', 'bill_of_landing_non_inventories.country_id_origin', '=', 'origin.id')
             ->join('countries as bltb_released', 'bill_of_landing_non_inventories.country_id_bltb_released', '=', 'bltb_released.id')
             ->join('countries as ocefrepayable', 'bill_of_landing_non_inventories.country_id_ocefrepayable', '=', 'ocefrepayable.id')
-            ->join('traffic_modes', 'bill_of_landing_non_inventories.traffic_mode_id', '=', 'traffic_nodes.id')
+            ->join('traffic_modes', 'bill_of_landing_non_inventories.traffic_mode_id', '=', 'traffic_modes.id')
             ->get();
 
         return $bl_non_inventories;
@@ -166,7 +166,7 @@ class BillOfLandingNonInventoriesController extends Controller
             ->join('countries as origin', 'bill_of_landing_non_inventories.country_id_origin', '=', 'origin.id')
             ->join('countries as bltb_released', 'bill_of_landing_non_inventories.country_id_bltb_released', '=', 'bltb_released.id')
             ->join('countries as ocefrepayable', 'bill_of_landing_non_inventories.country_id_ocefrepayable', '=', 'ocefrepayable.id')
-            ->join('traffic_modes', 'bill_of_landing_non_inventories.traffic_mode_id', '=', 'traffic_nodes.id')
+            ->join('traffic_modes', 'bill_of_landing_non_inventories.traffic_mode_id', '=', 'traffic_modes.id')
             ->where('bill_of_landing_non_inventories.id', '=', $id)
             ->get();
 
@@ -196,6 +196,7 @@ class BillOfLandingNonInventoriesController extends Controller
         }
 
         try {
+            $billoflandingnoninventories->date = $request->date;
             $billoflandingnoninventories->bill_of_landing_number = $request->bill_of_landing_number;
             $billoflandingnoninventories->booking_confirmation_id = $request->booking_confirmation_id;
             $billoflandingnoninventories->client_id_shipper = $request->client_id_shipper;

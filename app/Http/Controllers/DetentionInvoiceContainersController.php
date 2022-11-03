@@ -24,13 +24,13 @@ class DetentionInvoiceContainersController extends Controller
                 'detention_invoice_containers.remarks',
                 'detention_invoice_containers.status',
                 'detention_invoice_containers.deleted',
-                'arrival_notices.arrival_notice_no',
-                'typeofunits.type_of_unit',
+                'arrival_noticies.arrival_notice_no',
+                'type_of_units.type_of_unit',
                 'equipments.equipment_number'
             )
-            ->join('arrival_notices', 'detentioninvoicecontainerss.arrival_notice_id', '=', 'arrival_notices.id')
-            ->join('typeofunits', 'detentioninvoicecontainerss.typeofunit_id', '=', 'typeofunits.id')
-            ->join('equipments', 'detentioninvoicecontainerss.equipment_id', '=', 'equipments.id')
+            ->join('arrival_noticies', 'detention_invoice_containers.arrival_notice_id', '=', 'arrival_noticies.id')
+            ->join('type_of_units', 'detention_invoice_containers.type_of_unit_id', '=', 'type_of_units.id')
+            ->join('equipments', 'detention_invoice_containers.equipment_id', '=', 'equipments.id')
             ->get();
 
         return $detentioninvoicecontainers;
@@ -52,13 +52,13 @@ class DetentionInvoiceContainersController extends Controller
                 'detention_invoice_containers.remarks',
                 'detention_invoice_containers.status',
                 'detention_invoice_containers.deleted',
-                'arrival_notices.arrival_notice_no',
-                'typeofunits.type_of_unit',
+                'arrival_noticies.arrival_notice_no',
+                'type_of_units.type_of_unit',
                 'equipments.equipment_number'
             )
-            ->join('arrival_notices', 'detentioninvoicecontainerss.arrival_notice_id', '=', 'arrival_notices.id')
-            ->join('typeofunits', 'detentioninvoicecontainerss.typeofunit_id', '=', 'typeofunits.id')
-            ->join('equipments', 'detentioninvoicecontainerss.equipment_id', '=', 'equipments.id')
+            ->join('arrival_noticies', 'detention_invoice_containers.arrival_notice_id', '=', 'arrival_noticies.id')
+            ->join('type_of_units', 'detention_invoice_containers.type_of_unit_id', '=', 'type_of_units.id')
+            ->join('equipments', 'detention_invoice_containers.equipment_id', '=', 'equipments.id')
             ->where('detention_invoice_containers.id', '=', $id)
             ->get();
 
@@ -69,14 +69,18 @@ class DetentionInvoiceContainersController extends Controller
     {
         $id = $request->id;
 
+        if ($id == 0) { // create
 
+            $detentioninvoicecontainers = new detention_invoice_containers();
+        } else { // update
 
-        $detentioninvoicecontainers = new detention_invoice_containers();
+            $detentioninvoicecontainers = detention_invoice_containers::find($id);
+        }
 
 
         try {
             $detentioninvoicecontainers->arrival_notice_id = $request->arrival_notice_id;
-            $detentioninvoicecontainers->detentioninvoicecontainers_id = $request->detentioninvoicecontainers_id;
+            $detentioninvoicecontainers->equipment_id = $request->equipment_id;
             $detentioninvoicecontainers->seal_no = $request->seal_no;
             $detentioninvoicecontainers->marks = $request->marks;
             $detentioninvoicecontainers->type_of_unit_id = $request->type_of_unit_id;

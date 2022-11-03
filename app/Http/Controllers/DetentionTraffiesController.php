@@ -11,28 +11,18 @@ class DetentionTraffiesController extends Controller
 {
     public function index()
     {
-        $equipments = DB::table('equipments')
+        $equipments = DB::table('detention_traffies')
             ->select(
-                'equipments.id',
-                'equipments.equipment_number',
-                'equipments.owner_id',
-                'equipments.typeofunit_id',
-                'equipments.grade',
-                'equipments.status',
-                'equipments.vendor_id_yard',
-                'equipments.client_id_agent',
-                'owners.owner_code',
-                'owners.owner_name',
-                'typeofunits.type_of_unit',
-                'vendors.vendor_code',
-                'vendors.vendor_name',
+                'detention_traffies.id',
+                'detention_traffies.client_id_agent',
+                'detention_traffies.currency_id',
+                'detention_traffies.free_days',
+                'detention_traffies.comm',
+                'detention_traffies.deleted',
                 'clients.client_code',
                 'clients.client_name'
             )
-            ->join('owners', 'equipments.owner_id', '=', 'owners.id')
-            ->join('typeofunits', 'equipments.typeofunit_id', '=', 'typeofunits.id')
-            ->join('vendors', 'equipments.vendor_id_yard', '=', 'vendors.id')
-            ->join('clients', 'equipments.client_id_agent', '=', 'clients.id')
+            ->join('clients', 'detention_traffies.client_id_agent', '=', 'clients.id')
             ->get();
 
         return $equipments;
@@ -41,29 +31,19 @@ class DetentionTraffiesController extends Controller
     public function showById(Request $request)
     {
         $id = $request->id;
-        $equipments = DB::table('equipments')
-            ->select(
-                'equipments.id',
-                'equipments.equipment_number',
-                'equipments.owner_id',
-                'equipments.typeofunit_id',
-                'equipments.grade',
-                'equipments.status',
-                'equipments.vendor_id_yard',
-                'equipments.client_id_agent',
-                'owners.owner_code',
-                'owners.owner_name',
-                'typeofunits.type_of_unit',
-                'vendors.vendor_code',
-                'vendors.vendor_name',
-                'clients.client_code',
-                'clients.client_name'
-            )
-            ->join('owners', 'equipments.owner_id', '=', 'owners.id')
-            ->join('typeofunits', 'equipments.typeofunit_id', '=', 'typeofunits.id')
-            ->join('vendors', 'equipments.vendor_id_yard', '=', 'vendors.id')
-            ->join('clients', 'equipments.client_id_agent', '=', 'clients.id')
-            ->where('equipments.id', '=', $id)
+        $equipments = DB::table('detention_traffies')
+        ->select(
+            'detention_traffies.id',
+            'detention_traffies.client_id_agent',
+            'detention_traffies.currency_id',
+            'detention_traffies.free_days',
+            'detention_traffies.comm',
+            'detention_traffies.deleted',
+            'clients.client_code',
+            'clients.client_name'
+        )
+        ->join('clients', 'detention_traffies.client_id_agent', '=', 'clients.id')
+            ->where('detention_traffies.id', '=', $id)
             ->get();
 
         return $equipments;
@@ -73,8 +53,13 @@ class DetentionTraffiesController extends Controller
     {
         $id = $request->id;
 
-
-            $detentiontraffies = new detention_traffies();
+            if ($id == 0) { // create
+    
+                $detentiontraffies = new detention_traffies();
+            } else { // update
+    
+                $detentiontraffies = detention_traffies::find($id);
+            }
 
 
         try {

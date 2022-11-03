@@ -19,7 +19,7 @@ class DetentionInvoiceSlabsController extends Controller
                 'detention_invoice_slabs.amount',
                 'detention_invoices.detention_no'
             )
-            ->join('detention_invoices', 'equipments.detention_invoice_id', '=', 'detention_invoices.id')
+            ->join('detention_invoices', 'detention_invoice_slabs.detention_invoice_id', '=', 'detention_invoices.id')
             ->get();
 
         return $detentioninvoiceslabs;
@@ -36,8 +36,8 @@ class DetentionInvoiceSlabsController extends Controller
                 'detention_invoice_slabs.amount',
                 'detention_invoices.detention_no'
             )
-            ->join('detention_invoices', 'equipments.detention_invoice_id', '=', 'detention_invoices.id')
-            ->where('equipments.id', '=', $id)
+            ->join('detention_invoices', 'detention_invoice_slabs.detention_invoice_id', '=', 'detention_invoices.id')
+            ->where('detention_invoice_slabs.id', '=', $id)
             ->get();
 
         return $detentioninvoiceslabs;
@@ -47,8 +47,13 @@ class DetentionInvoiceSlabsController extends Controller
     {
         $id = $request->id;
 
- 
+        if ($id == 0) { // create
+    
             $detentioninvoiceslabs = new detention_invoice_slabs();
+        } else { // update
+
+            $detentioninvoiceslabs = detention_invoice_slabs::find($id);
+        }
 
 
         try {

@@ -11,7 +11,7 @@ class ArrivalNoticeChargesController extends Controller
 {
     public function index()
     {
-        $arrivalnoticechargess = DB::table('arrivalnoticechargess')
+        $arrivalnoticechargess = DB::table('arrival_notice_charges')
             ->select(
                 'arrival_notice_charges.id',
                 'arrival_notice_charges.arrival_notice_id',
@@ -33,15 +33,15 @@ class ArrivalNoticeChargesController extends Controller
                 'arrival_notice_charges.total_cost_in',
                 'arrival_notice_charges.profit',
                 'arrival_notice_charges.profit_in',
-                'arrival_notices.arrival_notice_no',
+                'arrival_noticies.arrival_notice_no',
                 'currencies.currency_code',
                 'currencies.currency_name',
                 'mycurrency.currency_code',
                 'mycurrency.currency_name',
             )
-            ->join('arrival_notices', 'arrivalnoticechargess.arrival_notice_id', '=', 'arrival_notices.id')
-            ->join('currencies', 'arrivalnoticechargess.currency_id', '=', 'currencies.id')
-            ->join('currencies as mycurrency', 'arrivalnoticechargess.currency_id_mycurrency', '=', 'mycurrency.id')
+            ->join('arrival_noticies', 'arrival_notice_charges.arrival_notice_id', '=', 'arrival_noticies.id')
+            ->join('currencies', 'arrival_notice_charges.currency_id', '=', 'currencies.id')
+            ->join('currencies as mycurrency', 'arrival_notice_charges.currency_id_mycurrency', '=', 'mycurrency.id')
             ->get();
 
         return $arrivalnoticechargess;
@@ -50,7 +50,7 @@ class ArrivalNoticeChargesController extends Controller
     public function showById(Request $request)
     {
         $id = $request->id;
-        $arrivalnoticechargess = DB::table('arrivalnoticechargess')
+        $arrivalnoticechargess = DB::table('arrival_notice_charges')
             ->select(
                 'arrival_notice_charges.id',
                 'arrival_notice_charges.arrival_notice_id',
@@ -72,16 +72,16 @@ class ArrivalNoticeChargesController extends Controller
                 'arrival_notice_charges.total_cost_in',
                 'arrival_notice_charges.profit',
                 'arrival_notice_charges.profit_in',
-                'arrival_notices.arrival_notice_no',
+                'arrival_noticies.arrival_notice_no',
                 'currencies.currency_code',
                 'currencies.currency_name',
                 'mycurrency.currency_code',
                 'mycurrency.currency_name',
             )
-            ->join('arrival_notices', 'arrivalnoticechargess.arrival_notice_id', '=', 'arrival_notices.id')
-            ->join('currencies', 'arrivalnoticechargess.currency_id', '=', 'currencies.id')
-            ->join('currencies as mycurrency', 'arrivalnoticechargess.currency_id_mycurrency', '=', 'mycurrency.id')
-            ->where('arrival_notices.id', '=', $id)
+            ->join('arrival_noticies', 'arrival_notice_charges.arrival_notice_id', '=', 'arrival_noticies.id')
+            ->join('currencies', 'arrival_notice_charges.currency_id', '=', 'currencies.id')
+            ->join('currencies as mycurrency', 'arrival_notice_charges.currency_id_mycurrency', '=', 'mycurrency.id')
+            ->where('arrival_noticies.id', '=', $id)
             ->get();
 
         return $arrivalnoticechargess;
@@ -91,8 +91,11 @@ class ArrivalNoticeChargesController extends Controller
     {
         $id = $request->id;
 
-
-        $arrivalnoticecharges = new arrival_notice_charges();
+        if ($id == 0) { // create
+            $arrivalnoticecharges = new arrival_notice_charges();
+        } else { // update
+            $arrivalnoticecharges = arrival_notice_charges::find($id);
+        }
 
 
         try {
@@ -114,7 +117,7 @@ class ArrivalNoticeChargesController extends Controller
             $arrivalnoticecharges->total_cost = $request->total_cost;
             $arrivalnoticecharges->total_cost_in = $request->total_cost_in;
             $arrivalnoticecharges->profit = $request->profit;
-            $arrivalnoticecharges->profit_in = $request->profit;
+            $arrivalnoticecharges->profit_in = $request->profit_in;
             $arrivalnoticecharges->save();
 
             $data = [

@@ -31,7 +31,7 @@ return new class extends Migration
             $table->decimal('imp_other_expenses_remarks',10,2)->nullable();
             $table->decimal('imp_total_ex',10,2)->nullable();
             $table->decimal('imp_final_amount',10,2)->nullable();
-            $table->decimal('imp_remarks',10,2)->nullable();
+            $table->longText('imp_remarks')->nullable();
             $table->date('imp_created_by')->nullable();
             $table->date('imp_created_date')->nullable();
             $table->longText('imp_approved_by')->nullable();

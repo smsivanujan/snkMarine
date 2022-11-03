@@ -57,30 +57,23 @@ class BillOfLandingSwitchesController extends Controller
                 'discharge.port_name',
                 'final_dest.port_code',
                 'final_dest.port_name',
-                'discharge_bl.port_code',
-                'discharge_bl.port_name',
-                'final_dest_bl.port_code',
-                'final_dest_bl.port_name',
                 'origin.country_name',
                 'bltb_released.country_name',
                 'ocefrepayable.country_name',
                 'traffic_modes.trafficmode_type'
             )
-            ->join('booking_confirmations', 'bill_of_landings.booking_confirmation_id', '=', 'booking_confirmations.id')
-            ->join('clients as shipper', 'bill_of_landings.client_id_shipper', '=', 'shipper.id')
-            ->join('clients as consignee', 'bill_of_landings.client_id_consignee', '=', 'consignee.id')
-            ->join('clients as fw_agent', 'bill_of_landings.client_id_fw_agent', '=', 'fw_agent.id')
-            ->join('clients as notify', 'bill_of_landings.client_id_notify', '=', 'notify.id')
-            ->join('ports as portloading', 'bill_of_landings.port_id_loading', '=', 'portloading.id')
-            ->join('ports as discharge', 'bill_of_landings.port_id_discharge', '=', 'discharge.id')
-            ->join('ports as final_dest', 'bill_of_landings.port_id_final_dest', '=', 'final_dest.id')
-            ->join('ports as loading_bl', 'bill_of_landings.port_id_loading_bl', '=', 'loading_bl.id')
-            ->join('ports as discharge_bl', 'bill_of_landings.port_id_discharge_bl', '=', 'discharge_bl.id')
-            ->join('ports as final_dest_bl', 'bill_of_landings.port_id_final_dest_bl', '=', 'final_dest_bl.id')
-            ->join('countries as origin', 'bill_of_landings.country_id_origin', '=', 'origin.id')
-            ->join('countries as bltb_released', 'bill_of_landings.country_id_bltb_released', '=', 'bltb_released.id')
-            ->join('countries as ocefrepayable', 'bill_of_landings.country_id_ocefrepayable', '=', 'ocefrepayable.id')
-            ->join('traffic_modes', 'bill_of_landings.traffic_mode_id', '=', 'traffic_nodes.id')
+            ->join('booking_confirmations', 'bill_of_landing_switches.booking_confirmation_id', '=', 'booking_confirmations.id')
+            ->join('clients as shipper', 'bill_of_landing_switches.client_id_shipper', '=', 'shipper.id')
+            ->join('clients as consignee', 'bill_of_landing_switches.client_id_consignee', '=', 'consignee.id')
+            ->join('clients as fw_agent', 'bill_of_landing_switches.client_id_fw_agent', '=', 'fw_agent.id')
+            ->join('clients as notify', 'bill_of_landing_switches.client_id_notify', '=', 'notify.id')
+            ->join('ports as portloading', 'bill_of_landing_switches.port_id_loading', '=', 'portloading.id')
+            ->join('ports as discharge', 'bill_of_landing_switches.port_id_discharge', '=', 'discharge.id')
+            ->join('ports as final_dest', 'bill_of_landing_switches.port_id_final_dest', '=', 'final_dest.id')
+            ->join('countries as origin', 'bill_of_landing_switches.country_id_origin', '=', 'origin.id')
+            ->join('countries as bltb_released', 'bill_of_landing_switches.country_id_bltb_released', '=', 'bltb_released.id')
+            ->join('countries as ocefrepayable', 'bill_of_landing_switches.country_id_ocefrepayable', '=', 'ocefrepayable.id')
+            ->join('traffic_modes', 'bill_of_landing_switches.traffic_mode_id', '=', 'traffic_modes.id')
             ->get();
 
         return $billoflandingswitch;
@@ -135,31 +128,24 @@ class BillOfLandingSwitchesController extends Controller
                 'discharge.port_name',
                 'final_dest.port_code',
                 'final_dest.port_name',
-                'discharge_bl.port_code',
-                'discharge_bl.port_name',
-                'final_dest_bl.port_code',
-                'final_dest_bl.port_name',
                 'origin.country_name',
                 'bltb_released.country_name',
                 'ocefrepayable.country_name',
                 'traffic_modes.trafficmode_type'
             )
-            ->join('booking_confirmations', 'bill_of_landings.booking_confirmation_id', '=', 'booking_confirmations.id')
-            ->join('clients as shipper', 'bill_of_landings.client_id_shipper', '=', 'shipper.id')
-            ->join('clients as consignee', 'bill_of_landings.client_id_consignee', '=', 'consignee.id')
-            ->join('clients as fw_agent', 'bill_of_landings.client_id_fw_agent', '=', 'fw_agent.id')
-            ->join('clients as notify', 'bill_of_landings.client_id_notify', '=', 'notify.id')
-            ->join('ports as portloading', 'bill_of_landings.port_id_loading', '=', 'portloading.id')
-            ->join('ports as discharge', 'bill_of_landings.port_id_discharge', '=', 'discharge.id')
-            ->join('ports as final_dest', 'bill_of_landings.port_id_final_dest', '=', 'final_dest.id')
-            ->join('ports as loading_bl', 'bill_of_landings.port_id_loading_bl', '=', 'loading_bl.id')
-            ->join('ports as discharge_bl', 'bill_of_landings.port_id_discharge_bl', '=', 'discharge_bl.id')
-            ->join('ports as final_dest_bl', 'bill_of_landings.port_id_final_dest_bl', '=', 'final_dest_bl.id')
-            ->join('countries as origin', 'bill_of_landings.country_id_origin', '=', 'origin.id')
-            ->join('countries as bltb_released', 'bill_of_landings.country_id_bltb_released', '=', 'bltb_released.id')
-            ->join('countries as ocefrepayable', 'bill_of_landings.country_id_ocefrepayable', '=', 'ocefrepayable.id')
-            ->join('traffic_modes', 'bill_of_landings.traffic_mode_id', '=', 'traffic_nodes.id')
-            ->where('bill_of_landings.id', '=', $id)
+            ->join('booking_confirmations', 'bill_of_landing_switches.booking_confirmation_id', '=', 'booking_confirmations.id')
+            ->join('clients as shipper', 'bill_of_landing_switches.client_id_shipper', '=', 'shipper.id')
+            ->join('clients as consignee', 'bill_of_landing_switches.client_id_consignee', '=', 'consignee.id')
+            ->join('clients as fw_agent', 'bill_of_landing_switches.client_id_fw_agent', '=', 'fw_agent.id')
+            ->join('clients as notify', 'bill_of_landing_switches.client_id_notify', '=', 'notify.id')
+            ->join('ports as portloading', 'bill_of_landing_switches.port_id_loading', '=', 'portloading.id')
+            ->join('ports as discharge', 'bill_of_landing_switches.port_id_discharge', '=', 'discharge.id')
+            ->join('ports as final_dest', 'bill_of_landing_switches.port_id_final_dest', '=', 'final_dest.id')
+            ->join('countries as origin', 'bill_of_landing_switches.country_id_origin', '=', 'origin.id')
+            ->join('countries as bltb_released', 'bill_of_landing_switches.country_id_bltb_released', '=', 'bltb_released.id')
+            ->join('countries as ocefrepayable', 'bill_of_landing_switches.country_id_ocefrepayable', '=', 'ocefrepayable.id')
+            ->join('traffic_modes', 'bill_of_landing_switches.traffic_mode_id', '=', 'traffic_modes.id')
+            ->where('bill_of_landing_switches.id', '=', $id)
             ->get();
 
         return $billoflandingswitch;
@@ -167,9 +153,29 @@ class BillOfLandingSwitchesController extends Controller
 
     public function store(Request $request)
     {
-        $billoflandingswitch = new bill_of_landing_switches();
+        $id = $request->id;
+
+        if ($id == 0) { // create
+
+            $this->validate($request, [
+                'bill_of_landing_number' => 'unique:bill_of_landing_switches,bill_of_landing_number'
+            ]);
+
+
+
+            $billoflandingswitch = new bill_of_landing_switches();
+        } else { // update
+
+            $this->validate($request, [
+                'bill_of_landing_number' => 'unique:bill_of_landing_switches,bill_of_landing_number,' . $id,
+            ]);
+
+            $billoflandingswitch = bill_of_landing_switches::find($id);
+        }
+       
 
         try {
+            $billoflandingswitch->date = $request->date;
             $billoflandingswitch->bill_of_landing_number = $request->bill_of_landing_number;
             $billoflandingswitch->booking_confirmation_id = $request->booking_confirmation_id;
             $billoflandingswitch->client_id_shipper = $request->client_id_shipper;
@@ -180,9 +186,6 @@ class BillOfLandingSwitchesController extends Controller
             $billoflandingswitch->port_id_loading = $request->port_id_loading;
             $billoflandingswitch->port_id_discharge = $request->port_id_discharge;
             $billoflandingswitch->port_id_final_dest = $request->port_id_final_dest;
-            $billoflandingswitch->port_id_loading_bl = $request->port_id_loading_bl;
-            $billoflandingswitch->port_id_discharge_bl = $request->port_id_discharge_bl;
-            $billoflandingswitch->port_id_final_dest_bl = $request->port_id_final_dest_bl;
             $billoflandingswitch->detention_free_days = $request->detention_free_days;
             $billoflandingswitch->detention_description = $request->detention_description;
             $billoflandingswitch->pre_carriage_by = $request->pre_carriage_by;

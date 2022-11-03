@@ -51,7 +51,7 @@ class InvoicesController extends Controller
                 'portloading.port_name',
                 'discharge.port_code',
                 'discharge.port_name',
-                'igmindiavoyages.voyage'
+                'igm_india_voyages.voyage'
             )
             ->join('bill_of_landings', 'invoices.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('clients as shipper', 'invoices.client_id_shipper', '=', 'shipper.id')
@@ -108,7 +108,7 @@ class InvoicesController extends Controller
                 'portloading.port_name',
                 'discharge.port_code',
                 'discharge.port_name',
-                'igmindiavoyages.voyage'
+                'igm_india_voyages.voyage'
             )
             ->join('bill_of_landings', 'invoices.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('clients as shipper', 'invoices.client_id_shipper', '=', 'shipper.id')

@@ -32,7 +32,7 @@ class BillOfLandingSubNonInventoriesImpsController extends Controller
                 'bill_of_landing_sub_non_inventories_imps.imp_final_amount',
                 'bill_of_landing_sub_non_inventories_imps.imp_remarks'
             )
-            ->join('bill_of_landing_sub_non_inventories', 'bill_of_landing_sub_non_inventories_exps.blsn_invent_id', '=', 'bill_of_landing_sub_non_inventories_exps.id')
+            ->join('bill_of_landing_sub_non_inventories', 'bill_of_landing_sub_non_inventories_imps.blsn_invent_id', '=', 'bill_of_landing_sub_non_inventories_imps.id')
             ->get();
 
         return $billoflandingsubnoninventoriesimps;
@@ -62,7 +62,7 @@ class BillOfLandingSubNonInventoriesImpsController extends Controller
                 'bill_of_landing_sub_non_inventories_imps.imp_final_amount',
                 'bill_of_landing_sub_non_inventories_imps.imp_remarks'
             )
-            ->join('bill_of_landing_sub_non_inventories', 'bill_of_landing_sub_non_inventories_exps.blsn_invent_id', '=', 'bill_of_landing_sub_non_inventories_exps.id')
+            ->join('bill_of_landing_sub_non_inventories', 'bill_of_landing_sub_non_inventories_imps.blsn_invent_id', '=', 'bill_of_landing_sub_non_inventories_imps.id')
             ->where('bill_of_landing_sub_non_inventories.id', '=', $id)
             ->get();
 
@@ -75,8 +75,12 @@ class BillOfLandingSubNonInventoriesImpsController extends Controller
 
         if ($id == 0) { // create
 
+            $blsnoninventoriesimps = new bill_of_landing_sub_non_inventories_imps();
+        } else { // update
+
             $blsnoninventoriesimps = bill_of_landing_sub_non_inventories_imps::find($id);
         }
+
 
         try {
             $blsnoninventoriesimps->blsn_invent_id = $request->blsn_invent_id;

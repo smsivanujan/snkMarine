@@ -18,16 +18,10 @@ class DetentionTraffSubsController extends Controller
                 'detention_traff_subs.tariff_name',
                 'detention_traff_subs.slab_days',
                 'detention_traff_subs.slab_rate',
-                'detention_traff_subs.deleted',
-                'yard.vendor_code',
-                'yard.vendor_name',
-                'agent.client_code',
-                'agent.client_name'
+                'detention_traff_subs.deleted'
             )
             ->join('detention_traffies', 'detention_traff_subs.detention_traffic_id', '=', 'detention_traffies.id')
-            ->join('typeofunits', 'detention_traff_subs.typeofunit_id', '=', 'typeofunits.id')
-            ->join('vendors as yard', 'detention_traff_subs.vendor_id_yard', '=', 'yard.id')
-            ->join('clients as agent', 'detention_traff_subs.client_id_agent', '=', 'agent.id')
+
             ->get();
 
         return $detentiontraffsubs;
@@ -37,22 +31,15 @@ class DetentionTraffSubsController extends Controller
     {
         $id = $request->id;
         $detentiontraffsubs = DB::table('detention_traff_subs')
-        ->select(
-            'detention_traff_subs.id',
-            'detention_traff_subs.detention_traffic_id',
-            'detention_traff_subs.tariff_name',
-            'detention_traff_subs.slab_days',
-            'detention_traff_subs.slab_rate',
-            'detention_traff_subs.deleted',
-            'yard.vendor_code',
-            'yard.vendor_name',
-            'agent.client_code',
-            'agent.client_name'
-        )
-        ->join('detention_traffies', 'detention_traff_subs.detention_traffic_id', '=', 'detention_traffies.id')
-        ->join('typeofunits', 'detention_traff_subs.typeofunit_id', '=', 'typeofunits.id')
-        ->join('vendors as yard', 'detention_traff_subs.vendor_id_yard', '=', 'yard.id')
-        ->join('clients as agent', 'detention_traff_subs.client_id_agent', '=', 'agent.id')
+            ->select(
+                'detention_traff_subs.id',
+                'detention_traff_subs.detention_traffic_id',
+                'detention_traff_subs.tariff_name',
+                'detention_traff_subs.slab_days',
+                'detention_traff_subs.slab_rate',
+                'detention_traff_subs.deleted'
+            )
+            ->join('detention_traffies', 'detention_traff_subs.detention_traffic_id', '=', 'detention_traffies.id')
             ->where('detention_traffies.id', '=', $id)
             ->get();
 
@@ -62,8 +49,13 @@ class DetentionTraffSubsController extends Controller
     public function store(Request $request)
     {
         $id = $request->id;
-
+        if ($id == 0) { // create
+    
             $detentiontraffsub = new detention_traff_subs();
+        } else { // update
+
+            $detentiontraffsub = detention_traff_subs::find($id);
+        }
 
 
         try {

@@ -14,6 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('bill_of_landing_sub_switches', function (Blueprint $table) {
+
+
+
             $table->increments('id');
             $table->integer('bill_of_landing_id')->unsigned()->unique();
             $table->integer('equipment_id')->unsigned()->nullable();
@@ -21,8 +24,8 @@ return new class extends Migration
             $table->string('marks')->nullable();
             $table->integer('package_quantity')->nullable();
             $table->longText('description')->nullable();
-            $table->decimal('gross_weight',10,2)->nullable();
-            $table->decimal('measurement',10,2)->nullable();
+            $table->decimal('gross_weight', 10, 2)->nullable();
+            $table->decimal('measurement', 10, 2)->nullable();
             $table->integer('bill_confirmation_id')->nullable();
             $table->string('status')->nullable();
             $table->integer('ignore_data')->nullable();
@@ -39,8 +42,8 @@ return new class extends Migration
             $table->date('payed_till')->nullable();
             $table->string('soa_status_exp')->nullable();
             $table->string('soa_status_imp')->nullable();
-            $table->decimal('lift_on_off',10,2)->nullable();
-            $table->decimal('other_expenses',10,2)->nullable();
+            $table->decimal('lift_on_off', 10, 2)->nullable();
+            $table->decimal('other_expenses', 10, 2)->nullable();
             $table->longText('other_expenses_remarks')->nullable();
             $table->integer('deleted')->nullable();
             $table->timestamps();

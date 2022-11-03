@@ -18,14 +18,14 @@ class ReceiptPaymentsController extends Controller
                 'receipt_payments.pay_type',
                 'receipt_payments.cheque_no',
                 'receipt_payments.cheque_date',
-                'receiptpayments.current_bal',
-                'receiptpayments.paying_amount',
-                'receiptpayments.paying_local',
-                'receiptpayments.status',
-                'receiptpayments.deleted',
+                'receipt_payments.current_bal',
+                'receipt_payments.paying_amount',
+                'receipt_payments.paying_local',
+                'receipt_payments.status',
+                'receipt_payments.deleted',
                 'receipts.receipt_no'
             )
-            ->join('receipts', 'receiptpayments.receipt_id', '=', 'receipts.id')
+            ->join('receipts', 'receipt_payments.receipt_id', '=', 'receipts.id')
             ->get();
 
         return $receiptpayments;
@@ -41,14 +41,14 @@ class ReceiptPaymentsController extends Controller
             'receipt_payments.pay_type',
             'receipt_payments.cheque_no',
             'receipt_payments.cheque_date',
-            'receiptpayments.current_bal',
-            'receiptpayments.paying_amount',
-            'receiptpayments.paying_local',
-            'receiptpayments.status',
-            'receiptpayments.deleted',
+            'receipt_payments.current_bal',
+            'receipt_payments.paying_amount',
+            'receipt_payments.paying_local',
+            'receipt_payments.status',
+            'receipt_payments.deleted',
             'receipts.receipt_no'
         )
-        ->join('receipts', 'receiptpayments.receipt_id', '=', 'receipts.id')
+        ->join('receipts', 'receipt_payments.receipt_id', '=', 'receipts.id')
             ->where('receipts.id', '=', $id)
             ->get();
 
@@ -76,8 +76,6 @@ class ReceiptPaymentsController extends Controller
 
             $receiptpayment = receipt_payments::find($id);
         }
-
-
 
         try {
             $receiptpayment->receipt_id = $request->receipt_id;

@@ -81,9 +81,13 @@ class BillOfLandingSubNonInventoriesExpsController extends Controller
     {
         $id = $request->id;
 
+        if ($id == 0) { // create
 
+            $blsnoninventoriesexps = new bill_of_landing_sub_non_inventories_exps();
+        } else { // update
 
-        $blsnoninventoriesexps = new bill_of_landing_sub_non_inventories_exps();
+            $blsnoninventoriesexps = bill_of_landing_sub_non_inventories_exps::find($id);
+        }
 
 
         try {

@@ -50,7 +50,7 @@ class ArrivalNoticiesController extends Controller
                 'portloading.port_name',
                 'discharge.port_code',
                 'discharge.port_name',
-                'igmindiavoyages.voyage',
+                'igm_india_voyages.voyage',
                 'yard.vendor_code',
                 'yard.vendor_name',
                 
@@ -99,7 +99,7 @@ class ArrivalNoticiesController extends Controller
                 'arrival_noticies.usd_rate',
                 'arrival_noticies.usd_tot',
                 'arrival_noticies.deleted',
-                'bill_of_landings.owner_code',
+                'bill_of_landings.bill_of_landing_number',
                 'shipper.client_code',
                 'shipper.client_name',
                 'consignee.client_code',
@@ -110,7 +110,7 @@ class ArrivalNoticiesController extends Controller
                 'portloading.port_name',
                 'discharge.port_code',
                 'discharge.port_name',
-                'igmindiavoyages.voyage',
+                'igm_india_voyages.voyage',
                 'yard.vendor_code',
                 'yard.vendor_name',
                 

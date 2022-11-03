@@ -43,7 +43,7 @@ class BillRemoteLogsController extends Controller
             )
             ->join('bill_of_landings', 'bill_remote_logs.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('clients', 'bill_remote_logs.client_id', '=', 'clients.id')
-            ->where('client_id.id', '=', $id)
+            ->where('bill_of_landings.id', '=', $id)
             ->get();
 
         return $bill_remote_logs;

@@ -85,7 +85,7 @@ class BillOfLandingsController extends Controller
             ->join('countries as origin', 'bill_of_landings.country_id_origin', '=', 'origin.id')
             ->join('countries as bltb_released', 'bill_of_landings.country_id_bltb_released', '=', 'bltb_released.id')
             ->join('countries as ocefrepayable', 'bill_of_landings.country_id_ocefrepayable', '=', 'ocefrepayable.id')
-            ->join('traffic_modes', 'bill_of_landings.traffic_mode_id', '=', 'traffic_nodes.id')
+            ->join('traffic_modes', 'bill_of_landings.traffic_mode_id', '=', 'traffic_modes.id')
             ->get();
 
         return $billoflanding;
@@ -168,7 +168,7 @@ class BillOfLandingsController extends Controller
             ->join('countries as origin', 'bill_of_landings.country_id_origin', '=', 'origin.id')
             ->join('countries as bltb_released', 'bill_of_landings.country_id_bltb_released', '=', 'bltb_released.id')
             ->join('countries as ocefrepayable', 'bill_of_landings.country_id_ocefrepayable', '=', 'ocefrepayable.id')
-            ->join('traffic_modes', 'bill_of_landings.traffic_mode_id', '=', 'traffic_nodes.id')
+            ->join('traffic_modes', 'bill_of_landings.traffic_mode_id', '=', 'traffic_modes.id')
             ->where('bill_of_landings.id', '=', $id)
             ->get();
 
@@ -194,6 +194,7 @@ class BillOfLandingsController extends Controller
         }
 
         try {
+            $billoflanding->date = $request->date;
             $billoflanding->bill_of_landing_number = $request->bill_of_landing_number;
             $billoflanding->booking_confirmation_id = $request->booking_confirmation_id;
             $billoflanding->client_id_shipper = $request->client_id_shipper;
