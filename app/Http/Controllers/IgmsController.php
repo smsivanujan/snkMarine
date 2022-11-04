@@ -66,7 +66,7 @@ class IgmsController extends Controller
             ->join('igm_india_voyages', 'igms.igm_india_voyage_id', '=', 'igm_india_voyages.id')
             ->join('clients as carrier', 'igms.client_id_carrier', '=', 'carrier.id')
             ->join('clients as notify', 'igms.client_id_notify', '=', 'notify.id')
-            ->join('vendors as cosignee', 'igms.client_id_cosignee', '=', 'cosignee.id')
+            ->join('clients as cosignee', 'igms.client_id_cosignee', '=', 'cosignee.id')
             ->get();
 
         return $igms;
@@ -130,7 +130,7 @@ class IgmsController extends Controller
             ->join('igm_india_voyages', 'igms.igm_india_voyage_id', '=', 'igm_india_voyages.id')
             ->join('clients as carrier', 'igms.client_id_carrier', '=', 'carrier.id')
             ->join('clients as notify', 'igms.client_id_notify', '=', 'notify.id')
-            ->join('vendors as cosignee', 'igms.client_id_cosignee', '=', 'cosignee.id')
+            ->join('clients as cosignee', 'igms.client_id_cosignee', '=', 'cosignee.id')
             ->where('igms.id', '=', $id)
             ->get();
 

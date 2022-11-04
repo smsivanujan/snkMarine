@@ -58,7 +58,6 @@ use App\Http\Controllers\InvoiceChargesController;
 use App\Http\Controllers\ReceiptPaymentsController;
 use App\Http\Controllers\RemoteBlController;
 use App\Http\Controllers\VoucherPaymentsController;
-
 use App\Http\Controllers\IgmCarriersController;
 use App\Http\Controllers\IgmContainersController;
 use App\Http\Controllers\IgmIndiaCargoInfosController;
@@ -414,8 +413,8 @@ Route::POST('/igmlankadodcontainers/store', [IgmLankaDoContainersController::cla
 
 //Igm Lanka Dos----------------------------------------------O ----------------
 Route::GET('/igmlankados/show/all', [IgmLankaDosController::class,'index']);
-Route::GET('/detentioninvoicecontainers/show/{id}', [IgmLankaDosController::class,'showById']);
-Route::POST('/detentioninvoicecontainers/store', [IgmLankaDosController::class,'store']);
+Route::GET('/igmlankados/show/{id}', [IgmLankaDosController::class,'showById']);
+Route::POST('/igmlankados/store', [IgmLankaDosController::class,'store']);
 
 //Igms----------------------------------------------O ----------------
 Route::GET('/igms/show/all', [IgmsController::class,'index']);

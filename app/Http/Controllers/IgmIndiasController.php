@@ -48,7 +48,7 @@ class IgmIndiasController extends Controller
                 'igm_indias.arrival_date',
                 'igm_indias.igm_number',
                 'igm_indias.nationality',
-                'igm_indias.deleted',
+                'igm_indias.deleted'
             )
             ->join('bill_of_landings', 'igm_indias.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('igm_india_voyages', 'igm_indias.igm_india_voyage_id', '=', 'igm_india_voyages.id')
@@ -98,7 +98,7 @@ class IgmIndiasController extends Controller
                 'igm_indias.arrival_date',
                 'igm_indias.igm_number',
                 'igm_indias.nationality',
-                'igm_indias.deleted',
+                'igm_indias.deleted'
             )
             ->join('bill_of_landings', 'igm_indias.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('igm_india_voyages', 'igm_indias.igm_india_voyage_id', '=', 'igm_india_voyages.id')
@@ -123,7 +123,7 @@ class IgmIndiasController extends Controller
 
 
         try {
-            $igm_indias->bill_of_landing_id = $request->blsn_invent_id;
+            $igm_indias->bill_of_landing_id = $request->bill_of_landing_id;
             $igm_indias->sender_id = $request->sender_id;
             $igm_indias->version_no = $request->version_no;
             $igm_indias->message_id = $request->message_id;

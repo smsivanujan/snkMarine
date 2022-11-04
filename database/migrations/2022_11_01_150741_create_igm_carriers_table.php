@@ -21,7 +21,7 @@ return new class extends Migration
             $table->String('sender_id');
             $table->String('pan_number');
             $table->String('receiver_id');
-            $table->date('version_no');
+            $table->String('version_no');
             $table->integer('client_id_shipper')->unsigned();
             $table->timestamps();
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');

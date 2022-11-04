@@ -16,7 +16,7 @@ class IgmIndiaVoyagesController extends Controller
                 'igm_india_voyages.id',
                 'igm_india_voyages.voyage',
                 'igm_india_voyages.imo',
-                'igm_india_voyages.sign',
+                'igm_india_voyages.sign'
             )
             ->get();
 
@@ -31,7 +31,7 @@ class IgmIndiaVoyagesController extends Controller
                 'igm_india_voyages.id',
                 'igm_india_voyages.voyage',
                 'igm_india_voyages.imo',
-                'igm_india_voyages.sign',
+                'igm_india_voyages.sign'
             )
             ->where('igm_india_voyages.id', '=', $id)
             ->get();

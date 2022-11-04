@@ -28,7 +28,7 @@ class IgmIndiaContainersController extends Controller
                 'igm_india_containers.type',
                 'igm_india_containers.pkgs',
                 'igm_india_containers.gross_weight',
-                'igm_india_containers.con_code',
+                'igm_india_containers.con_code'
             )
             ->join('igms', 'igm_india_containers.igm_id', '=', 'igms.id')
             ->join('equipments', 'igm_india_containers.equipment_id', '=', 'equipments.id')
@@ -57,7 +57,7 @@ class IgmIndiaContainersController extends Controller
                 'igm_india_containers.type',
                 'igm_india_containers.pkgs',
                 'igm_india_containers.gross_weight',
-                'igm_india_containers.con_code',
+                'igm_india_containers.con_code'
             )
             ->join('igms', 'igm_india_containers.igm_id', '=', 'igms.id')
             ->join('equipments', 'igm_india_containers.equipment_id', '=', 'equipments.id')

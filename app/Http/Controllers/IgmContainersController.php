@@ -20,7 +20,7 @@ class IgmContainersController extends Controller
                 'igm_containers.no_of_packages',
                 'igm_containers.type_of_container',
                 'igm_containers.empty_Full',
-                'igm_containers.deleted',
+                'igm_containers.deleted'
             )
             ->join('bill_of_landings', 'igm_containers.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->get();
@@ -39,7 +39,7 @@ class IgmContainersController extends Controller
             'igm_containers.no_of_packages',
             'igm_containers.type_of_container',
             'igm_containers.empty_Full',
-            'igm_containers.deleted',
+            'igm_containers.deleted'
         )
         ->join('bill_of_landings', 'igm_containers.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->where('igm_containers.id', '=', $id)
@@ -67,6 +67,7 @@ class IgmContainersController extends Controller
             $igm_containers->no_of_packages = $request->no_of_packages;
             $igm_containers->type_of_container = $request->type_of_container;
             $igm_containers->empty_Full = $request->empty_Full;
+            $igm_containers->deleted = $request->deleted;
             $igm_containers->save();
 
 

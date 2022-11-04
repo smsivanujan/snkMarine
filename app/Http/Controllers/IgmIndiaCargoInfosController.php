@@ -44,7 +44,7 @@ class IgmIndiaCargoInfosController extends Controller
                 'igm_india_cargo_infos.client_id_notify',
                 'igm_india_cargo_infos.unit_count',
                 'igm_india_cargo_infos.shipping_from',
-                'igm_india_cargo_infos.remarks',
+                'igm_india_cargo_infos.remarks'
             )
             ->join('igms', 'igm_india_cargo_infos.igm_id', '=', 'igms.id')
             ->join('igm_india_voyages', 'igm_india_cargo_infos.igm_india_voyage_id', '=', 'igm_india_voyages.id')
@@ -92,7 +92,7 @@ class IgmIndiaCargoInfosController extends Controller
             'igm_india_cargo_infos.client_id_notify',
             'igm_india_cargo_infos.unit_count',
             'igm_india_cargo_infos.shipping_from',
-            'igm_india_cargo_infos.remarks',
+            'igm_india_cargo_infos.remarks'
         )
         ->join('igms', 'igm_india_cargo_infos.igm_id', '=', 'igms.id')
         ->join('igm_india_voyages', 'igm_india_cargo_infos.igm_india_voyage_id', '=', 'igm_india_voyages.id')
@@ -137,6 +137,7 @@ class IgmIndiaCargoInfosController extends Controller
             $igm_india_cargo_infos->total_packages = $request->total_packages;
             $igm_india_cargo_infos->pkg_units = $request->pkg_units;
             $igm_india_cargo_infos->total_gross = $request->total_gross;
+            $igm_india_cargo_infos->gross_units = $request->gross_units;
             $igm_india_cargo_infos->marks_numbers = $request->marks_numbers;
             $igm_india_cargo_infos->cargo_des2 = $request->cargo_des2;
             $igm_india_cargo_infos->cargo_class = $request->cargo_class;
