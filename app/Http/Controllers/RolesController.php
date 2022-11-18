@@ -17,7 +17,7 @@ class RolesController extends Controller
                 'roles.role_name',
                 'roles.description'
             )
-            ->get();
+            ->paginate(50);
 
         return $roles;
     }

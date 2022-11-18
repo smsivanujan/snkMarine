@@ -37,7 +37,7 @@ class BillOfLandingSubNonInventoriesExpsController extends Controller
             )
             ->join('bill_of_landing_sub_non_inventories', 'bill_of_landing_sub_non_inventories_exps.blsn_invent_id', '=', 'bill_of_landing_sub_non_inventories_exps.id')
             ->join('booking_confirmations', 'bill_of_landing_sub_non_inventories_exps.ex_bc_id', '=', 'booking_confirmations.id')
-            ->get();
+            ->paginate(50);
 
         return $billoflandingsubnoninventoriesexps;
     }

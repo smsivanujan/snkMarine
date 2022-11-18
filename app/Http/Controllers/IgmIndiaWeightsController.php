@@ -16,7 +16,7 @@ class IgmIndiaWeightsController extends Controller
                 'igm_india_weights.id',
                 'igm_india_weights.weight'
             )
-            ->get();
+            ->paginate(50);
 
         return $igm_india_weights;
     }
@@ -25,10 +25,10 @@ class IgmIndiaWeightsController extends Controller
     {
         $id = $request->id;
         $igm_india_weights = DB::table('igm_india_weights')
-        ->select(
-            'igm_india_weights.id',
-            'igm_india_weights.weight'
-        )
+            ->select(
+                'igm_india_weights.id',
+                'igm_india_weights.weight'
+            )
             ->where('igm_india_weights.id', '=', $id)
             ->get();
 

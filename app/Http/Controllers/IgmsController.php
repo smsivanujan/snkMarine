@@ -58,7 +58,7 @@ class IgmsController extends Controller
                 'carrier.client_code',
                 'carrier.client_name',
                 'notify.client_code',
-                'notify.client_name',  
+                'notify.client_name',
                 'cosignee.client_code',
                 'cosignee.client_name'
             )
@@ -67,7 +67,7 @@ class IgmsController extends Controller
             ->join('clients as carrier', 'igms.client_id_carrier', '=', 'carrier.id')
             ->join('clients as notify', 'igms.client_id_notify', '=', 'notify.id')
             ->join('clients as cosignee', 'igms.client_id_cosignee', '=', 'cosignee.id')
-            ->get();
+            ->paginate(50);
 
         return $igms;
     }
@@ -122,7 +122,7 @@ class IgmsController extends Controller
                 'carrier.client_code',
                 'carrier.client_name',
                 'notify.client_code',
-                'notify.client_name',  
+                'notify.client_name',
                 'cosignee.client_code',
                 'cosignee.client_name'
             )
@@ -204,5 +204,24 @@ class IgmsController extends Controller
 
             return $th;
         }
+    }
+
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $igms = igms::find($id);
+        $igms->deleted = $status;
+        $igms->save();
+
+        return 'Done';
     }
 }

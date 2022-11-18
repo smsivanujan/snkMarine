@@ -75,7 +75,7 @@ class BookingConfirmationsController extends Controller
             ->join('igm_india_voyages', 'booking_confirmations.igm_india_voyage_id', '=', 'igm_india_voyages.id')
             ->join('type_of_units', 'booking_confirmations.type_of_unit_id', '=', 'type_of_units.id')
             ->join('vendors as yard', 'booking_confirmations.vendor_id_yard', '=', 'yard.id')
-            ->get();
+            ->paginate(50);
 
         return $bookingconfirmations;
     }

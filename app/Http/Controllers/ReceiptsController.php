@@ -33,7 +33,7 @@ class ReceiptsController extends Controller
             ->join('invoices', 'receipts.invoice_id', '=', 'invoices.id')
             ->join('detention_invoices', 'receipts.detention_invoice_id', '=', 'detention_invoices.id')
             ->join('currencies', 'receipts.currency_id', '=', 'currencies.id')
-            ->get();
+            ->paginate(50);
 
         return $receipts;
     }
@@ -42,27 +42,27 @@ class ReceiptsController extends Controller
     {
         $id = $request->id;
         $receipts = DB::table('receipts')
-        ->select(
-            'receipts.id',
-            'receipts.receipt_no',
-            'receipts.description',
-            'receipts.client_id',
-            'receipts.arrival_notice_id',
-            'receipts.invoice_id',
-            'receipts.detention_invoice_id',
-            'receipts.currency_id',
-            'receipts.deleted',
-            'arrival_noticies.arrival_notice_no',
-            'invoices.invoice_no',
-            'detention_invoices.detention_no',
-            'currencies.currency_code',
-            'currencies.currency_name'
-        )
-        ->join('clients', 'receipts.client_id', '=', 'clients.id')
-        ->join('arrival_noticies', 'receipts.arrival_notice_id', '=', 'arrival_noticies.id')
-        ->join('invoices', 'receipts.invoice_id', '=', 'invoices.id')
-        ->join('detention_invoices', 'receipts.detention_invoice_id', '=', 'detention_invoices.id')
-        ->join('currencies', 'receipts.currency_id', '=', 'currencies.id')
+            ->select(
+                'receipts.id',
+                'receipts.receipt_no',
+                'receipts.description',
+                'receipts.client_id',
+                'receipts.arrival_notice_id',
+                'receipts.invoice_id',
+                'receipts.detention_invoice_id',
+                'receipts.currency_id',
+                'receipts.deleted',
+                'arrival_noticies.arrival_notice_no',
+                'invoices.invoice_no',
+                'detention_invoices.detention_no',
+                'currencies.currency_code',
+                'currencies.currency_name'
+            )
+            ->join('clients', 'receipts.client_id', '=', 'clients.id')
+            ->join('arrival_noticies', 'receipts.arrival_notice_id', '=', 'arrival_noticies.id')
+            ->join('invoices', 'receipts.invoice_id', '=', 'invoices.id')
+            ->join('detention_invoices', 'receipts.detention_invoice_id', '=', 'detention_invoices.id')
+            ->join('currencies', 'receipts.currency_id', '=', 'currencies.id')
             ->where('receipts.id', '=', $id)
             ->get();
 
@@ -113,5 +113,24 @@ class ReceiptsController extends Controller
 
             return $th;
         }
+    }
+
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $receipt = receipts::find($id);
+        $receipt->deleted = $status;
+        $receipt->save();
+
+        return 'Done';
     }
 }

@@ -20,7 +20,7 @@ class SoasController extends Controller
                 'clients.client_name'
             )
             ->join('clients', 'soas.client_id_agent', '=', 'clients.id')
-            ->get();
+            ->paginate(50);
 
         return $soas;
     }
@@ -46,16 +46,15 @@ class SoasController extends Controller
     public function store(Request $request)
     {
         $id = $request->id;
-        
+
         if ($id == 0) { // create
 
             $soa = new soas();
-
         } else { // update
 
             $soa = soas::find($id);
         }
-       
+
 
         try {
             $soa->date = $request->date;

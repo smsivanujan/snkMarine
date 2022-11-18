@@ -33,7 +33,7 @@ class BillOfLandingSubNonInventoriesImpsController extends Controller
                 'bill_of_landing_sub_non_inventories_imps.imp_remarks'
             )
             ->join('bill_of_landing_sub_non_inventories', 'bill_of_landing_sub_non_inventories_imps.blsn_invent_id', '=', 'bill_of_landing_sub_non_inventories_imps.id')
-            ->get();
+            ->paginate(50);
 
         return $billoflandingsubnoninventoriesimps;
     }

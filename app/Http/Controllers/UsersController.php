@@ -34,7 +34,7 @@ class UsersController extends Controller
             )
             ->join('clients', 'users.client_id', '=', 'clients.id')
             ->join('timezones', 'users.timezone_id', '=', 'timezones.id')
-            ->get();
+            ->paginate(50);
 
         return $users;
     }
@@ -131,5 +131,42 @@ class UsersController extends Controller
 
             return $th;
         }
+    }
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $user = users::find($id);
+        $user->is_delete = $status;
+        $user->save();
+
+        return 'Done';
+    }
+
+    // status change
+    public function statusOnlineChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//offline
+        } else {
+            $status = 1;//online
+        }
+
+        $user = users::find($id);
+        $user->is_online = $status;
+        $user->save();
+
+        return 'Done';
     }
 }

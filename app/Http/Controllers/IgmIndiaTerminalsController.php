@@ -18,7 +18,7 @@ class IgmIndiaTerminalsController extends Controller
                 'igm_india_terminals.code',
                 'igm_india_terminals.port'
             )
-            ->get();
+            ->paginate(50);
 
         return $igm_india_terminals;
     }

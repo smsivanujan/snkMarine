@@ -17,7 +17,7 @@ class PropertiesController extends Controller
                 'properties.property_name',
                 'properties.description'
             )
-            ->get();
+            ->paginate(50);
 
         return $properties;
     }

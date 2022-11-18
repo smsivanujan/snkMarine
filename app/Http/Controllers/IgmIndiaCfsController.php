@@ -12,11 +12,11 @@ class IgmIndiaCfsController extends Controller
     public function index()
     {
         $igmindiacfs = DB::table('igm_india_cfs')
-        ->select(
-            'igm_india_cfs.id',
-            'igm_india_cfs.cfs_code'     
-        )
-            ->get();
+            ->select(
+                'igm_india_cfs.id',
+                'igm_india_cfs.cfs_code'
+            )
+            ->paginate(50);
 
         return $igmindiacfs;
     }
@@ -27,7 +27,7 @@ class IgmIndiaCfsController extends Controller
         $igmindiacfs = DB::table('igm_india_cfs')
             ->select(
                 'igm_india_cfs.id',
-                'igm_india_cfs.cfs_code'     
+                'igm_india_cfs.cfs_code'
             )
             ->where('igm_india_cfs.id', '=', $id)
             ->get();

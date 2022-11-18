@@ -26,7 +26,7 @@ class EquipmentSaleDetailsController extends Controller
             )
             ->join('equipment_sales', 'equipment_sale_details.equipment_sale_id', '=', 'equipment_sales.id')
             ->join('equipments', 'equipment_sale_details.equipment_id', '=', 'equipments.id')
-            ->get();
+            ->paginate(50);
 
         return $equipmentsaledetails;
     }
@@ -35,19 +35,19 @@ class EquipmentSaleDetailsController extends Controller
     {
         $id = $request->id;
         $equipmentsaledetails = DB::table('equipment_sale_details')
-        ->select(
-            'equipment_sale_details.id',
-            'equipment_sale_details.equipment_sale_id',
-            'equipment_sale_details.equipment_id',
-            'equipment_sale_details.amount',
-            'equipment_sale_details.destination',
-            'equipment_sales.date',
-            'equipment_sales.no_unit',
-            'equipment_sales.sale_type',
-            'equipments.equipment_number'
-        )
-        ->join('equipment_sales', 'equipment_sale_details.equipment_sale_id', '=', 'equipment_sales.id')
-        ->join('equipments', 'equipment_sale_details.equipment_id', '=', 'equipments.id')
+            ->select(
+                'equipment_sale_details.id',
+                'equipment_sale_details.equipment_sale_id',
+                'equipment_sale_details.equipment_id',
+                'equipment_sale_details.amount',
+                'equipment_sale_details.destination',
+                'equipment_sales.date',
+                'equipment_sales.no_unit',
+                'equipment_sales.sale_type',
+                'equipments.equipment_number'
+            )
+            ->join('equipment_sales', 'equipment_sale_details.equipment_sale_id', '=', 'equipment_sales.id')
+            ->join('equipments', 'equipment_sale_details.equipment_id', '=', 'equipments.id')
             ->where('equipment_sale_details.equipment_sale_id', '=', $id)
             ->get();
 
@@ -61,12 +61,11 @@ class EquipmentSaleDetailsController extends Controller
         if ($id == 0) { // create
 
             $equipmentsaledetail = new equipment_sale_details();
-
         } else { // update
 
             $equipmentsaledetail = equipment_sale_details::find($id);
         }
-       
+
 
         try {
             $equipmentsaledetail->equipment_sale_id = $request->equipment_sale_id;

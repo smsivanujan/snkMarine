@@ -60,7 +60,7 @@ class InvoicesController extends Controller
             ->join('ports as portloading', 'invoices.port_id_loading', '=', 'portloading.id')
             ->join('ports as discharge', 'invoices.port_id_discharge', '=', 'discharge.id')
             ->join('igm_india_voyages', 'invoices.igm_india_voyage_id', '=', 'igm_india_voyages.id')
-            ->get();
+            ->paginate(50);
 
         return $invoices;
     }
@@ -183,5 +183,24 @@ class InvoicesController extends Controller
 
             return $th;
         }
+    }
+
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $invoice = invoices::find($id);
+        $invoice->deleted = $status;
+        $invoice->save();
+
+        return 'Done';
     }
 }

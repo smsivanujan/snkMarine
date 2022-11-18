@@ -16,7 +16,7 @@ class TrafficModesController extends Controller
                 'traffic_modes.id',
                 'traffic_modes.trafficmode_type'
             )
-            ->get();
+            ->paginate(50);
 
         return $trafficmodes;
     }

@@ -17,7 +17,7 @@ class DefaultValuesController extends Controller
                 'default_values.category',
                 'default_values.c_value'
             )
-            ->get();
+            ->paginate(50);
 
         return $defaultvalues;
     }

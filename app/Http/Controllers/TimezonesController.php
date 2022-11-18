@@ -17,7 +17,7 @@ class TimezonesController extends Controller
                 'timezones.timezone_data_name',
                 'timezones.timezone_data_value'
             )
-            ->get();
+            ->paginate(50);
 
         return $timezones;
     }

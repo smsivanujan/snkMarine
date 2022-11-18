@@ -20,7 +20,7 @@ class DetentionInvoiceSlabsController extends Controller
                 'detention_invoices.detention_no'
             )
             ->join('detention_invoices', 'detention_invoice_slabs.detention_invoice_id', '=', 'detention_invoices.id')
-            ->get();
+            ->paginate(50);
 
         return $detentioninvoiceslabs;
     }
@@ -48,7 +48,7 @@ class DetentionInvoiceSlabsController extends Controller
         $id = $request->id;
 
         if ($id == 0) { // create
-    
+
             $detentioninvoiceslabs = new detention_invoice_slabs();
         } else { // update
 

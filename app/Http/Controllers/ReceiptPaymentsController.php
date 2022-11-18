@@ -26,7 +26,7 @@ class ReceiptPaymentsController extends Controller
                 'receipts.receipt_no'
             )
             ->join('receipts', 'receipt_payments.receipt_id', '=', 'receipts.id')
-            ->get();
+            ->paginate(50);
 
         return $receiptpayments;
     }
@@ -35,20 +35,20 @@ class ReceiptPaymentsController extends Controller
     {
         $id = $request->id;
         $receiptpayments = DB::table('receipt_payments')
-        ->select(
-            'receipt_payments.id',
-            'receipt_payments.receipt_id',
-            'receipt_payments.pay_type',
-            'receipt_payments.cheque_no',
-            'receipt_payments.cheque_date',
-            'receipt_payments.current_bal',
-            'receipt_payments.paying_amount',
-            'receipt_payments.paying_local',
-            'receipt_payments.status',
-            'receipt_payments.deleted',
-            'receipts.receipt_no'
-        )
-        ->join('receipts', 'receipt_payments.receipt_id', '=', 'receipts.id')
+            ->select(
+                'receipt_payments.id',
+                'receipt_payments.receipt_id',
+                'receipt_payments.pay_type',
+                'receipt_payments.cheque_no',
+                'receipt_payments.cheque_date',
+                'receipt_payments.current_bal',
+                'receipt_payments.paying_amount',
+                'receipt_payments.paying_local',
+                'receipt_payments.status',
+                'receipt_payments.deleted',
+                'receipts.receipt_no'
+            )
+            ->join('receipts', 'receipt_payments.receipt_id', '=', 'receipts.id')
             ->where('receipts.id', '=', $id)
             ->get();
 
@@ -99,5 +99,24 @@ class ReceiptPaymentsController extends Controller
 
             return $th;
         }
+    }
+
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $receiptpayment = receipt_payments::find($id);
+        $receiptpayment->deleted = $status;
+        $receiptpayment->save();
+
+        return 'Done';
     }
 }

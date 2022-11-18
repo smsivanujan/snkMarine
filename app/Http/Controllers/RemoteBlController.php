@@ -23,7 +23,7 @@ class RemoteBlController extends Controller
             )
             ->join('bill_of_landings', 'remote_bls.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('clients', 'remote_bls.client_id_agent', '=', 'clients.id')
-            ->get();
+            ->paginate(50);
 
         return $remotebls;
     }
@@ -64,7 +64,7 @@ class RemoteBlController extends Controller
         $id = $request->id;
 
 
-            $remote_bl = new remote_bl();
+        $remote_bl = new remote_bl();
 
 
         try {

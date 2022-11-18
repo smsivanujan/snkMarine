@@ -74,7 +74,7 @@ class BillOfLandingSwitchesController extends Controller
             ->join('countries as bltb_released', 'bill_of_landing_switches.country_id_bltb_released', '=', 'bltb_released.id')
             ->join('countries as ocefrepayable', 'bill_of_landing_switches.country_id_ocefrepayable', '=', 'ocefrepayable.id')
             ->join('traffic_modes', 'bill_of_landing_switches.traffic_mode_id', '=', 'traffic_modes.id')
-            ->get();
+            ->paginate(50);
 
         return $billoflandingswitch;
     }
@@ -172,7 +172,7 @@ class BillOfLandingSwitchesController extends Controller
 
             $billoflandingswitch = bill_of_landing_switches::find($id);
         }
-       
+
 
         try {
             $billoflandingswitch->date = $request->date;

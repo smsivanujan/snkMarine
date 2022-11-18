@@ -27,7 +27,7 @@ class EquipmentSalesController extends Controller
             )
             ->join('clients', 'equipment_sales.client_id', '=', 'clients.id')
             ->join('clients as agent', 'equipment_sales.client_id_agent', '=', 'agent.id')
-            ->get();
+            ->paginate(50);
 
         return $equipmentsales;
     }

@@ -56,7 +56,7 @@ class BillOfLandingSubSwitchesController extends Controller
             ->join('clients as agent', 'bill_of_landing_sub_switches.client_id_agent', '=', 'agent.id')
             ->join('clients as ex_agent', 'bill_of_landing_sub_switches.client_id_ex_agent', '=', 'ex_agent.id')
             ->join('vendors as yard', 'bill_of_landing_sub_switches.vendor_id_yard', '=', 'yard.id')
-            ->get();
+            ->paginate(50);
 
         return $billoflandingsubswitches;
     }
@@ -170,5 +170,24 @@ class BillOfLandingSubSwitchesController extends Controller
 
             return $th;
         }
+    }
+
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $bl_sub_switch = bill_of_landing_sub_switches::find($id);
+        $bl_sub_switch->deleted = $status;
+        $bl_sub_switch->save();
+
+        return 'Done';
     }
 }

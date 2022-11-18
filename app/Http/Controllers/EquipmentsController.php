@@ -33,7 +33,7 @@ class EquipmentsController extends Controller
             ->join('type_of_units', 'equipments.type_of_unit_id', '=', 'type_of_units.id')
             ->join('vendors', 'equipments.vendor_id_yard', '=', 'vendors.id')
             ->join('clients', 'equipments.client_id_agent', '=', 'clients.id')
-            ->get();
+            ->paginate(50);
 
         return $equipments;
     }

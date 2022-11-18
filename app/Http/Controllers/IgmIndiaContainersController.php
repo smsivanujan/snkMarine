@@ -32,7 +32,7 @@ class IgmIndiaContainersController extends Controller
             )
             ->join('igms', 'igm_india_containers.igm_id', '=', 'igms.id')
             ->join('equipments', 'igm_india_containers.equipment_id', '=', 'equipments.id')
-            ->get();
+            ->paginate(50);
 
         return $igm_india_containers;
     }

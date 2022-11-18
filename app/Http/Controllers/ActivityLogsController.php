@@ -23,7 +23,7 @@ class ActivityLogsController extends Controller
             )
             ->join('users', 'activity_logs.user_id', '=', 'users.id')
             ->join('clients', 'users.client_id', '=', 'clients.id')
-            ->get();
+            ->paginate(50);
 
         return $activitylogs;
     }

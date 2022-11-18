@@ -20,7 +20,7 @@ class PermissionsController extends Controller
                 'clients.client_name'
             )
             ->join('clients', 'permissions.client_id', '=', 'clients.id')
-            ->get();
+            ->paginate(50);
 
         return $permissions;
     }

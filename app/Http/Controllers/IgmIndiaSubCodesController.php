@@ -18,7 +18,7 @@ class IgmIndiaSubCodesController extends Controller
                 'igm_india_sub_codes.port_code',
                 'igm_india_sub_codes.sub_code'
             )
-            ->get();
+            ->paginate(50);
 
         return $igm_india_sub_codes;
     }

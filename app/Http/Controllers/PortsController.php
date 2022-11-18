@@ -22,7 +22,7 @@ class PortsController extends Controller
                 'countries.capital_city_name'
             )
             ->join('countries', 'ports.country_id', '=', 'countries.id')
-            ->get();
+            ->paginate(50);
 
         return $ports;
     }

@@ -23,7 +23,7 @@ class DetentionTraffiesController extends Controller
                 'clients.client_name'
             )
             ->join('clients', 'detention_traffies.client_id_agent', '=', 'clients.id')
-            ->get();
+            ->paginate(50);
 
         return $equipments;
     }
@@ -32,17 +32,17 @@ class DetentionTraffiesController extends Controller
     {
         $id = $request->id;
         $equipments = DB::table('detention_traffies')
-        ->select(
-            'detention_traffies.id',
-            'detention_traffies.client_id_agent',
-            'detention_traffies.currency_id',
-            'detention_traffies.free_days',
-            'detention_traffies.comm',
-            'detention_traffies.deleted',
-            'clients.client_code',
-            'clients.client_name'
-        )
-        ->join('clients', 'detention_traffies.client_id_agent', '=', 'clients.id')
+            ->select(
+                'detention_traffies.id',
+                'detention_traffies.client_id_agent',
+                'detention_traffies.currency_id',
+                'detention_traffies.free_days',
+                'detention_traffies.comm',
+                'detention_traffies.deleted',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('clients', 'detention_traffies.client_id_agent', '=', 'clients.id')
             ->where('detention_traffies.id', '=', $id)
             ->get();
 
@@ -53,13 +53,13 @@ class DetentionTraffiesController extends Controller
     {
         $id = $request->id;
 
-            if ($id == 0) { // create
-    
-                $detentiontraffies = new detention_traffies();
-            } else { // update
-    
-                $detentiontraffies = detention_traffies::find($id);
-            }
+        if ($id == 0) { // create
+
+            $detentiontraffies = new detention_traffies();
+        } else { // update
+
+            $detentiontraffies = detention_traffies::find($id);
+        }
 
 
         try {
@@ -80,5 +80,24 @@ class DetentionTraffiesController extends Controller
 
             return $th;
         }
+    }
+
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $detentiontraffies = detention_traffies::find($id);
+        $detentiontraffies->deleted = $status;
+        $detentiontraffies->save();
+
+        return 'Done';
     }
 }

@@ -32,7 +32,7 @@ class VouchersController extends Controller
             ->join('bill_of_landings', 'vouchers.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('vendors', 'vouchers.vendor_id', '=', 'vendors.id')
             ->join('currencies', 'vouchers.currency_id', '=', 'currencies.id')
-            ->get();
+            ->paginate(50);
 
         return $vouchers;
     }
@@ -111,4 +111,24 @@ class VouchersController extends Controller
             return $th;
         }
     }
+
+     // status change
+     public function statusChange(Request $request)
+     {
+         $id = $request->id;
+         $status = $request->status;
+ 
+         if ($status == 1) {
+             $status = 0;//inactive
+         } else {
+             $status = 1;//active
+         }
+ 
+         $voucher = vouchers::find($id);
+         $voucher->deleted = $status;
+         $voucher->save();
+ 
+         return 'Done';
+     }
+ 
 }

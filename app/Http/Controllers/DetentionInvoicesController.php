@@ -65,7 +65,7 @@ class DetentionInvoicesController extends Controller
                 'forign.currency_name'
                 // 'local.currency_code',
                 // 'local.currency_name'
-                
+
             )
             ->join('bill_of_landings', 'detention_invoices.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('clients as shipper', 'detention_invoices.client_id_shipper', '=', 'shipper.id')
@@ -77,9 +77,9 @@ class DetentionInvoicesController extends Controller
             ->join('detention_traffies', 'detention_invoices.tariff_id', '=', 'detention_traffies.id')
             ->join('currencies as forign', 'detention_invoices.forign_currency_id', '=', 'forign.id')
             // ->join('currencies as local ', 'detention_invoices.local_currency_id', '=', 'local.id')
-            ->get();
+            ->paginate(50);
 
-            return $detentioninvoices;
+        return $detentioninvoices;
     }
 
     public function showById(Request $request)
@@ -139,7 +139,7 @@ class DetentionInvoicesController extends Controller
                 'forign.currency_name'
                 // 'local.currency_code',
                 // 'local.currency_name'
-                
+
             )
             ->join('bill_of_landings', 'detention_invoices.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('clients as shipper', 'detention_invoices.client_id_shipper', '=', 'shipper.id')
@@ -228,5 +228,24 @@ class DetentionInvoicesController extends Controller
 
             return $th;
         }
+    }
+
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $detentioninvoice = detention_invoices::find($id);
+        $detentioninvoice->deleted = $status;
+        $detentioninvoice->save();
+
+        return 'Done';
     }
 }

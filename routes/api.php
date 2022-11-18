@@ -420,3 +420,28 @@ Route::POST('/igmlankados/store', [IgmLankaDosController::class,'store']);
 Route::GET('/igms/show/all', [IgmsController::class,'index']);
 Route::GET('/igms/show/{id}', [IgmsController::class,'showById']);
 Route::POST('/igms/store', [IgmsController::class,'store']);
+
+// -------------------------------------------------------
+// -----------------------------------------
+
+Route::get('arivalnotices/status-change', [ArrivalNoticiesController::class, 'statusChange']);
+Route::get('billoflandingsubnoninventories/status-change', [BillOfLandingSubNonInventoriesController::class, 'statusChange']);
+Route::get('billoflandingsubs/status-change', [BillOfLandingSubsController::class, 'statusChange']);
+Route::get('billoflandingsubswitches/status-change', [BillOfLandingSubSwitchesController::class, 'statusChange']);
+Route::get('clients/status-change', [ClientsController::class, 'statusChange']);
+Route::get('detentioninvoicecontainers/status-change', [DetentionInvoiceContainersController::class, 'statusChange']);
+Route::get('detentioninvoice/status-change', [DetentionInvoicesController::class, 'statusChange']);
+Route::get('detentiontraffies/status-change', [DetentionTraffiesController::class, 'statusChange']);
+Route::get('detentiontraffsubs/status-change', [DetentionTraffSubsController::class, 'statusChange']);
+Route::get('igmcontainers/status-change', [IgmContainersController::class, 'statusChange']);
+Route::get('igmindias/status-change', [IgmIndiasController::class, 'statusChange']);
+Route::get('igmlankados/status-change', [IgmLankaDosController::class, 'statusChange']);
+Route::get('igms/status-change', [IgmsController::class, 'statusChange']);
+Route::get('invoices/status-change', [InvoicesController::class, 'statusChange']);
+Route::get('owners/status-change', [OwnersController::class, 'statusChange']);
+Route::get('receiptpayments/status-change', [ReceiptPaymentsController::class, 'statusChange']);
+Route::get('receipts/status-change', [ReceiptsController::class, 'statusChange']);
+Route::get('users/status-change', [UsersController::class, 'statusChange']);
+Route::get('users/status-online-change', [UsersController::class, 'statusOnlineChange']);
+Route::get('vendors/status-change', [VendorsController::class, 'statusChange']);
+Route::get('vouchers/status-change', [VouchersController::class, 'statusChange']);

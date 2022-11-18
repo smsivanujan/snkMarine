@@ -40,7 +40,7 @@ class InvoiceChargesController extends Controller
             ->join('invoices', 'invoice_charges.invoice_id', '=', 'invoices.id')
             ->join('currencies', 'invoice_charges.currency_id', '=', 'currencies.id')
             ->join('currencies as mycurrency', 'invoice_charges.currency_id_mycurrency', '=', 'mycurrency.id')
-            ->get();
+            ->paginate(50);
 
         return $invoicecharges;
     }
@@ -87,13 +87,13 @@ class InvoiceChargesController extends Controller
     {
         $id = $request->id;
 
-            if ($id == 0) { // create
-    
-                $invoicecharge = new invoice_charges();
-            } else { // update
-    
-                $invoicecharge = invoice_charges::find($id);
-            }
+        if ($id == 0) { // create
+
+            $invoicecharge = new invoice_charges();
+        } else { // update
+
+            $invoicecharge = invoice_charges::find($id);
+        }
 
 
         try {

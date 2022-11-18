@@ -53,7 +53,7 @@ class IgmIndiasController extends Controller
             ->join('bill_of_landings', 'igm_indias.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('igm_india_voyages', 'igm_indias.igm_india_voyage_id', '=', 'igm_india_voyages.id')
             ->join('igm_india_terminals', 'igm_indias.igm_india_terminal_id', '=', 'igm_india_terminals.id')
-            ->get();
+            ->paginate(50);
 
         return $igm_indias;
     }
@@ -171,5 +171,24 @@ class IgmIndiasController extends Controller
 
             return $th;
         }
+    }
+
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $igmindia = igm_indias::find($id);
+        $igmindia->deleted = $status;
+        $igmindia->save();
+
+        return 'Done';
     }
 }

@@ -51,7 +51,7 @@ class IgmIndiaCargoInfosController extends Controller
             ->join('bill_of_landings', 'igm_india_cargo_infos.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('clients as consignee', 'igm_india_cargo_infos.client_id_consignee', '=', 'consignee.id')
             ->join('clients as notify', 'igm_india_cargo_infos.client_id_notify', '=', 'notify.id')
-            ->get();
+            ->paginate(50);
 
         return $igm_india_cargo_infos;
     }
@@ -60,45 +60,45 @@ class IgmIndiaCargoInfosController extends Controller
     {
         $id = $request->id;
         $igm_india_cargo_infos = DB::table('igm_india_cargo_infos')
-        ->select(
-            'igm_india_cargo_infos.id',
-            'igm_india_cargo_infos.igm_id',
-            'igm_india_cargo_infos.pod2',
-            'igm_india_cargo_infos.imo2',
-            'igm_india_cargo_infos.call_sign2',
-            'igm_india_cargo_infos.igm_india_voyage_id',
-            'igm_india_cargo_infos.line_number',
-            'igm_india_cargo_infos.bill_of_landing_id',
-            'igm_india_cargo_infos.pol_code',
-            'igm_india_cargo_infos.pol_code_sub',
-            'igm_india_cargo_infos.final_destination',
-            'igm_india_cargo_infos.vessel_type2',
-            'igm_india_cargo_infos.other_cargo',
-            'igm_india_cargo_infos.local_cargo',
-            'igm_india_cargo_infos.local_sfc',
-            'igm_india_cargo_infos.total_packages',
-            'igm_india_cargo_infos.pkg_units',
-            'igm_india_cargo_infos.total_gross',
-            'igm_india_cargo_infos.gross_units',
-            'igm_india_cargo_infos.marks_numbers',
-            'igm_india_cargo_infos.cargo_des2',
-            'igm_india_cargo_infos.cargo_class',
-            'igm_india_cargo_infos.ul_number',
-            'igm_india_cargo_infos.rail_number',
-            'igm_india_cargo_infos.rail_operator',
-            'igm_india_cargo_infos.train_road',
-            'igm_india_cargo_infos.pan_number',
-            'igm_india_cargo_infos.client_id_consignee',
-            'igm_india_cargo_infos.client_id_notify',
-            'igm_india_cargo_infos.unit_count',
-            'igm_india_cargo_infos.shipping_from',
-            'igm_india_cargo_infos.remarks'
-        )
-        ->join('igms', 'igm_india_cargo_infos.igm_id', '=', 'igms.id')
-        ->join('igm_india_voyages', 'igm_india_cargo_infos.igm_india_voyage_id', '=', 'igm_india_voyages.id')
-        ->join('bill_of_landings', 'igm_india_cargo_infos.bill_of_landing_id', '=', 'bill_of_landings.id')
-        ->join('clients as consignee', 'igm_india_cargo_infos.client_id_consignee', '=', 'consignee.id')
-        ->join('clients as notify', 'igm_india_cargo_infos.client_id_notify', '=', 'notify.id')
+            ->select(
+                'igm_india_cargo_infos.id',
+                'igm_india_cargo_infos.igm_id',
+                'igm_india_cargo_infos.pod2',
+                'igm_india_cargo_infos.imo2',
+                'igm_india_cargo_infos.call_sign2',
+                'igm_india_cargo_infos.igm_india_voyage_id',
+                'igm_india_cargo_infos.line_number',
+                'igm_india_cargo_infos.bill_of_landing_id',
+                'igm_india_cargo_infos.pol_code',
+                'igm_india_cargo_infos.pol_code_sub',
+                'igm_india_cargo_infos.final_destination',
+                'igm_india_cargo_infos.vessel_type2',
+                'igm_india_cargo_infos.other_cargo',
+                'igm_india_cargo_infos.local_cargo',
+                'igm_india_cargo_infos.local_sfc',
+                'igm_india_cargo_infos.total_packages',
+                'igm_india_cargo_infos.pkg_units',
+                'igm_india_cargo_infos.total_gross',
+                'igm_india_cargo_infos.gross_units',
+                'igm_india_cargo_infos.marks_numbers',
+                'igm_india_cargo_infos.cargo_des2',
+                'igm_india_cargo_infos.cargo_class',
+                'igm_india_cargo_infos.ul_number',
+                'igm_india_cargo_infos.rail_number',
+                'igm_india_cargo_infos.rail_operator',
+                'igm_india_cargo_infos.train_road',
+                'igm_india_cargo_infos.pan_number',
+                'igm_india_cargo_infos.client_id_consignee',
+                'igm_india_cargo_infos.client_id_notify',
+                'igm_india_cargo_infos.unit_count',
+                'igm_india_cargo_infos.shipping_from',
+                'igm_india_cargo_infos.remarks'
+            )
+            ->join('igms', 'igm_india_cargo_infos.igm_id', '=', 'igms.id')
+            ->join('igm_india_voyages', 'igm_india_cargo_infos.igm_india_voyage_id', '=', 'igm_india_voyages.id')
+            ->join('bill_of_landings', 'igm_india_cargo_infos.bill_of_landing_id', '=', 'bill_of_landings.id')
+            ->join('clients as consignee', 'igm_india_cargo_infos.client_id_consignee', '=', 'consignee.id')
+            ->join('clients as notify', 'igm_india_cargo_infos.client_id_notify', '=', 'notify.id')
             ->where('igm_india_cargo_infos.id', '=', $id)
             ->get();
 

@@ -20,7 +20,7 @@ class DepartmentsController extends Controller
                 'properties.property_name'
             )
             ->join('properties', 'departments.property_id', '=', 'properties.id')
-            ->get();
+            ->paginate(50);
 
         return $departments;
     }

@@ -18,7 +18,7 @@ class IgmIndiaVoyagesController extends Controller
                 'igm_india_voyages.imo',
                 'igm_india_voyages.sign'
             )
-            ->get();
+            ->paginate(50);
 
         return $igmindiavoyages;
     }

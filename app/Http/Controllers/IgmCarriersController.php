@@ -29,7 +29,7 @@ class IgmCarriersController extends Controller
             )
             ->join('clients', 'igm_carriers.client_id', '=', 'clients.id')
             ->join('clients as shipper', 'igm_carriers.client_id_shipper', '=', 'clients.id')
-            ->get();
+            ->paginate(50);
 
         return $igmcarriers;
     }
@@ -38,23 +38,23 @@ class IgmCarriersController extends Controller
     {
         $id = $request->id;
         $igmcarriers = DB::table('igm_carriers')
-        ->select(
-            'igm_carriers.id',
-            'igm_carriers.client_id',
-            'igm_carriers.customs_office_code',
-            'igm_carriers.place_of_destination_code',
-            'igm_carriers.sender_id',
-            'igm_carriers.pan_number',
-            'igm_carriers.receiver_id',
-            'igm_carriers.version_no',
-            'igm_carriers.client_id_shipper',
-            'clients.client_code',
-            'clients.client_name',
-            'shipper.client_code',
-            'shipper.client_name'
-        )
-        ->join('clients', 'igm_carriers.client_id', '=', 'clients.id')
-        ->join('clients as shipper', 'igm_carriers.client_id_shipper', '=', 'clients.id')
+            ->select(
+                'igm_carriers.id',
+                'igm_carriers.client_id',
+                'igm_carriers.customs_office_code',
+                'igm_carriers.place_of_destination_code',
+                'igm_carriers.sender_id',
+                'igm_carriers.pan_number',
+                'igm_carriers.receiver_id',
+                'igm_carriers.version_no',
+                'igm_carriers.client_id_shipper',
+                'clients.client_code',
+                'clients.client_name',
+                'shipper.client_code',
+                'shipper.client_name'
+            )
+            ->join('clients', 'igm_carriers.client_id', '=', 'clients.id')
+            ->join('clients as shipper', 'igm_carriers.client_id_shipper', '=', 'clients.id')
             ->where('igm_carriers.id', '=', $id)
             ->get();
 

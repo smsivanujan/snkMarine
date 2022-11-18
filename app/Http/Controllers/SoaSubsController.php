@@ -27,7 +27,7 @@ class SoaSubsController extends Controller
             )
             ->join('soas', 'soa_subs.soa_id', '=', 'soas.id')
             ->join('clients', 'soa_subs.client_id_agent', '=', 'clients.id')
-            ->get();
+            ->paginate(50);
 
         return $soasubs;
     }
@@ -36,21 +36,21 @@ class SoaSubsController extends Controller
     {
         $id = $request->id;
         $soasubs = DB::table('soa_subs')
-        ->select(
-            'soa_subs.id',
-            'soa_subs.date',
-            'soa_subs.soa_id',
-            'soa_subs.client_id_agent',
-            'soa_subs.description',
-            'soa_subs.income',
-            'soa_subs.expenses',
-            'soas.date as soasDate',
-            'soas.status',
-            'clients.client_code',
-            'clients.client_name'
-        )
-        ->join('soas', 'soa_subs.soa_id', '=', 'soas.id')
-        ->join('clients', 'soa_subs.client_id_agent', '=', 'clients.id')
+            ->select(
+                'soa_subs.id',
+                'soa_subs.date',
+                'soa_subs.soa_id',
+                'soa_subs.client_id_agent',
+                'soa_subs.description',
+                'soa_subs.income',
+                'soa_subs.expenses',
+                'soas.date as soasDate',
+                'soas.status',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('soas', 'soa_subs.soa_id', '=', 'soas.id')
+            ->join('clients', 'soa_subs.client_id_agent', '=', 'clients.id')
             ->where('soas.id', '=', $id)
             ->get();
 
@@ -60,11 +60,10 @@ class SoaSubsController extends Controller
     public function store(Request $request)
     {
         $id = $request->id;
-        
+
         if ($id == 0) { // create
 
             $soasub = new soa_subs();
-
         } else { // update
 
             $soasub = soa_subs::find($id);

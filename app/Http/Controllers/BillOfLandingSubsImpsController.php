@@ -33,7 +33,7 @@ class BillOfLandingSubsImpsController extends Controller
                 'bill_of_landing_subs_imps.imp_remarks'
             )
             ->join('bill_of_landing_subs', 'bill_of_landing_subs_imps.bill_of_landing_sub_id', '=', 'bill_of_landing_subs.id')
-            ->get();
+            ->paginate(50);
 
         return $billoflanding_subsimps;
     }
@@ -81,7 +81,7 @@ class BillOfLandingSubsImpsController extends Controller
 
             $billoflandingsubsimps = bill_of_landing_subs_imps::find($id);
         }
-        
+
 
         try {
             $billoflandingsubsimps->bill_of_landing_sub_id = $request->bill_of_landing_sub_id;

@@ -21,8 +21,7 @@ class DetentionTraffSubsController extends Controller
                 'detention_traff_subs.deleted'
             )
             ->join('detention_traffies', 'detention_traff_subs.detention_traffic_id', '=', 'detention_traffies.id')
-
-            ->get();
+            ->paginate(50);
 
         return $detentiontraffsubs;
     }
@@ -50,7 +49,7 @@ class DetentionTraffSubsController extends Controller
     {
         $id = $request->id;
         if ($id == 0) { // create
-    
+
             $detentiontraffsub = new detention_traff_subs();
         } else { // update
 
@@ -76,5 +75,24 @@ class DetentionTraffSubsController extends Controller
 
             return $th;
         }
+    }
+
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $detentiontraffsub = detention_traff_subs::find($id);
+        $detentiontraffsub->deleted = $status;
+        $detentiontraffsub->save();
+
+        return 'Done';
     }
 }

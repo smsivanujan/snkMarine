@@ -16,7 +16,20 @@ class AccessModelsController extends Controller
                 'access_models.id',
                 'access_models.name'
             )
-            ->get();
+            ->paginate(50);
+
+        return $accessmodels;
+    }
+
+    public function search()
+    {
+        $accessmodels = DB::table('access_models')
+            ->select(
+                'access_models.id',
+                'access_models.name'
+            )
+            ->where('access_models.name' like "")
+            ->paginate(50);
 
         return $accessmodels;
     }

@@ -24,7 +24,7 @@ class VoucherPaymentsController extends Controller
                 'vouchers.voucher_no'
             )
             ->join('vouchers', 'voucher_payments.voucher_id', '=', 'vouchers.id')
-            ->get();
+            ->paginate(50);
 
         return $voucherpayments;
     }

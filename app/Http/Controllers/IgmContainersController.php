@@ -23,7 +23,7 @@ class IgmContainersController extends Controller
                 'igm_containers.deleted'
             )
             ->join('bill_of_landings', 'igm_containers.bill_of_landing_id', '=', 'bill_of_landings.id')
-            ->get();
+            ->paginate(50);
 
         return $igmcontainers;
     }
@@ -32,16 +32,16 @@ class IgmContainersController extends Controller
     {
         $id = $request->id;
         $igmcontainers = DB::table('igm_containers')
-        ->select(
-            'igm_containers.id',
-            'igm_containers.igm_id',
-            'igm_containers.bill_of_landing_id',
-            'igm_containers.no_of_packages',
-            'igm_containers.type_of_container',
-            'igm_containers.empty_Full',
-            'igm_containers.deleted'
-        )
-        ->join('bill_of_landings', 'igm_containers.bill_of_landing_id', '=', 'bill_of_landings.id')
+            ->select(
+                'igm_containers.id',
+                'igm_containers.igm_id',
+                'igm_containers.bill_of_landing_id',
+                'igm_containers.no_of_packages',
+                'igm_containers.type_of_container',
+                'igm_containers.empty_Full',
+                'igm_containers.deleted'
+            )
+            ->join('bill_of_landings', 'igm_containers.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->where('igm_containers.id', '=', $id)
             ->get();
 
@@ -81,5 +81,24 @@ class IgmContainersController extends Controller
 
             return $th;
         }
+    }
+
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $igmcontainer = igm_containers::find($id);
+        $igmcontainer->deleted = $status;
+        $igmcontainer->save();
+
+        return 'Done';
     }
 }

@@ -41,7 +41,7 @@ class ClientsController extends Controller
             ->join('countries', 'clients.country_id', '=', 'countries.id')
             ->join('ports', 'clients.port_id', '=', 'ports.id')
             ->join('currencies', 'clients.currency_id', '=', 'currencies.id')
-            ->get();
+            ->paginate(50);
 
         return $clients;
     }
@@ -151,5 +151,24 @@ class ClientsController extends Controller
 
             return $th;
         }
+    }
+
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $client = clients::find($id);
+        $client->is_active = $status;
+        $client->save();
+
+        return 'Done';
     }
 }

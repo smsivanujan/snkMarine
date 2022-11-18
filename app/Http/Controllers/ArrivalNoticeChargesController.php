@@ -42,7 +42,7 @@ class ArrivalNoticeChargesController extends Controller
             ->join('arrival_noticies', 'arrival_notice_charges.arrival_notice_id', '=', 'arrival_noticies.id')
             ->join('currencies', 'arrival_notice_charges.currency_id', '=', 'currencies.id')
             ->join('currencies as mycurrency', 'arrival_notice_charges.currency_id_mycurrency', '=', 'mycurrency.id')
-            ->get();
+            ->paginate(50);
 
         return $arrivalnoticechargess;
     }

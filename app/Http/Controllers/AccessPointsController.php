@@ -20,7 +20,7 @@ class AccessPointsController extends Controller
                 'access_models.name',
             )
             ->join('access_models', 'access_points.access_model_id', '=', 'access_models.id')
-            ->get();
+            ->paginate(50);
 
         return $accesspoints;
     }

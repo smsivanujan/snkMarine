@@ -51,7 +51,7 @@ class IgmLankaDosController extends Controller
             ->join('vendors as warhouse', 'igm_lanka_dos.vendor_id_warhouse', '=', 'warhouse.id')
             ->join('ports', 'igm_lanka_dos.port_id_loading', '=', 'ports.id')
             ->join('vendors as yard', 'igm_lanka_dos.vendor_id_yard', '=', 'yard.id')
-            ->get();
+            ->paginate(50);
 
         return $igm_lanka_dos;
     }
@@ -149,5 +149,24 @@ class IgmLankaDosController extends Controller
 
             return $th;
         }
+    }
+
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $igmlankado = igm_lanka_dos::find($id);
+        $igmlankado->deleted = $status;
+        $igmlankado->save();
+
+        return 'Done';
     }
 }

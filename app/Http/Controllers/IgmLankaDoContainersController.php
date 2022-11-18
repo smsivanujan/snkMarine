@@ -24,7 +24,7 @@ class IgmLankaDoContainersController extends Controller
             )
             ->join('igms', 'igm_lanka_do_containers.igm_id', '=', 'igms.id')
             ->join('equipments', 'igm_lanka_do_containers.equipment_id', '=', 'equipments.id')
-            ->get();
+            ->paginate(50);
 
         return $igm_lanka_do_containers;
     }
@@ -33,18 +33,18 @@ class IgmLankaDoContainersController extends Controller
     {
         $id = $request->id;
         $igm_lanka_do_containers = DB::table('igm_lanka_do_containers')
-        ->select(
-            'igm_lanka_do_containers.id',
-            'igm_lanka_do_containers.igm_id',
-            'igm_lanka_do_containers.equipment_id',
-            'igm_lanka_do_containers.seal_no',
-            'igm_lanka_do_containers.description',
-            'igm_lanka_do_containers.weight',
-            'igm_lanka_do_containers.measurement',
-            'equipments.equipment_number'
-        )
-        ->join('igms', 'igm_lanka_do_containers.igm_id', '=', 'igms.id')
-        ->join('equipments', 'igm_lanka_do_containers.equipment_id', '=', 'equipments.id')
+            ->select(
+                'igm_lanka_do_containers.id',
+                'igm_lanka_do_containers.igm_id',
+                'igm_lanka_do_containers.equipment_id',
+                'igm_lanka_do_containers.seal_no',
+                'igm_lanka_do_containers.description',
+                'igm_lanka_do_containers.weight',
+                'igm_lanka_do_containers.measurement',
+                'equipments.equipment_number'
+            )
+            ->join('igms', 'igm_lanka_do_containers.igm_id', '=', 'igms.id')
+            ->join('equipments', 'igm_lanka_do_containers.equipment_id', '=', 'equipments.id')
             ->where('igm_lanka_do_containers.id', '=', $id)
             ->get();
 

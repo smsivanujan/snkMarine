@@ -86,7 +86,7 @@ class BillOfLandingsController extends Controller
             ->join('countries as bltb_released', 'bill_of_landings.country_id_bltb_released', '=', 'bltb_released.id')
             ->join('countries as ocefrepayable', 'bill_of_landings.country_id_ocefrepayable', '=', 'ocefrepayable.id')
             ->join('traffic_modes', 'bill_of_landings.traffic_mode_id', '=', 'traffic_modes.id')
-            ->get();
+            ->paginate(50);
 
         return $billoflanding;
     }
@@ -180,16 +180,16 @@ class BillOfLandingsController extends Controller
         $id = $request->id;
 
         if ($id == 0) { // create
-                $this->validate($request, [
-                    'bill_of_landing_number' => 'unique:bill_of_landings,bill_of_landing_number'
-                ]);
+            $this->validate($request, [
+                'bill_of_landing_number' => 'unique:bill_of_landings,bill_of_landing_number'
+            ]);
 
             $billoflanding = new bill_of_landings();
         } else { // update
-                $this->validate($request, [
-                    'bill_of_landing_number' => 'unique:bill_of_landings,bill_of_landing_number,' . $id,
-                ]);
-           
+            $this->validate($request, [
+                'bill_of_landing_number' => 'unique:bill_of_landings,bill_of_landing_number,' . $id,
+            ]);
+
             $billoflanding = bill_of_landings::find($id);
         }
 
@@ -206,7 +206,7 @@ class BillOfLandingsController extends Controller
             $billoflanding->port_id_discharge = $request->port_id_discharge;
             $billoflanding->port_id_final_dest = $request->port_id_final_dest;
             $billoflanding->port_id_loading_bl = $request->port_id_loading_bl;
-            $billoflanding->port_id_discharge_bl=$request->port_id_discharge_bl;
+            $billoflanding->port_id_discharge_bl = $request->port_id_discharge_bl;
             $billoflanding->port_id_final_dest_bl = $request->port_id_final_dest_bl;
             $billoflanding->detention_free_days = $request->detention_free_days;
             $billoflanding->detention_description = $request->detention_description;
@@ -221,7 +221,7 @@ class BillOfLandingsController extends Controller
             $billoflanding->ocean_freight = $request->ocean_freight;
             $billoflanding->country_id_ocefrepayable = $request->country_id_ocefrepayable;
             $billoflanding->traffic_mode_id = $request->traffic_mode_id;
-            $billoflanding->no_of_bls=$request->no_of_bls;
+            $billoflanding->no_of_bls = $request->no_of_bls;
             $billoflanding->bl_type = $request->bl_type;
             $billoflanding->special_instructions = $request->special_instructions;
             $billoflanding->shipper_loaded = $request->shipper_loaded;

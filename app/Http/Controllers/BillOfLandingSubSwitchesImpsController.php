@@ -64,7 +64,7 @@ class BillOfLandingSubSwitchesImpsController extends Controller
             )
             ->join('bill_of_landing_sub_non_inventories', 'bill_of_landing_sub_switches_imps.bls_switch_id', '=', 'bill_of_landing_sub_non_inventories.id')
             ->where('bill_of_landing_sub_switches_imps.id', '=', $id)
-            ->get();
+            ->paginate(50);
 
         return $billoflandingsubswitchesimps;
     }
@@ -73,13 +73,13 @@ class BillOfLandingSubSwitchesImpsController extends Controller
     {
         $id = $request->id;
 
-            if ($id == 0) { // create
+        if ($id == 0) { // create
 
-                $bls_switches_imps = new bill_of_landing_sub_switches_imps();
-            } else { // update
-    
-                $bls_switches_imps = bill_of_landing_sub_switches_imps::find($id);
-            }
+            $bls_switches_imps = new bill_of_landing_sub_switches_imps();
+        } else { // update
+
+            $bls_switches_imps = bill_of_landing_sub_switches_imps::find($id);
+        }
 
 
         try {

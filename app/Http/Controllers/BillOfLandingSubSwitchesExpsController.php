@@ -37,7 +37,7 @@ class BillOfLandingSubSwitchesExpsController extends Controller
             )
             ->join('bill_of_landing_sub_non_inventories', 'bill_of_landing_sub_switches_exps.bls_switch_id', '=', 'bill_of_landing_sub_switches_exps.id')
             ->join('booking_confirmations', 'bill_of_landing_sub_switches_exps.ex_bc_id', '=', 'booking_confirmations.id')
-            ->get();
+            ->paginate(50);
 
         return $billoflandingsubswitchesexps;
     }
@@ -80,14 +80,14 @@ class BillOfLandingSubSwitchesExpsController extends Controller
     public function store(Request $request)
     {
         $id = $request->id;
-            if ($id == 0) { // create
+        if ($id == 0) { // create
 
-                $bls_switches_exps = new bill_of_landing_sub_switches_exps();
-            } else { // update
-    
-                $bls_switches_exps = bill_of_landing_sub_switches_exps::find($id);
-            }
-        
+            $bls_switches_exps = new bill_of_landing_sub_switches_exps();
+        } else { // update
+
+            $bls_switches_exps = bill_of_landing_sub_switches_exps::find($id);
+        }
+
 
         try {
             $bls_switches_exps->bls_switch_id = $request->bls_switch_id;

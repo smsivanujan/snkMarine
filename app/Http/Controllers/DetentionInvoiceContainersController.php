@@ -31,7 +31,7 @@ class DetentionInvoiceContainersController extends Controller
             ->join('arrival_noticies', 'detention_invoice_containers.arrival_notice_id', '=', 'arrival_noticies.id')
             ->join('type_of_units', 'detention_invoice_containers.type_of_unit_id', '=', 'type_of_units.id')
             ->join('equipments', 'detention_invoice_containers.equipment_id', '=', 'equipments.id')
-            ->get();
+            ->paginate(50);
 
         return $detentioninvoicecontainers;
     }
@@ -101,5 +101,24 @@ class DetentionInvoiceContainersController extends Controller
 
             return $th;
         }
+    }
+
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $detentioninvoicecontainers = detention_invoice_containers::find($id);
+        $detentioninvoicecontainers->deleted = $status;
+        $detentioninvoicecontainers->save();
+
+        return 'Done';
     }
 }

@@ -23,7 +23,7 @@ class SwapHistoriesController extends Controller
             )
             ->join('equipments', 'swap_histories.equipment_id', '=', 'equipments.id')
             ->join('clients', 'swap_histories.client_id_agent', '=', 'clients.id')
-            ->get();
+            ->paginate(50);
 
         return $swaphistories;
     }

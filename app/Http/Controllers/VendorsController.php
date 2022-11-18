@@ -37,7 +37,7 @@ class VendorsController extends Controller
             )
             ->join('countries', 'vendors.country_id', '=', 'countries.id')
             ->join('ports', 'vendors.port_id', '=', 'ports.id')
-            ->get();
+            ->paginate(50);
 
         return $vendors;
     }
@@ -142,5 +142,24 @@ class VendorsController extends Controller
 
             return $th;
         }
+    }
+
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $vendor = vendors::find($id);
+        $vendor->is_active = $status;
+        $vendor->save();
+
+        return 'Done';
     }
 }

@@ -52,8 +52,7 @@ class ArrivalNoticiesController extends Controller
                 'discharge.port_name',
                 'igm_india_voyages.voyage',
                 'yard.vendor_code',
-                'yard.vendor_name',
-                
+                'yard.vendor_name'
             )
             ->join('bill_of_landings', 'arrival_noticies.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('clients as shipper', 'arrival_noticies.client_id_shipper', '=', 'shipper.id')
@@ -63,7 +62,7 @@ class ArrivalNoticiesController extends Controller
             ->join('ports as discharge', 'arrival_noticies.port_id_discharge', '=', 'discharge.id')
             ->join('igm_india_voyages', 'arrival_noticies.igm_india_voyage_id', '=', 'igm_india_voyages.id')
             ->join('vendors as yard', 'arrival_noticies.vendor_id_yard', '=', 'yard.id')
-            ->get();
+            ->paginate(50);
 
         return $arrivalnoticies;
     }
@@ -113,7 +112,7 @@ class ArrivalNoticiesController extends Controller
                 'igm_india_voyages.voyage',
                 'yard.vendor_code',
                 'yard.vendor_name',
-                
+
             )
             ->join('bill_of_landings', 'arrival_noticies.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('clients as shipper', 'arrival_noticies.client_id_shipper', '=', 'shipper.id')
@@ -188,5 +187,24 @@ class ArrivalNoticiesController extends Controller
 
             return $th;
         }
+    }
+
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+        
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $arrivalnoticies = arrival_noticies::find($id);
+        $arrivalnoticies->deleted = $status;
+        $arrivalnoticies->save();
+
+        return 'Done';
     }
 }

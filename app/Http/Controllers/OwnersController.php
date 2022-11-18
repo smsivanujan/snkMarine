@@ -36,7 +36,7 @@ class OwnersController extends Controller
             )
             ->join('countries', 'owners.country_id', '=', 'countries.id')
             ->join('ports', 'owners.port_id', '=', 'ports.id')
-            ->get();
+            ->paginate(50);
 
         return $owners;
     }
@@ -141,5 +141,24 @@ class OwnersController extends Controller
 
             return $th;
         }
+    }
+
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;//inactive
+        } else {
+            $status = 1;//active
+        }
+
+        $owner = owners::find($id);
+        $owner->is_active = $status;
+        $owner->save();
+
+        return 'Done';
     }
 }

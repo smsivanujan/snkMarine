@@ -38,7 +38,7 @@ class BillOfLandingSubsExpsController extends Controller
             )
             ->join('bill_of_landing_subs', 'bill_of_landing_subs_exps.bill_of_landing_sub_id', '=', 'bill_of_landing_subs.id')
             ->join('booking_confirmations', 'bill_of_landing_subs_exps.ex_bc_id', '=', 'booking_confirmations.id')
-            ->get();
+            ->paginate(50);
 
         return $billoflandingsubnoninventoriesexps;
     }
@@ -47,31 +47,31 @@ class BillOfLandingSubsExpsController extends Controller
     {
         $id = $request->id;
         $billoflandingsubnoninventoriesexps = DB::table('bill_of_landing_subs_exps')
-        ->select(
-            'bill_of_landing_subs_exps.id',
-            'bill_of_landing_subs_exps.bill_of_landing_sub_id',
-            'bill_of_landing_subs_exps.ex_bc_id',
-            'bill_of_landing_subs_exps.ex_reserved_date',
-            'bill_of_landing_subs_exps.ex_shipper_date',
-            'bill_of_landing_subs_exps.exp_freight_charge',
-            'bill_of_landing_subs_exps.exp_dc_surcharge_in',
-            'bill_of_landing_subs_exps.exp_other_recovery',
-            'bill_of_landing_subs_exps.exp_other_recovery_remarks',
-            'bill_of_landing_subs_exps.exp_total_in',
-            'bill_of_landing_subs_exps.exp_slot_fees',
-            'bill_of_landing_subs_exps.exp_dc_surcharge_ex',
-            'bill_of_landing_subs_exps.exp_agent_comm',
-            'bill_of_landing_subs_exps.exp_phc',
-            'bill_of_landing_subs_exps.exp_total_expenses',
-            'bill_of_landing_subs_exps.exp_final_amount',
-            'bill_of_landing_subs_exps.exp_remarks',
-            'bill_of_landing_subs_exps.exp_created_date',
-            'bill_of_landing_subs_exps.exp_approved_by',
-            'bill_of_landing_subs_exps.exp_approved_date',
-            'booking_confirmations.booking_confirmation_number'
-        )
-        ->join('bill_of_landing_subs', 'bill_of_landing_subs_exps.bill_of_landing_sub_id', '=', 'bill_of_landing_subs.id')
-        ->join('booking_confirmations', 'bill_of_landing_subs_exps.ex_bc_id', '=', 'booking_confirmations.id')
+            ->select(
+                'bill_of_landing_subs_exps.id',
+                'bill_of_landing_subs_exps.bill_of_landing_sub_id',
+                'bill_of_landing_subs_exps.ex_bc_id',
+                'bill_of_landing_subs_exps.ex_reserved_date',
+                'bill_of_landing_subs_exps.ex_shipper_date',
+                'bill_of_landing_subs_exps.exp_freight_charge',
+                'bill_of_landing_subs_exps.exp_dc_surcharge_in',
+                'bill_of_landing_subs_exps.exp_other_recovery',
+                'bill_of_landing_subs_exps.exp_other_recovery_remarks',
+                'bill_of_landing_subs_exps.exp_total_in',
+                'bill_of_landing_subs_exps.exp_slot_fees',
+                'bill_of_landing_subs_exps.exp_dc_surcharge_ex',
+                'bill_of_landing_subs_exps.exp_agent_comm',
+                'bill_of_landing_subs_exps.exp_phc',
+                'bill_of_landing_subs_exps.exp_total_expenses',
+                'bill_of_landing_subs_exps.exp_final_amount',
+                'bill_of_landing_subs_exps.exp_remarks',
+                'bill_of_landing_subs_exps.exp_created_date',
+                'bill_of_landing_subs_exps.exp_approved_by',
+                'bill_of_landing_subs_exps.exp_approved_date',
+                'booking_confirmations.booking_confirmation_number'
+            )
+            ->join('bill_of_landing_subs', 'bill_of_landing_subs_exps.bill_of_landing_sub_id', '=', 'bill_of_landing_subs.id')
+            ->join('booking_confirmations', 'bill_of_landing_subs_exps.ex_bc_id', '=', 'booking_confirmations.id')
             ->where('bill_of_landing_subs_exps.id', '=', $id)
             ->get();
 
@@ -81,14 +81,14 @@ class BillOfLandingSubsExpsController extends Controller
     {
         $id = $request->id;
 
-            if ($id == 0) { // create
+        if ($id == 0) { // create
 
-                $billoflandingsubsexps = new bill_of_landing_subs_exps();
-            } else { // update
-    
-                $billoflandingsubsexps = bill_of_landing_subs_exps::find($id);
-            }
-        
+            $billoflandingsubsexps = new bill_of_landing_subs_exps();
+        } else { // update
+
+            $billoflandingsubsexps = bill_of_landing_subs_exps::find($id);
+        }
+
 
         try {
             $billoflandingsubsexps->bill_of_landing_sub_id = $request->bill_of_landing_sub_id;

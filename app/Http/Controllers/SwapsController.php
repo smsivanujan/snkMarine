@@ -22,7 +22,7 @@ class SwapsController extends Controller
             )
             ->join('equipments', 'swaps.equipment_id', '=', 'equipments.id')
             ->join('clients', 'swaps.client_id_agent', '=', 'clients.id')
-            ->get();
+            ->paginate(50);
 
         return $swaps;
     }
@@ -50,11 +50,10 @@ class SwapsController extends Controller
     public function store(Request $request)
     {
         $id = $request->id;
-        
+
         if ($id == 0) { // create
 
             $swap = new swaps();
-
         } else { // update
 
             $swap = swaps::find($id);

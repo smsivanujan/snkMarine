@@ -17,7 +17,7 @@ class CountriesController extends Controller
                 'countries.country_name',
                 'countries.capital_city_name'
             )
-            ->get();
+            ->paginate(50);
 
         return $countries;
     }

@@ -28,7 +28,7 @@ class LoginLogsController extends Controller
             )
             ->join('users', 'login_logs.user_id', '=', 'users.id')
             ->join('clients', 'users.client_id', '=', 'clients.id')
-            ->get();
+            ->paginate(50);
 
         return $loginlogs;
     }
@@ -37,22 +37,22 @@ class LoginLogsController extends Controller
     {
         $id = $request->id;
         $loginlogs = DB::table('login_logs')
-        ->select(
-            'login_logs.id',
-            'login_logs.date',
-            'login_logs.user_id',
-            'login_logs.ipaddress',
-            'login_logs.browser',
-            'login_logs.os',
-            'login_logs.user_agent',
-            'login_logs.login_type',
-            'login_logs.login_time',
-            'users.client_id',
-            'clients.client_code',
-            'clients.client_name'
-        )
-        ->join('users', 'login_logs.user_id', '=', 'users.id')
-        ->join('clients', 'users.client_id', '=', 'clients.id')
+            ->select(
+                'login_logs.id',
+                'login_logs.date',
+                'login_logs.user_id',
+                'login_logs.ipaddress',
+                'login_logs.browser',
+                'login_logs.os',
+                'login_logs.user_agent',
+                'login_logs.login_type',
+                'login_logs.login_time',
+                'users.client_id',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('users', 'login_logs.user_id', '=', 'users.id')
+            ->join('clients', 'users.client_id', '=', 'clients.id')
             ->where('clients.id', '=', $id)
             ->get();
 

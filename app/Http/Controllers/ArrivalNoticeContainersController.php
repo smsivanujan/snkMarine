@@ -26,7 +26,7 @@ class ArrivalNoticeContainersController extends Controller
             ->join('arrival_noticies', 'arrival_notice_containers.arrival_notice_id', '=', 'arrival_noticies.id')
             ->join('equipments', 'arrival_notice_containers.equipment_id', '=', 'equipments.id')
             ->join('type_of_units', 'arrival_notice_containers.type_of_unit_id', '=', 'type_of_units.id')
-            ->get();
+            ->paginate(50);
 
         return $arrivalnoticecontainers;
     }

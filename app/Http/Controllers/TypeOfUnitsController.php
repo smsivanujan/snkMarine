@@ -16,7 +16,7 @@ class TypeOfUnitsController extends Controller
                 'type_of_units.id',
                 'type_of_units.type_of_unit'
             )
-            ->get();
+            ->paginate(50);
 
         return $typeofunits;
     }
