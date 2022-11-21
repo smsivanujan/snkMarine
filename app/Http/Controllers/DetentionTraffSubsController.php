@@ -45,6 +45,33 @@ class DetentionTraffSubsController extends Controller
         return $detentiontraffsubs;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $detentiontraffsubs = DB::table('detention_traff_subs')
+            ->select(
+                'detention_traff_subs.id',
+                'detention_traff_subs.detention_traffic_id',
+                'detention_traff_subs.tariff_name',
+                'detention_traff_subs.slab_days',
+                'detention_traff_subs.slab_rate',
+                'detention_traff_subs.deleted'
+            )
+            ->join('detention_traffies', 'detention_traff_subs.detention_traffic_id', '=', 'detention_traffies.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('detention_traff_subs.tariff_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $detentiontraffsubs;
+    }
+
+
     public function store(Request $request)
     {
         $id = $request->id;

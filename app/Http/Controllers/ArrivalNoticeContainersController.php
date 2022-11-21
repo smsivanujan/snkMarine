@@ -55,6 +55,111 @@ class ArrivalNoticeContainersController extends Controller
         return $arrivalnoticecontainers;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $arrivalnoticecontainers = DB::table('arrival_notice_containers')
+            ->select(
+                'arrival_notice_containers.id',
+                'arrival_notice_containers.arrival_notice_id',
+                'arrival_notice_containers.equipment_id',
+                'arrival_notice_containers.seal_no',
+                'arrival_notice_containers.marks',
+                'arrival_notice_containers.type_of_unit_id',
+                'arrival_noticies.arrival_notice_no',
+                'equipments.equipment_number',
+                'type_of_units.type_of_unit',
+            )
+            ->join('arrival_noticies', 'arrival_notice_containers.arrival_notice_id', '=', 'arrival_noticies.id')
+            ->join('equipments', 'arrival_notice_containers.equipment_id', '=', 'equipments.id')
+            ->join('type_of_units', 'arrival_notice_containers.type_of_unit_id', '=', 'type_of_units.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('arrival_noticies.arrival_notice_no', 'like', '%' . $query . '%')
+                        ->orWhere('arrival_notice_containers.seal_no', 'like', '%' . $query . '%')
+                        ->orWhere('equipments.equipment_number', 'like', '%' . $query . '%')
+                        ->orWhere('type_of_units.type_of_unit', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $arrivalnoticecontainers;
+    }
+
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $arrivalnoticecontainers = DB::table('arrival_notice_containers')
+        ->select(
+            'arrival_notice_containers.id',
+            'arrival_notice_containers.arrival_notice_id',
+            'arrival_notice_containers.equipment_id',
+            'arrival_notice_containers.seal_no',
+            'arrival_notice_containers.marks',
+            'arrival_notice_containers.type_of_unit_id',
+            'arrival_noticies.arrival_notice_no',
+            'equipments.equipment_number',
+            'type_of_units.type_of_unit',
+        )
+        ->join('arrival_noticies', 'arrival_notice_containers.arrival_notice_id', '=', 'arrival_noticies.id')
+        ->join('equipments', 'arrival_notice_containers.equipment_id', '=', 'equipments.id')
+        ->join('type_of_units', 'arrival_notice_containers.type_of_unit_id', '=', 'type_of_units.id');
+
+        if (!empty($request->arrival_notice_id) && !empty($request->equipment_id) && !empty($request->type_of_unit_id)) {
+            // return "1";
+            // id empty
+            $arrivalnoticecontainers = $arrivalnoticecontainers
+                ->where('arrival_notice_charges.arrival_notice_id', '=', $request->id)
+                ->where('arrival_notice_charges.equipment_id', '=', $request->id)
+                ->where('arrival_notice_charges.type_of_unit_id', '=', $request->id);
+        } elseif (!empty($request->arrival_notice_id) && !empty($request->equipment_id) && empty($request->type_of_unit_id)) {
+            // return "2";
+            // access_model_id empty
+            $arrivalnoticecontainers = $arrivalnoticecontainers
+                ->where('arrival_notice_charges.arrival_notice_id', '=', $request->id)
+                ->where('arrival_notice_charges.equipment_id', '=', $request->id);
+        } elseif (!empty($request->arrival_notice_id) && empty($request->equipment_id) && !empty($request->type_of_unit_id)) {
+            // return "3";
+            // access_model_id empty
+            $arrivalnoticecontainers = $arrivalnoticecontainers
+                ->where('arrival_notice_charges.arrival_notice_id', '=', $request->id)
+                ->where('arrival_notice_charges.type_of_unit_id', '=', $request->id);
+            } elseif (!empty($request->arrival_notice_id) && empty($request->equipment_id) && empty($request->type_of_unit_id)) {
+                // return "4";
+                // access_model_id empty
+                $arrivalnoticecontainers = $arrivalnoticecontainers
+                    ->where('arrival_notice_charges.arrival_notice_id', '=', $request->id);
+        } elseif (empty($request->arrival_notice_id) && !empty($request->equipment_id) && !empty($request->type_of_unit_id)) {
+            // return "5";
+            // access_model_id empty
+            $arrivalnoticecontainers = $arrivalnoticecontainers
+                ->where('arrival_notice_charges.equipment_id', '=', $request->id)
+                ->where('arrival_notice_charges.type_of_unit_id', '=', $request->id);
+        } elseif (empty($request->arrival_notice_id) && !empty($request->equipment_id) && empty($request->type_of_unit_id)) {
+            // return "6";
+            // access_model_id empty
+            $arrivalnoticecontainers = $arrivalnoticecontainers
+                ->where('arrival_notice_charges.equipment_id', '=', $request->id);
+        } elseif (empty($request->arrival_notice_id) && empty($request->equipment_id) && !empty($request->type_of_unit_id)) {
+            // return "7";
+            // access_model_id empty
+            $arrivalnoticecontainers = $arrivalnoticecontainers
+                ->where('arrival_notice_charges.type_of_unit_id', '=', $request->id);
+        } else {
+            // return "8";
+            //all empty
+            $arrivalnoticecontainers = $arrivalnoticecontainers;
+        }
+
+        $result = $arrivalnoticecontainers->orderBy('arrival_notice_charges.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

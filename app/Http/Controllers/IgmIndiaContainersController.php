@@ -28,7 +28,9 @@ class IgmIndiaContainersController extends Controller
                 'igm_india_containers.type',
                 'igm_india_containers.pkgs',
                 'igm_india_containers.gross_weight',
-                'igm_india_containers.con_code'
+                'igm_india_containers.con_code',
+                'igms.customs_office_code',
+                'equipments.equipment_number'
             )
             ->join('igms', 'igm_india_containers.igm_id', '=', 'igms.id')
             ->join('equipments', 'igm_india_containers.equipment_id', '=', 'equipments.id')
@@ -57,12 +59,59 @@ class IgmIndiaContainersController extends Controller
                 'igm_india_containers.type',
                 'igm_india_containers.pkgs',
                 'igm_india_containers.gross_weight',
-                'igm_india_containers.con_code'
+                'igm_india_containers.con_code',
+                'igms.customs_office_code',
+                'equipments.equipment_number'
             )
             ->join('igms', 'igm_india_containers.igm_id', '=', 'igms.id')
             ->join('equipments', 'igm_india_containers.equipment_id', '=', 'equipments.id')
             ->where('igm_india_containers.id', '=', $id)
             ->get();
+
+        return $igm_india_containers;
+    }
+
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $igm_india_containers = DB::table('igm_india_containers')
+            ->select(
+                'igm_india_containers.id',
+                'igm_india_containers.igm_id',
+                'igm_india_containers.cargo_info_number',
+                'igm_india_containers.pod',
+                'igm_india_containers.imo',
+                'igm_india_containers.vessel',
+                'igm_india_containers.voyage',
+                'igm_india_containers.line',
+                'igm_india_containers.sub_line',
+                'igm_india_containers.equipment_id',
+                'igm_india_containers.seal',
+                'igm_india_containers.pan',
+                'igm_india_containers.type',
+                'igm_india_containers.pkgs',
+                'igm_india_containers.gross_weight',
+                'igm_india_containers.con_code',
+                'igms.customs_office_code',
+                'equipments.equipment_number'
+            )
+            ->join('igms', 'igm_india_containers.igm_id', '=', 'igms.id')
+            ->join('equipments', 'igm_india_containers.equipment_id', '=', 'equipments.id')
+            ->where(function ($q) use ($query) {
+                $q->where('igm_india_containers.cargo_info_number', 'like', '%' . $query . '%')
+                    ->orWhere('igm_india_containers.vessel', 'like', '%' . $query . '%')
+                    ->orWhere('igm_india_containers.voyage', 'like', '%' . $query . '%')
+                    ->orWhere('igm_india_containers.type', 'like', '%' . $query . '%')
+                    ->orWhere('igm_india_containers.pan', 'like', '%' . $query . '%')
+                    ->orWhere('igms.customs_office_code', 'like', '%' . $query . '%')
+                    ->orWhere('equipments.equipment_number', 'like', '%' . $query . '%');
+            })
+                ->get();
+        }
 
         return $igm_india_containers;
     }

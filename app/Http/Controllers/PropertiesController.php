@@ -37,6 +37,29 @@ class PropertiesController extends Controller
         return $properties;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $properties = DB::table('properties')
+            ->select(
+                'properties.id',
+                'properties.property_name',
+                'properties.description'
+            )
+                ->where(function ($q) use ($query) {
+                    $q->where('properties.property_name', 'like', '%' . $query . '%')
+                        ->orWhere('properties.description', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $properties;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

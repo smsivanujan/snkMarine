@@ -45,6 +45,35 @@ class CurrenciesController extends Controller
         return $currencies;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $currencies = DB::table('currencies')
+            ->select(
+                'currencies.id',
+                'currencies.currency_code',
+                'currencies.currency_name',
+                'currencies.country_id',
+                'countries.country_name',
+                'countries.capital_city_name'
+            )
+            ->join('countries', 'currencies.country_id', '=', 'countries.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('currencies.currency_code', 'like', '%' . $query . '%')
+                    ->orWhere('currencies.currency_code', 'like', '%' . $query . '%')
+                    ->orWhere('countries.country_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $currencies;
+    }
+
+
     public function store(Request $request)
     {
         $id = $request->id;

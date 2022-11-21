@@ -21,6 +21,27 @@ class TrafficModesController extends Controller
         return $trafficmodes;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $trafficmodes = DB::table('traffic_modes')
+            ->select(
+                'traffic_modes.id',
+                'traffic_modes.trafficmode_type'
+            )
+                ->where(function ($q) use ($query) {
+                    $q->where('traffic_modes.trafficmode_type', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $trafficmodes;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

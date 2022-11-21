@@ -59,6 +59,43 @@ class LoginLogsController extends Controller
         return $loginlogs;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $loginlogs = DB::table('login_logs')
+            ->select(
+                'login_logs.id',
+                'login_logs.date',
+                'login_logs.user_id',
+                'login_logs.ipaddress',
+                'login_logs.browser',
+                'login_logs.os',
+                'login_logs.user_agent',
+                'login_logs.login_type',
+                'login_logs.login_time',
+                'users.client_id',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('users', 'login_logs.user_id', '=', 'users.id')
+            ->join('clients', 'users.client_id', '=', 'clients.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('login_logs.date', 'like', '%' . $query . '%')
+                        ->orWhere('login_logs.login_type', 'like', '%' . $query . '%')
+                        ->orWhere('login_logs.login_time', 'like', '%' . $query . '%')
+                        ->orWhere('clients.client_code', 'like', '%' . $query . '%')
+                        ->orWhere('clients.client_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $loginlogs;
+    }
+
     public function store(Request $request)
     {
         $loginlog = new login_logs();

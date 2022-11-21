@@ -117,6 +117,75 @@ class BillOfLandingSubsController extends Controller
         return $billoflandingsubs;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $billoflandingsubs = DB::table('bill_of_landing_subs')
+                ->select(
+                    'bill_of_landing_subs.id',
+                    'bill_of_landing_subs.date',
+                    'bill_of_landing_subs.bill_of_landing_id',
+                    'bill_of_landing_subs.equipment_id',
+                    'bill_of_landing_subs.seal_no',
+                    'bill_of_landing_subs.marks',
+                    'bill_of_landing_subs.package_quantity',
+                    'bill_of_landing_subs.description',
+                    'bill_of_landing_subs.gross_weight',
+                    'bill_of_landing_subs.measurement',
+                    'bill_of_landing_subs.bill_confirmation_id',
+                    'bill_of_landing_subs.status',
+                    'bill_of_landing_subs.ignore_data',
+                    'bill_of_landing_subs.reserved_date',
+                    'bill_of_landing_subs.shipper_date',
+                    'bill_of_landing_subs.on_job_date',
+                    'bill_of_landing_subs.yard_in_date',
+                    'bill_of_landing_subs.client_id_agent',
+                    'bill_of_landing_subs.client_id_ex_agent',
+                    'bill_of_landing_subs.vendor_id_yard',
+                    'bill_of_landing_subs.free_days',
+                    'bill_of_landing_subs.free_days_standard',
+                    'bill_of_landing_subs.ata_fpd',
+                    'bill_of_landing_subs.payed_till',
+                    'bill_of_landing_subs.soa_status_exp',
+                    'bill_of_landing_subs.soa_status_imp',
+                    'bill_of_landing_subs.lift_on_off',
+                    'bill_of_landing_subs.other_expenses',
+                    'bill_of_landing_subs.other_expenses_remarks',
+                    'bill_of_landing_subs.deleted',
+                    'bill_of_landings.bill_of_landing_number',
+                    'equipments.equipment_number',
+                    'agent.client_code',
+                    'agent.client_name',
+                    'ex_agent.client_code',
+                    'ex_agent.client_name',
+                    'yard.vendor_code',
+                    'yard.vendor_name'
+                )
+                ->join('bill_of_landings', 'bill_of_landing_subs.bill_of_landing_id', '=', 'bill_of_landings.id')
+                ->join('equipments', 'bill_of_landing_subs.equipment_id', '=', 'equipments.id')
+                ->join('clients as agent', 'bill_of_landing_subs.client_id_agent', '=', 'agent.id')
+                ->join('clients as ex_agent', 'bill_of_landing_subs.client_id_ex_agent', '=', 'ex_agent.id')
+                ->join('vendors as yard', 'bill_of_landing_subs.vendor_id_yard', '=', 'yard.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('bill_of_landings.bill_of_landing_number', 'like', '%' . $query . '%')
+                        ->orWhere('bill_of_landing_subs.seal_no', 'like', '%' . $query . '%')
+                        ->orWhere('equipments.equipment_number', 'like', '%' . $query . '%')
+                        ->orWhere('agent.client_code', 'like', '%' . $query . '%')
+                        ->orWhere('agent.client_name', 'like', '%' . $query . '%')
+                        ->orWhere('yard.vendor_code', 'like', '%' . $query . '%')
+                        ->orWhere('yard.vendor_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $billoflandingsubs;
+    }
+
+
     public function store(Request $request)
     {
         $id = $request->id;
@@ -181,9 +250,9 @@ class BillOfLandingSubsController extends Controller
         $status = $request->status;
 
         if ($status == 1) {
-            $status = 0;//inactive
+            $status = 0; //inactive
         } else {
-            $status = 1;//active
+            $status = 1; //active
         }
 
         $billoflandingsubs = bill_of_landing_subs::find($id);

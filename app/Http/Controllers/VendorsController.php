@@ -77,6 +77,56 @@ class VendorsController extends Controller
         return $vendors;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $vendors = DB::table('vendors')
+            ->select(
+                'vendors.id',
+                'vendors.vendor_code',
+                'vendors.vendor_name',
+                'vendors.sub_code',
+                'vendors.country_id',
+                'vendors.port_id',
+                'vendors.email',
+                'vendors.telephone_number',
+                'vendors.fax',
+                'vendors.mobile_number',
+                'vendors.contact_name',
+                'vendors.address',
+                'vendors.image',
+                'vendors.remarks',
+                'vendors.is_active',
+                'countries.country_name',
+                'countries.capital_city_name',
+                'ports.port_code',
+                'ports.port_name',
+                'ports.sub_code',
+                'ports.country_id'
+            )
+            ->join('countries', 'vendors.country_id', '=', 'countries.id')
+            ->join('ports', 'vendors.port_id', '=', 'ports.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('vendors.vendor_code', 'like', '%' . $query . '%')
+                        ->orWhere('vendors.vendor_name', 'like', '%' . $query . '%')
+                        ->orWhere('vendors.email', 'like', '%' . $query . '%')
+                        ->orWhere('vendors.mobile_number', 'like', '%' . $query . '%')
+                        ->orWhere('vendors.is_active', 'like', '%' . $query . '%')
+                        ->orWhere('countries.country_name', 'like', '%' . $query . '%')
+                        ->orWhere('ports.port_code', 'like', '%' . $query . '%')
+                        ->orWhere('ports.port_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $vendors;
+    }
+
+
     public function store(Request $request)
     {
         $id = $request->id;

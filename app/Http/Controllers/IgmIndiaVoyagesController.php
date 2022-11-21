@@ -39,6 +39,30 @@ class IgmIndiaVoyagesController extends Controller
         return $igmindiavoyages;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $igmindiavoyages = DB::table('igm_india_voyages')
+            ->select(
+                'igm_india_voyages.id',
+                'igm_india_voyages.voyage',
+                'igm_india_voyages.imo',
+                'igm_india_voyages.sign'
+            )
+            ->where(function ($q) use ($query) {
+                $q->where('igm_india_voyages.voyage', 'like', '%' . $query . '%')
+                    ->orWhere('igm_india_voyages.imo', 'like', '%' . $query . '%');
+            })
+                ->get();
+        }
+
+        return $igmindiavoyages;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

@@ -85,6 +85,59 @@ class ClientsController extends Controller
         return $clients;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $clients = DB::table('clients')
+            ->select(
+                'clients.id',
+                'clients.client_code',
+                'clients.client_name',
+                'clients.sub_code',
+                'clients.country_id',
+                'clients.port_id',
+                'clients.email',
+                'clients.telephone_number',
+                'clients.fax',
+                'clients.mobile_number',
+                'clients.contact_name',
+                'clients.address',
+                'clients.image',
+                'clients.currency_id',
+                'clients.remarks',
+                'clients.is_active',
+                'countries.country_name',
+                'countries.capital_city_name',
+                'ports.port_code',
+                'ports.port_name',
+                'ports.sub_code',
+                'ports.country_id',
+                'currencies.currency_code',
+                'currencies.currency_name'
+            )
+            ->join('countries', 'clients.country_id', '=', 'countries.id')
+            ->join('ports', 'clients.port_id', '=', 'ports.id')
+            ->join('currencies', 'clients.currency_id', '=', 'currencies.id')
+            ->where(function ($q) use ($query) {
+                $q->where('clients.client_code', 'like', '%' . $query . '%')
+                    ->orWhere('clients.client_name', 'like', '%' . $query . '%')
+                    ->orWhere('countries.country_name', 'like', '%' . $query . '%')
+                    ->orWhere('ports.port_code', 'like', '%' . $query . '%')
+                    ->orWhere('ports.port_name', 'like', '%' . $query . '%')
+                    ->orWhere('currencies.currency_code', 'like', '%' . $query . '%')
+                    ->orWhere('currencies.currency_name', 'like', '%' . $query . '%');
+            })
+                ->get();
+        }
+
+        return $clients;
+    }
+
+
     public function store(Request $request)
     {
         $id = $request->id;

@@ -21,15 +21,28 @@ class AccessModelsController extends Controller
         return $accessmodels;
     }
 
-    public function search()
+    public function showBySearch(Request $request)
     {
+        $query = "";
+
         $accessmodels = DB::table('access_models')
-            ->select(
-                'access_models.id',
-                'access_models.name'
-            )
-            ->where('access_models.name' like "")
-            ->paginate(50);
+        ->select(
+            'access_models.id',
+            'access_models.name'
+        );
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+           
+            $accessmodels=$accessmodels->where(function ($q) use ($query) {
+                    $q->where('access_models.name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+        // else{
+        //     $accessmodels=$accessmodels->get();
+        // }
 
         return $accessmodels;
     }

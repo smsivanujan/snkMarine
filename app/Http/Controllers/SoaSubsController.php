@@ -57,6 +57,41 @@ class SoaSubsController extends Controller
         return $soasubs;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $soasubs = DB::table('soa_subs')
+            ->select(
+                'soa_subs.id',
+                'soa_subs.date',
+                'soa_subs.soa_id',
+                'soa_subs.client_id_agent',
+                'soa_subs.description',
+                'soa_subs.income',
+                'soa_subs.expenses',
+                'soas.date as soasDate',
+                'soas.status',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('soas', 'soa_subs.soa_id', '=', 'soas.id')
+            ->join('clients', 'soa_subs.client_id_agent', '=', 'clients.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('soa_subs.date', 'like', '%' . $query . '%')
+                        ->orWhere('soas.status', 'like', '%' . $query . '%')
+                        ->orWhere('clients.client_code', 'like', '%' . $query . '%')
+                        ->orWhere('clients.client_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $soasubs;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

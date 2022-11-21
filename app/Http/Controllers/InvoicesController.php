@@ -123,6 +123,87 @@ class InvoicesController extends Controller
         return $invoices;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $invoices = DB::table('invoices')
+            ->select(
+                'invoices.id',
+                'invoices.date',
+                'invoices.invoice_no',
+                'invoices.bill_of_landing_id',
+                'invoices.client_id_shipper',
+                'invoices.client_id_consignee',
+                'invoices.client_id',
+                'invoices.port_id_loading',
+                'invoices.port_id_discharge',
+                'invoices.igm_india_voyage_id',
+                'invoices.etd_pol',
+                'invoices.eta_pod',
+                'invoices.st_expire',
+                'invoices.ata_fpd',
+                'invoices.obl_no',
+                'invoices.shipment_type',
+                'invoices.hbl_no',
+                'invoices.carrier',
+                'invoices.nos_units',
+                'invoices.weight',
+                'invoices.cbm',
+                'invoices.remarks',
+                'invoices.usd_rate',
+                'invoices.usd_tot',
+                'invoices.status',
+                'invoices.tax_invoice',
+                'invoices.deleted',
+                'bill_of_landings.bill_of_landing_number',
+                'shipper.client_code',
+                'shipper.client_name',
+                'consignee.client_code',
+                'consignee.client_name',
+                'clients.client_code',
+                'clients.client_name',
+                'portloading.port_code',
+                'portloading.port_name',
+                'discharge.port_code',
+                'discharge.port_name',
+                'igm_india_voyages.voyage',
+                'bill_of_landings.bill_of_landing_number'
+
+            )
+            ->join('bill_of_landings', 'invoices.bill_of_landing_id', '=', 'bill_of_landings.id')
+            ->join('clients as shipper', 'invoices.client_id_shipper', '=', 'shipper.id')
+            ->join('clients as consignee', 'invoices.client_id_consignee', '=', 'consignee.id')
+            ->join('clients', 'invoices.client_id', '=', 'clients.id')
+            ->join('ports as portloading', 'invoices.port_id_loading', '=', 'portloading.id')
+            ->join('ports as discharge', 'invoices.port_id_discharge', '=', 'discharge.id')
+            ->join('igm_india_voyages', 'invoices.igm_india_voyage_id', '=', 'igm_india_voyages.id')
+            ->where(function ($q) use ($query) {
+                $q->where('invoices.invoice_no', 'like', '%' . $query . '%')
+                ->orWhere('invoices.date', 'like', '%' . $query . '%')
+                ->orWhere('invoices.obl_no', 'like', '%' . $query . '%')
+                ->orWhere('bill_of_landings.bill_of_landing_number', 'like', '%' . $query . '%')
+                ->orWhere('shipper.client_name', 'like', '%' . $query . '%')
+                ->orWhere('shipper.client_name', 'like', '%' . $query . '%')
+                ->orWhere('consignee.client_name', 'like', '%' . $query . '%')
+                ->orWhere('consignee.client_name', 'like', '%' . $query . '%')
+                ->orWhere('clients.client_name', 'like', '%' . $query . '%')
+                ->orWhere('clients.client_name', 'like', '%' . $query . '%')
+                ->orWhere('portloading.port_code', 'like', '%' . $query . '%')
+                ->orWhere('portloading.port_name', 'like', '%' . $query . '%')
+                ->orWhere('discharge.port_code', 'like', '%' . $query . '%')
+                ->orWhere('discharge.port_name', 'like', '%' . $query . '%')
+                ->orWhere('igm_india_voyages.voyage', 'like', '%' . $query . '%');
+            })
+                ->get();
+        }
+
+        return $invoices;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

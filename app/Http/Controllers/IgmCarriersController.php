@@ -61,6 +61,46 @@ class IgmCarriersController extends Controller
         return $igmcarriers;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $igmcarriers = DB::table('igm_carriers')
+            ->select(
+                'igm_carriers.id',
+                'igm_carriers.client_id',
+                'igm_carriers.customs_office_code',
+                'igm_carriers.place_of_destination_code',
+                'igm_carriers.sender_id',
+                'igm_carriers.pan_number',
+                'igm_carriers.receiver_id',
+                'igm_carriers.version_no',
+                'igm_carriers.client_id_shipper',
+                'clients.client_code',
+                'clients.client_name',
+                'shipper.client_code',
+                'shipper.client_name'
+            )
+            ->join('clients', 'igm_carriers.client_id', '=', 'clients.id')
+            ->join('clients as shipper', 'igm_carriers.client_id_shipper', '=', 'clients.id')
+            ->where(function ($q) use ($query) {
+                $q->where('igm_carriers.customs_office_code', 'like', '%' . $query . '%')
+                    ->orWhere('igm_carriers.place_of_destination_code', 'like', '%' . $query . '%')
+                    ->orWhere('igm_carriers.pan_number', 'like', '%' . $query . '%')
+                    ->orWhere('clients.client_code', 'like', '%' . $query . '%')
+                    ->orWhere('clients.client_name', 'like', '%' . $query . '%')
+                    ->orWhere('shipper.client_code', 'like', '%' . $query . '%')
+                    ->orWhere('shipper.client_name', 'like', '%' . $query . '%');
+            })
+                ->get();
+        }
+
+        return $igmcarriers;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

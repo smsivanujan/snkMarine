@@ -11,7 +11,7 @@ class DetentionTraffiesController extends Controller
 {
     public function index()
     {
-        $equipments = DB::table('detention_traffies')
+        $detentiontraffies = DB::table('detention_traffies')
             ->select(
                 'detention_traffies.id',
                 'detention_traffies.client_id_agent',
@@ -25,13 +25,13 @@ class DetentionTraffiesController extends Controller
             ->join('clients', 'detention_traffies.client_id_agent', '=', 'clients.id')
             ->paginate(50);
 
-        return $equipments;
+        return $detentiontraffies;
     }
 
     public function showById(Request $request)
     {
         $id = $request->id;
-        $equipments = DB::table('detention_traffies')
+        $detentiontraffies = DB::table('detention_traffies')
             ->select(
                 'detention_traffies.id',
                 'detention_traffies.client_id_agent',
@@ -46,8 +46,38 @@ class DetentionTraffiesController extends Controller
             ->where('detention_traffies.id', '=', $id)
             ->get();
 
-        return $equipments;
+        return $detentiontraffies;
     }
+
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $detentiontraffies = DB::table('detention_traffies')
+            ->select(
+                'detention_traffies.id',
+                'detention_traffies.client_id_agent',
+                'detention_traffies.currency_id',
+                'detention_traffies.free_days',
+                'detention_traffies.comm',
+                'detention_traffies.deleted',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('clients', 'detention_traffies.client_id_agent', '=', 'clients.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('clients.client_code', 'like', '%' . $query . '%')
+                    ->orWhere('clients.client_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $detentiontraffies;
+    }
+
 
     public function store(Request $request)
     {

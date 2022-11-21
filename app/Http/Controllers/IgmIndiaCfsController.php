@@ -35,6 +35,27 @@ class IgmIndiaCfsController extends Controller
         return $igmindiacfs;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $igmindiacfs = DB::table('igm_india_cfs')
+            ->select(
+                'igm_india_cfs.id',
+                'igm_india_cfs.cfs_code'
+            )
+            ->where(function ($q) use ($query) {
+                $q->where('igm_india_cfs.cfs_code', 'like', '%' . $query . '%');
+            })
+                ->get();
+        }
+
+        return $igmindiacfs;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

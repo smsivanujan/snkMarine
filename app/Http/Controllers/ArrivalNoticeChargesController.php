@@ -87,6 +87,117 @@ class ArrivalNoticeChargesController extends Controller
         return $arrivalnoticechargess;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $arrivalnoticechargess = DB::table('arrival_notice_charges')
+                ->select(
+                    'arrival_notice_charges.id',
+                    'arrival_notice_charges.arrival_notice_id',
+                    'arrival_notice_charges.description',
+                    'arrival_notice_charges.unit',
+                    'arrival_notice_charges.unit_cost',
+                    'arrival_notice_charges.unit_charge',
+                    'arrival_notice_charges.amount',
+                    'arrival_notice_charges.currency_id',
+                    'arrival_notice_charges.currency_id_mycurrency',
+                    'arrival_notice_charges.exchange_rate',
+                    'arrival_notice_charges.amount_in',
+                    'arrival_notice_charges.tax_description',
+                    'arrival_notice_charges.tax',
+                    'arrival_notice_charges.tax_amount',
+                    'arrival_notice_charges.amount_final',
+                    'arrival_notice_charges.payed',
+                    'arrival_notice_charges.total_cost',
+                    'arrival_notice_charges.total_cost_in',
+                    'arrival_notice_charges.profit',
+                    'arrival_notice_charges.profit_in',
+                    'arrival_noticies.arrival_notice_no',
+                    'currencies.currency_code',
+                    'currencies.currency_name',
+                    'mycurrency.currency_code',
+                    'mycurrency.currency_name'
+                )
+                ->join('arrival_noticies', 'arrival_notice_charges.arrival_notice_id', '=', 'arrival_noticies.id')
+                ->join('currencies', 'arrival_notice_charges.currency_id', '=', 'currencies.id')
+                ->join('currencies as mycurrency', 'arrival_notice_charges.currency_id_mycurrency', '=', 'mycurrency.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('arrival_noticies.arrival_notice_no', 'like', '%' . $query . '%')
+                        ->orWhere('currencies.currency_code', 'like', '%' . $query . '%')
+                        ->orWhere('mycurrency.currency_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $arrivalnoticechargess;
+    }
+
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $arrivalnoticechargess = DB::table('arrival_notice_charges')
+                ->select(
+                    'arrival_notice_charges.id',
+                    'arrival_notice_charges.arrival_notice_id',
+                    'arrival_notice_charges.description',
+                    'arrival_notice_charges.unit',
+                    'arrival_notice_charges.unit_cost',
+                    'arrival_notice_charges.unit_charge',
+                    'arrival_notice_charges.amount',
+                    'arrival_notice_charges.currency_id',
+                    'arrival_notice_charges.currency_id_mycurrency',
+                    'arrival_notice_charges.exchange_rate',
+                    'arrival_notice_charges.amount_in',
+                    'arrival_notice_charges.tax_description',
+                    'arrival_notice_charges.tax',
+                    'arrival_notice_charges.tax_amount',
+                    'arrival_notice_charges.amount_final',
+                    'arrival_notice_charges.payed',
+                    'arrival_notice_charges.total_cost',
+                    'arrival_notice_charges.total_cost_in',
+                    'arrival_notice_charges.profit',
+                    'arrival_notice_charges.profit_in',
+                    'arrival_noticies.arrival_notice_no',
+                    'currencies.currency_code',
+                    'currencies.currency_name',
+                    'mycurrency.currency_code',
+                    'mycurrency.currency_name',
+                )
+                ->join('arrival_noticies', 'arrival_notice_charges.arrival_notice_id', '=', 'arrival_noticies.id')
+                ->join('currencies', 'arrival_notice_charges.currency_id', '=', 'currencies.id')
+                ->join('currencies as mycurrency', 'arrival_notice_charges.currency_id_mycurrency', '=', 'mycurrency.id');
+
+        if (!empty($request->arrival_notice_id) && empty($request->currency_id)) {
+            // return "1";
+            // id empty
+            $arrivalnoticechargess = $arrivalnoticechargess
+                ->where('arrival_notice_charges.arrival_notice_id', '=', $request->access_model_id);
+        } elseif (empty($request->arrival_notice_id) && !empty($request->currency_id)) {
+            // return "2";
+            // access_model_id empty
+            $arrivalnoticechargess = $arrivalnoticechargess->where('arrival_notice_charges.currency_id', '=', $request->id);
+        } elseif (!empty($request->arrival_notice_id) && !empty($request->currency_id)) {
+            // return "3";
+            // no empty
+            $arrivalnoticechargess = $arrivalnoticechargess
+                ->where('arrival_notice_charges.arrival_notice_id', '=', $request->arrival_notice_id)
+                ->where('arrival_notice_charges.currency_id', '=', $request->currency_id);
+        } else {
+            // return "4";
+            //all empty
+            $arrivalnoticechargess = $arrivalnoticechargess;
+        }
+
+        $result = $arrivalnoticechargess->orderBy('arrival_notice_charges.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

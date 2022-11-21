@@ -22,6 +22,29 @@ class TimezonesController extends Controller
         return $timezones;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $timezones = DB::table('timezones')
+                ->select(
+                    'timezones.id',
+                    'timezones.timezone_data_name',
+                    'timezones.timezone_data_value'
+                )
+                ->where(function ($q) use ($query) {
+                    $q->where('timezones.timezone_data_name', 'like', '%' . $query . '%')
+                        ->orWhere('timezones.timezone_data_value', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $timezones;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

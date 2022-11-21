@@ -137,6 +137,86 @@ class IgmsController extends Controller
         return $igms;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $igms = DB::table('igms')
+            ->select(
+                'igms.id',
+                'igms.bill_of_landing_id',
+                'igms.customs_office_code',
+                'igms.igm_india_voyage_id',
+                'igms.date_of_departure',
+                'igms.date_of_arrival',
+                'igms.time_of_arrival',
+                'igms.total_number_of_bols',
+                'igms.total_number_of_packages',
+                'igms.total_number_of_containers',
+                'igms.total_gross_mass',
+                'igms.consolidated_cargo',
+                'igms.place_of_loading_code',
+                'igms.place_of_unloading_code',
+                'igms.exporter_name',
+                'igms.exporter_address',
+                'igms.number_of_packages',
+                'igms.package_type_code',
+                'igms.gross_mass',
+                'igms.shipping_marks',
+                'igms.volume_in_cubic_meters',
+                'igms.num_of_ctn_for_this_bol',
+                'igms.mode_of_transport_code',
+                'igms.identity_of_transporter',
+                'igms.nationality_of_transporter_code',
+                'igms.slpa_ref_number',
+                'igms.bol_reference',
+                'igms.line_number',
+                'igms.bol_nature',
+                'igms.bol_type_code',
+                'igms.place_of_departure_code',
+                'igms.place_of_destination_code',
+                'igms.unique_carrier_reference',
+                'igms.client_id_carrier',
+                'igms.client_id_notify',
+                'igms.client_id_cosignee',
+                'igms.freight_value',
+                'igms.freight_currency',
+                'igms.goods_description',
+                'igms.deleted',
+                'bill_of_landings.bill_of_landing_number',
+                'igm_india_voyages.voyage',
+                'carrier.client_code',
+                'carrier.client_name',
+                'notify.client_code',
+                'notify.client_name',
+                'cosignee.client_code',
+                'cosignee.client_name'
+            )
+            ->join('bill_of_landings', 'igms.bill_of_landing_id', '=', 'bill_of_landings.id')
+            ->join('igm_india_voyages', 'igms.igm_india_voyage_id', '=', 'igm_india_voyages.id')
+            ->join('clients as carrier', 'igms.client_id_carrier', '=', 'carrier.id')
+            ->join('clients as notify', 'igms.client_id_notify', '=', 'notify.id')
+            ->join('clients as cosignee', 'igms.client_id_cosignee', '=', 'cosignee.id')
+            ->where(function ($q) use ($query) {
+                $q->where('igms.customs_office_code', 'like', '%' . $query . '%')
+                    ->orWhere('bill_of_landings.bill_of_landing_number', 'like', '%' . $query . '%')
+                    ->orWhere('igm_india_voyages.voyage', 'like', '%' . $query . '%')
+                    ->orWhere('carrier.client_code', 'like', '%' . $query . '%')
+                    ->orWhere('carrier.client_name', 'like', '%' . $query . '%')
+                    ->orWhere('notify.client_code', 'like', '%' . $query . '%')
+                    ->orWhere('notify.client_name', 'like', '%' . $query . '%')
+                    ->orWhere('cosignee.client_code', 'like', '%' . $query . '%')
+                    ->orWhere('cosignee.client_name', 'like', '%' . $query . '%');
+            })
+                ->get();
+        }
+
+        return $igms;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

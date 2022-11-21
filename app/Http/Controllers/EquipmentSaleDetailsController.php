@@ -54,6 +54,37 @@ class EquipmentSaleDetailsController extends Controller
         return $equipmentsaledetails;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $equipmentsaledetails = DB::table('equipment_sale_details')
+            ->select(
+                'equipment_sale_details.id',
+                'equipment_sale_details.equipment_sale_id',
+                'equipment_sale_details.equipment_id',
+                'equipment_sale_details.amount',
+                'equipment_sale_details.destination',
+                'equipment_sales.date',
+                'equipment_sales.no_unit',
+                'equipment_sales.sale_type',
+                'equipments.equipment_number'
+            )
+            ->join('equipment_sales', 'equipment_sale_details.equipment_sale_id', '=', 'equipment_sales.id')
+            ->join('equipments', 'equipment_sale_details.equipment_id', '=', 'equipments.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('equipment_sales.date', 'like', '%' . $query . '%')
+                    ->orWhere('equipments.equipment_number', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $equipmentsaledetails;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

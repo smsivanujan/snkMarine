@@ -39,6 +39,31 @@ class IgmIndiaSubCodesController extends Controller
         return $igm_india_sub_codes;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $igm_india_sub_codes = DB::table('igm_india_sub_codes')
+            ->select(
+                'igm_india_sub_codes.id',
+                'igm_india_sub_codes.port_name',
+                'igm_india_sub_codes.port_code',
+                'igm_india_sub_codes.sub_code'
+            )
+            ->where(function ($q) use ($query) {
+                $q->where('igm_india_sub_codes.port_name', 'like', '%' . $query . '%')
+                    ->orWhere('igm_india_sub_codes.port_code', 'like', '%' . $query . '%')
+                    ->orWhere('igm_india_sub_codes.sub_code', 'like', '%' . $query . '%');
+            })
+                ->get();
+        }
+
+        return $igm_india_sub_codes;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

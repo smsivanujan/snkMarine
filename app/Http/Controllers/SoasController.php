@@ -43,6 +43,33 @@ class SoasController extends Controller
         return $soas;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $soas = DB::table('soas')
+            ->select(
+                'soas.id',
+                'soas.date',
+                'soas.client_id_agent',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('clients', 'soas.client_id_agent', '=', 'clients.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('soas.date', 'like', '%' . $query . '%')
+                        ->orWhere('clients.client_code', 'like', '%' . $query . '%')
+                        ->orWhere('clients.client_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $soas;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

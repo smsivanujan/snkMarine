@@ -49,6 +49,37 @@ class BillRemoteLogsController extends Controller
         return $bill_remote_logs;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $bill_remote_logs = DB::table('bill_remote_logs')
+            ->select(
+                'bill_remote_logs.id',
+                'bill_remote_logs.bill_of_landing_id',
+                'bill_remote_logs.client_id',
+                'bill_remote_logs.printed_date',
+                'bill_of_landings.bill_of_landing_number',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('bill_of_landings', 'bill_remote_logs.bill_of_landing_id', '=', 'bill_of_landings.id')
+            ->join('clients', 'bill_remote_logs.client_id', '=', 'clients.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('bill_of_landings.bill_of_landing_number', 'like', '%' . $query . '%')
+                        ->orWhere('clients.client_code', 'like', '%' . $query . '%')
+                        ->orWhere('clients.client_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $bill_remote_logs;
+    }
+
+
     public function store(Request $request)
     {
         $billremotelogs = new bill_remote_logs();

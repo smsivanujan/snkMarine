@@ -71,6 +71,52 @@ class UsersController extends Controller
         return $users;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $users = DB::table('users')
+            ->select(
+                'users.id',
+                'users.client_id',
+                'users.full_name',
+                'users.user_name',
+                'users.email',
+                'users.user_group',
+                'users.own_bc',
+                'users.password',
+                'users.timezone_id',
+                'users.is_active',
+                'users.last_login',
+                'users.last_logout',
+                'users.is_online',
+                'users.is_delete',
+                'clients.client_code',
+                'clients.client_name',
+                'timezones.timezone_data_name',
+                'timezones.timezone_data_value'
+            )
+            ->join('clients', 'users.client_id', '=', 'clients.id')
+            ->join('timezones', 'users.timezone_id', '=', 'timezones.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('users.full_name', 'like', '%' . $query . '%')
+                        ->orWhere('users.user_name', 'like', '%' . $query . '%')
+                        ->orWhere('users.email', 'like', '%' . $query . '%')
+                        ->orWhere('users.is_active', 'like', '%' . $query . '%')
+                        ->orWhere('clients.client_code', 'like', '%' . $query . '%')
+                        ->orWhere('clients.client_name', 'like', '%' . $query . '%')
+                        ->orWhere('timezones.timezone_data_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $users;
+    }
+
+
     public function store(Request $request)
     {
         $id = $request->id;
@@ -132,6 +178,7 @@ class UsersController extends Controller
             return $th;
         }
     }
+    
     // status change
     public function statusChange(Request $request)
     {

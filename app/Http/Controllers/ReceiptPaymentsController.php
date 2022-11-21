@@ -55,6 +55,40 @@ class ReceiptPaymentsController extends Controller
         return $receiptpayments;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $receiptpayments = DB::table('receipt_payments')
+                ->select(
+                    'receipt_payments.id',
+                    'receipt_payments.receipt_id',
+                    'receipt_payments.pay_type',
+                    'receipt_payments.cheque_no',
+                    'receipt_payments.cheque_date',
+                    'receipt_payments.current_bal',
+                    'receipt_payments.paying_amount',
+                    'receipt_payments.paying_local',
+                    'receipt_payments.status',
+                    'receipt_payments.deleted',
+                    'receipts.receipt_no'
+                )
+                ->join('receipts', 'receipt_payments.receipt_id', '=', 'receipts.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('receipt_payments.pay_type', 'like', '%' . $query . '%')
+                        ->orWhere('receipt_payments.cheque_no', 'like', '%' . $query . '%')
+                        ->orWhere('receipt_payments.cheque_date', 'like', '%' . $query . '%')
+                        ->orWhere('receipts.receipt_no', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $receiptpayments;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;
@@ -108,9 +142,9 @@ class ReceiptPaymentsController extends Controller
         $status = $request->status;
 
         if ($status == 1) {
-            $status = 0;//inactive
+            $status = 0; //inactive
         } else {
-            $status = 1;//active
+            $status = 1; //active
         }
 
         $receiptpayment = receipt_payments::find($id);

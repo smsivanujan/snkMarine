@@ -22,6 +22,30 @@ class DefaultValuesController extends Controller
         return $defaultvalues;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $defaultvalues = DB::table('default_values')
+            ->select(
+                'default_values.id',
+                'default_values.category',
+                'default_values.c_value'
+            )
+                ->where(function ($q) use ($query) {
+                    $q->where('default_values.category', 'like', '%' . $query . '%')
+                    ->orWhere('default_values.c_value', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $defaultvalues;
+    }
+
+
     public function store(Request $request)
     {
         $id = $request->id;

@@ -39,6 +39,31 @@ class IgmIndiaTerminalsController extends Controller
         return $igm_india_terminals;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $igm_india_terminals = DB::table('igm_india_terminals')
+                ->select(
+                    'igm_india_terminals.id',
+                    'igm_india_terminals.terminal',
+                    'igm_india_terminals.code',
+                    'igm_india_terminals.port'
+                )
+                ->where(function ($q) use ($query) {
+                    $q->where('igm_india_terminals.terminal', 'like', '%' . $query . '%')
+                        ->orWhere('igm_india_terminals.code', 'like', '%' . $query . '%')
+                        ->orWhere('igm_india_terminals.port', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $igm_india_terminals;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

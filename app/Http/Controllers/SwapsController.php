@@ -18,7 +18,9 @@ class SwapsController extends Controller
                 'swaps.equipment_id',
                 'swaps.description',
                 'swaps.client_id_agent',
-                'equipments.equipment_number'
+                'equipments.equipment_number',
+                'clients.client_code',
+                'clients.client_name'
             )
             ->join('equipments', 'swaps.equipment_id', '=', 'equipments.id')
             ->join('clients', 'swaps.client_id_agent', '=', 'clients.id')
@@ -37,12 +39,46 @@ class SwapsController extends Controller
                 'swaps.equipment_id',
                 'swaps.description',
                 'swaps.client_id_agent',
-                'equipments.equipment_number'
+                'equipments.equipment_number',
+                'clients.client_code',
+                'clients.client_name'
             )
             ->join('equipments', 'swaps.equipment_id', '=', 'equipments.id')
             ->join('clients', 'swaps.client_id_agent', '=', 'clients.id')
             ->where('swaps.id', '=', $id)
             ->get();
+
+        return $swaps;
+    }
+
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $swaps = DB::table('swaps')
+            ->select(
+                'swaps.id',
+                'swaps.date',
+                'swaps.equipment_id',
+                'swaps.description',
+                'swaps.client_id_agent',
+                'equipments.equipment_number',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('equipments', 'swaps.equipment_id', '=', 'equipments.id')
+            ->join('clients', 'swaps.client_id_agent', '=', 'clients.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('swaps.date', 'like', '%' . $query . '%')
+                        ->orWhere('equipments.equipment_number', 'like', '%' . $query . '%')
+                        ->orWhere('clients.client_code', 'like', '%' . $query . '%')
+                        ->orWhere('clients.client_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
 
         return $swaps;
     }

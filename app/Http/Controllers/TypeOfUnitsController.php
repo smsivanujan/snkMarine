@@ -21,6 +21,27 @@ class TypeOfUnitsController extends Controller
         return $typeofunits;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $typeofunits = DB::table('type_of_units')
+            ->select(
+                'type_of_units.id',
+                'type_of_units.type_of_unit'
+            )
+                ->where(function ($q) use ($query) {
+                    $q->where('type_of_units.type_of_unit', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $typeofunits;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

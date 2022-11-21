@@ -48,7 +48,11 @@ class IgmIndiasController extends Controller
                 'igm_indias.arrival_date',
                 'igm_indias.igm_number',
                 'igm_indias.nationality',
-                'igm_indias.deleted'
+                'igm_indias.deleted',
+                'bill_of_landings.bill_of_landing_number',
+                'igm_india_voyages.voyage',
+                'igm_india_terminals.terminal',
+                'igm_india_terminals.code'
             )
             ->join('bill_of_landings', 'igm_indias.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('igm_india_voyages', 'igm_indias.igm_india_voyage_id', '=', 'igm_india_voyages.id')
@@ -98,13 +102,83 @@ class IgmIndiasController extends Controller
                 'igm_indias.arrival_date',
                 'igm_indias.igm_number',
                 'igm_indias.nationality',
-                'igm_indias.deleted'
+                'igm_indias.deleted',
+                'bill_of_landings.bill_of_landing_number',
+                'igm_india_voyages.voyage',
+                'igm_india_terminals.terminal',
+                'igm_india_terminals.code'
             )
             ->join('bill_of_landings', 'igm_indias.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('igm_india_voyages', 'igm_indias.igm_india_voyage_id', '=', 'igm_india_voyages.id')
             ->join('igm_india_terminals', 'igm_indias.igm_india_terminal_id', '=', 'igm_india_terminals.id')
             ->where('igm_indias.id', '=', $id)
             ->get();
+
+        return $igm_indias;
+    }
+
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $igm_indias = DB::table('igm_indias')
+                ->select(
+                    'igm_indias.id',
+                    'igm_indias.bill_of_landing_id',
+                    'igm_indias.sender_id',
+                    'igm_indias.version_no',
+                    'igm_indias.message_id',
+                    'igm_indias.sequence',
+                    'igm_indias.date1',
+                    'igm_indias.time1',
+                    'igm_indias.pod1',
+                    'igm_indias.imo1',
+                    'igm_indias.call_sign1',
+                    'igm_indias.igm_india_voyage_id',
+                    'igm_indias.line_code',
+                    'igm_indias.line_pan',
+                    'igm_indias.master_name',
+                    'igm_indias.pod_code',
+                    'igm_indias.last_port1',
+                    'igm_indias.last_port2',
+                    'igm_indias.last_port3',
+                    'igm_indias.vessel_type1',
+                    'igm_indias.poa',
+                    'igm_indias.cargo_des1',
+                    'igm_indias.date_time',
+                    'igm_indias.light_house',
+                    'igm_indias.igm_india_terminal_id',
+                    'igm_indias.same_bottom',
+                    'igm_indias.passenger_list',
+                    'igm_indias.ship_stores',
+                    'igm_indias.crew_effect',
+                    'igm_indias.crew_list',
+                    'igm_indias.maritime',
+                    'igm_indias.vessel_name',
+                    'igm_indias.arrival_date',
+                    'igm_indias.igm_number',
+                    'igm_indias.nationality',
+                    'igm_indias.deleted',
+                    'bill_of_landings.bill_of_landing_number',
+                    'igm_india_voyages.voyage',
+                    'igm_india_terminals.terminal',
+                    'igm_india_terminals.code'
+                )
+                ->join('bill_of_landings', 'igm_indias.bill_of_landing_id', '=', 'bill_of_landings.id')
+                ->join('igm_india_voyages', 'igm_indias.igm_india_voyage_id', '=', 'igm_india_voyages.id')
+                ->join('igm_india_terminals', 'igm_indias.igm_india_terminal_id', '=', 'igm_india_terminals.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('igm_indias.version_no', 'like', '%' . $query . '%')
+                        ->orWhere('bill_of_landings.bill_of_landing_number', 'like', '%' . $query . '%')
+                        ->orWhere('igm_india_voyages.voyage', 'like', '%' . $query . '%')
+                        ->orWhere('igm_india_terminals.terminal', 'like', '%' . $query . '%')
+                        ->orWhere('igm_india_terminals.code', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
 
         return $igm_indias;
     }
@@ -180,9 +254,9 @@ class IgmIndiasController extends Controller
         $status = $request->status;
 
         if ($status == 1) {
-            $status = 0;//inactive
+            $status = 0; //inactive
         } else {
-            $status = 1;//active
+            $status = 1; //active
         }
 
         $igmindia = igm_indias::find($id);

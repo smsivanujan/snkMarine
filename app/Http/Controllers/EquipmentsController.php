@@ -69,6 +69,53 @@ class EquipmentsController extends Controller
         return $equipments;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $equipments = DB::table('equipments')
+            ->select(
+                'equipments.id',
+                'equipments.equipment_number',
+                'equipments.owner_id',
+                'equipments.type_of_unit_id',
+                'equipments.grade',
+                'equipments.status',
+                'equipments.vendor_id_yard',
+                'equipments.client_id_agent',
+                'owners.owner_code',
+                'owners.owner_name',
+                'type_of_units.type_of_unit',
+                'vendors.vendor_code',
+                'vendors.vendor_name',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('owners', 'equipments.owner_id', '=', 'owners.id')
+            ->join('type_of_units', 'equipments.type_of_unit_id', '=', 'type_of_units.id')
+            ->join('vendors', 'equipments.vendor_id_yard', '=', 'vendors.id')
+            ->join('clients', 'equipments.client_id_agent', '=', 'clients.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('equipments.equipment_number', 'like', '%' . $query . '%')
+                    ->orWhere('equipments.grade', 'like', '%' . $query . '%')
+                    ->orWhere('equipments.status', 'like', '%' . $query . '%')
+                    ->orWhere('owners.owner_code', 'like', '%' . $query . '%')
+                    ->orWhere('owners.owner_name', 'like', '%' . $query . '%')
+                    ->orWhere('type_of_units.type_of_unit', 'like', '%' . $query . '%')
+                    ->orWhere('vendors.vendor_code', 'like', '%' . $query . '%')
+                    ->orWhere('vendors.vendor_name', 'like', '%' . $query . '%')
+                    ->orWhere('clients.client_code', 'like', '%' . $query . '%')
+                    ->orWhere('clients.client_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $equipments;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

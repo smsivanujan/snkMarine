@@ -22,6 +22,30 @@ class CountriesController extends Controller
         return $countries;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $countries = DB::table('countries')
+            ->select(
+                'countries.id',
+                'countries.country_name',
+                'countries.capital_city_name'
+            )
+                ->where(function ($q) use ($query) {
+                    $q->where('countries.country_name', 'like', '%' . $query . '%')
+                    ->orWhere('countries.capital_city_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $countries;
+    }
+
+
     public function store(Request $request)
     {
         $id = $request->id;

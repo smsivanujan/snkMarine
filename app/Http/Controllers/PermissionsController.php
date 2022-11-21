@@ -43,6 +43,33 @@ class PermissionsController extends Controller
         return $permissions;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $permissions = DB::table('permissions')
+            ->select(
+                'permissions.id',
+                'permissions.client_id',
+                'permissions.permisions',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('clients', 'permissions.client_id', '=', 'clients.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('permissions.permisions', 'like', '%' . $query . '%')
+                        ->orWhere('clients.client_code', 'like', '%' . $query . '%')
+                        ->orWhere('clients.client_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $permissions;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

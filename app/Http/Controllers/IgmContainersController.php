@@ -48,6 +48,35 @@ class IgmContainersController extends Controller
         return $igmcontainers;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $igmcontainers = DB::table('igm_containers')
+            ->select(
+                'igm_containers.id',
+                'igm_containers.igm_id',
+                'igm_containers.bill_of_landing_id',
+                'igm_containers.no_of_packages',
+                'igm_containers.type_of_container',
+                'igm_containers.empty_Full',
+                'igm_containers.deleted',
+                'bill_of_landings.bill_of_landing_number'
+
+            )
+            ->join('bill_of_landings', 'igm_containers.bill_of_landing_id', '=', 'bill_of_landings.id')
+            ->where(function ($q) use ($query) {
+                $q->where('bill_of_landings.bill_of_landing_number', 'like', '%' . $query . '%');
+            })
+                ->get();
+        }
+
+        return $igmcontainers;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

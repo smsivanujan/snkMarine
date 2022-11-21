@@ -83,6 +83,56 @@ class InvoiceChargesController extends Controller
         return $invoicecharges;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $invoicecharges = DB::table('invoice_charges')
+            ->select(
+                'invoice_charges.id',
+                'invoice_charges.invoice_id',
+                'invoice_charges.description',
+                'invoice_charges.unit',
+                'invoice_charges.unit_cost',
+                'invoice_charges.unit_charge',
+                'invoice_charges.amount',
+                'invoice_charges.currency_id',
+                'invoice_charges.currency_id_mycurrency',
+                'invoice_charges.exchange_rate',
+                'invoice_charges.amount_in',
+                'invoice_charges.tax_description',
+                'invoice_charges.tax',
+                'invoice_charges.tax_amount',
+                'invoice_charges.amount_final',
+                'invoice_charges.total_cost',
+                'invoice_charges.total_cost_in',
+                'invoice_charges.profit',
+                'invoice_charges.profit_in',
+                'currencies.currency_code',
+                'currencies.currency_name',
+                'mycurrency.currency_code',
+                'mycurrency.currency_name',
+                'invoices.invoice_no'
+            )
+            ->join('invoices', 'invoice_charges.invoice_id', '=', 'invoices.id')
+            ->join('currencies', 'invoice_charges.currency_id', '=', 'currencies.id')
+            ->join('currencies as mycurrency', 'invoice_charges.currency_id_mycurrency', '=', 'mycurrency.id')
+            ->where(function ($q) use ($query) {
+                $q->where('invoices.invoice_no', 'like', '%' . $query . '%')
+                    ->orWhere('currencies.currency_code', 'like', '%' . $query . '%')
+                    ->orWhere('currencies.currency_name', 'like', '%' . $query . '%')
+                    ->orWhere('mycurrency.currency_code', 'like', '%' . $query . '%')
+                    ->orWhere('mycurrency.currency_name', 'like', '%' . $query . '%');
+            })
+                ->get();
+        }
+
+        return $invoicecharges;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

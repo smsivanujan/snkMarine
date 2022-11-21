@@ -175,6 +175,113 @@ class BillOfLandingsController extends Controller
         return $billoflanding;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $billoflanding = DB::table('bill_of_landings')
+            ->select(
+                'bill_of_landings.id',
+                'bill_of_landings.date',
+                'bill_of_landings.bill_of_landing_number',
+                'bill_of_landings.booking_confirmation_id',
+                'bill_of_landings.client_id_shipper',
+                'bill_of_landings.export_references',
+                'bill_of_landings.client_id_consignee',
+                'bill_of_landings.client_id_fw_agent',
+                'bill_of_landings.client_id_notify',
+                'bill_of_landings.port_id_loading',
+                'bill_of_landings.port_id_discharge',
+                'bill_of_landings.port_id_final_dest',
+                'bill_of_landings.port_id_loading_bl',
+                'bill_of_landings.port_id_discharge_bl',
+                'bill_of_landings.port_id_final_dest_bl',
+                'bill_of_landings.detention_free_days',
+                'bill_of_landings.detention_description',
+                'bill_of_landings.pre_carriage_by',
+                'bill_of_landings.place_of_receipt',
+                'bill_of_landings.ship_on_board_date',
+                'bill_of_landings.country_id_origin',
+                'bill_of_landings.country_id_bltb_released',
+                'bill_of_landings.igm_india_voyage_id',
+                'bill_of_landings.voyage_number',
+                'bill_of_landings.ocean_freight',
+                'bill_of_landings.country_id_ocefrepayable',
+                'bill_of_landings.traffic_mode_id',
+                'bill_of_landings.no_of_bls',
+                'bill_of_landings.bl_type',
+                'bill_of_landings.special_instructions',
+                'bill_of_landings.shipper_loaded',
+                'bill_of_landings.hide_shipped_date',
+                'bill_of_landings.status_1',
+                'bill_of_landings.status_2',
+                'booking_confirmations.booking_confirmation_number',
+                'shipper.client_code',
+                'shipper.client_name',
+                'consignee.client_code',
+                'consignee.client_name',
+                'fw_agent.client_code',
+                'fw_agent.client_name',
+                'notify.client_code',
+                'notify.client_name',
+                'portloading.port_code',
+                'portloading.port_name',
+                'discharge.port_code',
+                'discharge.port_name',
+                'final_dest.port_code',
+                'final_dest.port_name',
+                'discharge_bl.port_code',
+                'discharge_bl.port_name',
+                'final_dest_bl.port_code',
+                'final_dest_bl.port_name',
+                'origin.country_name',
+                'bltb_released.country_name',
+                'ocefrepayable.country_name',
+                'traffic_modes.trafficmode_type'
+            )
+            ->join('booking_confirmations', 'bill_of_landings.booking_confirmation_id', '=', 'booking_confirmations.id')
+            ->join('clients as shipper', 'bill_of_landings.client_id_shipper', '=', 'shipper.id')
+            ->join('clients as consignee', 'bill_of_landings.client_id_consignee', '=', 'consignee.id')
+            ->join('clients as fw_agent', 'bill_of_landings.client_id_fw_agent', '=', 'fw_agent.id')
+            ->join('clients as notify', 'bill_of_landings.client_id_notify', '=', 'notify.id')
+            ->join('ports as portloading', 'bill_of_landings.port_id_loading', '=', 'portloading.id')
+            ->join('ports as discharge', 'bill_of_landings.port_id_discharge', '=', 'discharge.id')
+            ->join('ports as final_dest', 'bill_of_landings.port_id_final_dest', '=', 'final_dest.id')
+            ->join('ports as loading_bl', 'bill_of_landings.port_id_loading_bl', '=', 'loading_bl.id')
+            ->join('ports as discharge_bl', 'bill_of_landings.port_id_discharge_bl', '=', 'discharge_bl.id')
+            ->join('ports as final_dest_bl', 'bill_of_landings.port_id_final_dest_bl', '=', 'final_dest_bl.id')
+            ->join('countries as origin', 'bill_of_landings.country_id_origin', '=', 'origin.id')
+            ->join('countries as bltb_released', 'bill_of_landings.country_id_bltb_released', '=', 'bltb_released.id')
+            ->join('countries as ocefrepayable', 'bill_of_landings.country_id_ocefrepayable', '=', 'ocefrepayable.id')
+            ->join('traffic_modes', 'bill_of_landings.traffic_mode_id', '=', 'traffic_modes.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('bill_of_landings.bill_of_landing_number', 'like', '%' . $query . '%')
+                        ->orWhere('bill_of_landings.date', 'like', '%' . $query . '%')
+                        ->orWhere('shipper.client_code', 'like', '%' . $query . '%')
+                        ->orWhere('shipper.client_name', 'like', '%' . $query . '%')
+                        ->orWhere('consignee.client_code', 'like', '%' . $query . '%')
+                        ->orWhere('consignee.client_name', 'like', '%' . $query . '%')
+                        ->orWhere('fw_agent.client_code', 'like', '%' . $query . '%')
+                        ->orWhere('fw_agent.client_name', 'like', '%' . $query . '%')
+                        ->orWhere('notify.client_code', 'like', '%' . $query . '%')
+                        ->orWhere('notify.client_name', 'like', '%' . $query . '%')
+                        ->orWhere('portloading.port_code', 'like', '%' . $query . '%')
+                        ->orWhere('portloading.port_name', 'like', '%' . $query . '%')
+                        ->orWhere('discharge.port_code', 'like', '%' . $query . '%')
+                        ->orWhere('discharge.port_name', 'like', '%' . $query . '%')
+                        ->orWhere('origin.country_name', 'like', '%' . $query . '%')
+                        ->orWhere('ocefrepayable.country_name', 'like', '%' . $query . '%')
+                        ->orWhere('traffic_modes.trafficmode_type', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $billoflanding;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

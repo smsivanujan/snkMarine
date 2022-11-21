@@ -51,6 +51,38 @@ class IgmLankaDoContainersController extends Controller
         return $igm_lanka_do_containers;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $igm_lanka_do_containers = DB::table('igm_lanka_do_containers')
+                ->select(
+                    'igm_lanka_do_containers.id',
+                    'igm_lanka_do_containers.igm_id',
+                    'igm_lanka_do_containers.equipment_id',
+                    'igm_lanka_do_containers.seal_no',
+                    'igm_lanka_do_containers.description',
+                    'igm_lanka_do_containers.weight',
+                    'igm_lanka_do_containers.measurement',
+                    'equipments.equipment_number',
+                    'igms.customs_office_code'
+                )
+                ->join('igms', 'igm_lanka_do_containers.igm_id', '=', 'igms.id')
+                ->join('equipments', 'igm_lanka_do_containers.equipment_id', '=', 'equipments.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('igm_lanka_do_containers.seal_no', 'like', '%' . $query . '%')
+                        ->orWhere('equipments.equipment_number', 'like', '%' . $query . '%')
+                        ->orWhere('igms.customs_office_code', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $igm_lanka_do_containers;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

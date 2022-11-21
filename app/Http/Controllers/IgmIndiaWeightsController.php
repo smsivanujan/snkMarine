@@ -35,6 +35,28 @@ class IgmIndiaWeightsController extends Controller
         return $igm_india_weights;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            
+        $igm_india_weights = DB::table('igm_india_weights')
+        ->select(
+            'igm_india_weights.id',
+            'igm_india_weights.weight'
+        )
+            ->where(function ($q) use ($query) {
+                $q->where('igm_india_weights.weight', 'like', '%' . $query . '%');
+            })
+                ->get();
+        }
+
+        return $igm_india_weights;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

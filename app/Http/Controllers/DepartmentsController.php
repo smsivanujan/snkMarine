@@ -43,6 +43,32 @@ class DepartmentsController extends Controller
         return $departments;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $departments = DB::table('departments')
+            ->select(
+                'departments.id',
+                'departments.department_name',
+                'departments.description',
+                'departments.property_id',
+                'properties.property_name'
+            )
+            ->join('properties', 'departments.property_id', '=', 'properties.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('departments.department_name', 'like', '%' . $query . '%')
+                    ->orWhere('properties.property_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $departments;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

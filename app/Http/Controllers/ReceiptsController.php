@@ -69,6 +69,49 @@ class ReceiptsController extends Controller
         return $receipts;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $receipts = DB::table('receipts')
+            ->select(
+                'receipts.id',
+                'receipts.receipt_no',
+                'receipts.description',
+                'receipts.client_id',
+                'receipts.arrival_notice_id',
+                'receipts.invoice_id',
+                'receipts.detention_invoice_id',
+                'receipts.currency_id',
+                'receipts.deleted',
+                'arrival_noticies.arrival_notice_no',
+                'invoices.invoice_no',
+                'detention_invoices.detention_no',
+                'currencies.currency_code',
+                'currencies.currency_name'
+            )
+            ->join('clients', 'receipts.client_id', '=', 'clients.id')
+            ->join('arrival_noticies', 'receipts.arrival_notice_id', '=', 'arrival_noticies.id')
+            ->join('invoices', 'receipts.invoice_id', '=', 'invoices.id')
+            ->join('detention_invoices', 'receipts.detention_invoice_id', '=', 'detention_invoices.id')
+            ->join('currencies', 'receipts.currency_id', '=', 'currencies.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('receipts.receipt_no', 'like', '%' . $query . '%')
+                        ->orWhere('arrival_noticies.arrival_notice_no', 'like', '%' . $query . '%')
+                        ->orWhere('invoices.invoice_no', 'like', '%' . $query . '%')
+                        ->orWhere('detention_invoices.detention_no', 'like', '%' . $query . '%')
+                        ->orWhere('currencies.currency_code', 'like', '%' . $query . '%')
+                        ->orWhere('currencies.currency_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $receipts;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

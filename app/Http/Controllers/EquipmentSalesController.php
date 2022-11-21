@@ -57,6 +57,42 @@ class EquipmentSalesController extends Controller
         return $equipmentsales;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $equipmentsales = DB::table('equipment_sales')
+            ->select(
+                'equipment_sales.id',
+                'equipment_sales.date',
+                'equipment_sales.client_id',
+                'equipment_sales.no_unit',
+                'equipment_sales.sale_type',
+                'equipment_sales.description',
+                'equipment_sales.client_id_agent',
+                'clients.client_code',
+                'clients.client_name',
+                'agent.client_code',
+                'agent.client_name'
+            )
+            ->join('clients', 'equipment_sales.client_id', '=', 'clients.id')
+            ->join('clients as agent', 'equipment_sales.client_id_agent', '=', 'agent.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('equipment_sales.date', 'like', '%' . $query . '%')
+                    ->orWhere('clients.client_code', 'like', '%' . $query . '%')
+                    ->orWhere('clients.client_name', 'like', '%' . $query . '%')
+                    ->orWhere('agent.client_code', 'like', '%' . $query . '%')
+                    ->orWhere('agent.client_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $equipmentsales;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

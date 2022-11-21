@@ -47,6 +47,36 @@ class PortsController extends Controller
         return $ports;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $ports = DB::table('ports')
+            ->select(
+                'ports.id',
+                'ports.port_code',
+                'ports.port_name',
+                'ports.sub_code',
+                'ports.country_id',
+                'countries.country_name',
+                'countries.capital_city_name'
+            )
+            ->join('countries', 'ports.country_id', '=', 'countries.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('ports.port_code', 'like', '%' . $query . '%')
+                        ->orWhere('ports.port_name', 'like', '%' . $query . '%')
+                        ->orWhere('countries.country_name', 'like', '%' . $query . '%')
+                        ->orWhere('countries.capital_city_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $ports;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

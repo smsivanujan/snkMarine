@@ -51,6 +51,38 @@ class VoucherPaymentsController extends Controller
         return $voucherpayments;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $voucherpayments = DB::table('voucher_payments')
+            ->select(
+                'voucher_payments.id',
+                'voucher_payments.voucher_id',
+                'voucher_payments.pay_type',
+                'voucher_payments.cheque_no',
+                'voucher_payments.cheque_date',
+                'voucher_payments.current_bal',
+                'voucher_payments.paying_amount',
+                'voucher_payments.paying_local',
+                'vouchers.voucher_no'
+            )
+            ->join('vouchers', 'voucher_payments.voucher_id', '=', 'vouchers.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('voucher_payments.pay_type', 'like', '%' . $query . '%')
+                        ->orWhere('voucher_payments.cheque_no', 'like', '%' . $query . '%')
+                        ->orWhere('voucher_payments.cheque_date', 'like', '%' . $query . '%')
+                        ->orWhere('vouchers.voucher_no', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $voucherpayments;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

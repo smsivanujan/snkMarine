@@ -43,6 +43,32 @@ class DetentionInvoiceSlabsController extends Controller
         return $detentioninvoiceslabs;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $detentioninvoiceslabs = DB::table('detention_invoice_slabs')
+            ->select(
+                'detention_invoice_slabs.id',
+                'detention_invoice_slabs.detention_invoice_id',
+                'detention_invoice_slabs.slab_no',
+                'detention_invoice_slabs.amount',
+                'detention_invoices.detention_no'
+            )
+            ->join('detention_invoices', 'detention_invoice_slabs.detention_invoice_id', '=', 'detention_invoices.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('detention_invoice_slabs.slab_no', 'like', '%' . $query . '%')
+                    ->orWhere('detention_invoices.detention_no', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $detentioninvoiceslabs;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

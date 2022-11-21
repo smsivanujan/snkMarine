@@ -75,6 +75,54 @@ class OwnersController extends Controller
         return $owners;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $owners = DB::table('owners')
+            ->select(
+                'owners.id',
+                'owners.owner_code',
+                'owners.owner_name',
+                'owners.sub_code',
+                'owners.country_id',
+                'owners.port_id',
+                'owners.email',
+                'owners.telephone_number',
+                'owners.fax',
+                'owners.mobile_number',
+                'owners.contact_name',
+                'owners.address',
+                'owners.image',
+                'owners.remarks',
+                'owners.is_active',
+                'countries.country_name',
+                'countries.capital_city_name',
+                'ports.port_code',
+                'ports.port_name',
+                'ports.country_id'
+            )
+            ->join('countries', 'owners.country_id', '=', 'countries.id')
+            ->join('ports', 'owners.port_id', '=', 'ports.id')
+                ->where(function ($q) use ($query) {
+                    $q->where('owners.owner_code', 'like', '%' . $query . '%')
+                        ->orWhere('owners.owner_name', 'like', '%' . $query . '%')
+                        ->orWhere('owners.email', 'like', '%' . $query . '%')
+                        ->orWhere('owners.mobile_number', 'like', '%' . $query . '%')
+                        ->orWhere('owners.is_active', 'like', '%' . $query . '%')
+                        ->orWhere('countries.country_name', 'like', '%' . $query . '%')
+                        ->orWhere('ports.port_code', 'like', '%' . $query . '%')
+                        ->orWhere('ports.port_name', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $owners;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

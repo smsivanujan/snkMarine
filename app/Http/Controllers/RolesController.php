@@ -22,6 +22,29 @@ class RolesController extends Controller
         return $roles;
     }
 
+    public function showBySearch(Request $request)
+    {
+        $query = "";
+
+        if ($request->get('query')) {
+            $query = $request->get('query');
+
+            $roles = DB::table('roles')
+            ->select(
+                'roles.id',
+                'roles.role_name',
+                'roles.description'
+            )
+                ->where(function ($q) use ($query) {
+                    $q->where('roles.role_name', 'like', '%' . $query . '%')
+                        ->orWhere('roles.description', 'like', '%' . $query . '%');
+                })
+                ->get();
+        }
+
+        return $roles;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;
