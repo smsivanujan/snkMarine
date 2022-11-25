@@ -45,7 +45,6 @@ class DefaultValuesController extends Controller
         return $defaultvalues;
     }
 
-
     public function store(Request $request)
     {
         $id = $request->id;

@@ -79,6 +79,49 @@ class BillRemoteLogsController extends Controller
         return $bill_remote_logs;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $bill_remote_logs = DB::table('bill_remote_logs')
+            ->select(
+                'bill_remote_logs.id',
+                'bill_remote_logs.bill_of_landing_id',
+                'bill_remote_logs.client_id',
+                'bill_remote_logs.printed_date',
+                'bill_of_landings.bill_of_landing_number',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('bill_of_landings', 'bill_remote_logs.bill_of_landing_id', '=', 'bill_of_landings.id')
+            ->join('clients', 'bill_remote_logs.client_id', '=', 'clients.id');
+
+        if (!empty($request->bill_of_landing_id) && !empty($request->client_id)) {
+
+             $bill_remote_logs = $bill_remote_logs
+             ->where('bill_remote_logs.bill_of_landing_id', '=', $request->bill_of_landing_id)
+             ->where('bill_remote_logs.client_id', '=', $request->client_id);
+        }
+        elseif (!empty($request->bill_of_landing_id) && empty($request->client_id)) {
+
+            $accesspoints = $bill_remote_logs
+            ->where('bill_remote_logs.bill_of_landing_id', '=', $request->bill_of_landing_id);
+        }
+        elseif (empty($request->bill_of_landing_id) && !empty($request->client_id)) {
+
+            $bill_remote_logs = $bill_remote_logs
+            ->where('bill_remote_logs.client_id', '=', $request->client_id);
+        }
+        else
+        {
+
+            $bill_remote_logs = $bill_remote_logs;
+        }
+
+        $result = $bill_remote_logs->orderBy('bill_remote_logs.id')
+            ->get();
+        return $result;
+    }
 
     public function store(Request $request)
     {

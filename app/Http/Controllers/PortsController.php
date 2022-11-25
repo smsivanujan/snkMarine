@@ -77,6 +77,38 @@ class PortsController extends Controller
         return $ports;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $ports = DB::table('ports')
+        ->select(
+            'ports.id',
+            'ports.port_code',
+            'ports.port_name',
+            'ports.sub_code',
+            'ports.country_id',
+            'countries.country_name',
+            'countries.capital_city_name'
+        )
+        ->join('countries', 'ports.country_id', '=', 'countries.id');
+
+        if (!empty($request->country_id)) {
+
+             $ports = $ports
+             ->where('ports.country_id', '=', $request->country_id);
+        }
+        else
+        {
+
+            $ports = $ports;
+        }
+
+        $result = $ports->orderBy('ports.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

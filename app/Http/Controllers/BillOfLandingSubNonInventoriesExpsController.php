@@ -77,51 +77,50 @@ class BillOfLandingSubNonInventoriesExpsController extends Controller
         return $billoflandingsubnoninventoriesexps;
     }
 
-    // public function showBySearch(Request $request)
-    // {
-    //     $query = "";
+    public function showBySearch(Request $request)
+    {
+        // $query = "";
 
-    //     if ($request->get('query')) {
-    //         $query = $request->get('query');
+        // if ($request->get('query')) {
+        //     $query = $request->get('query');
 
-    //         $billoflandingsubnoninventoriesexps = DB::table('bill_of_landing_sub_non_inventories_exps')
-    //         ->select(
-    //             'bill_of_landing_sub_non_inventories_exps.id',
-    //             'bill_of_landing_sub_non_inventories_exps.blsn_invent_id',
-    //             'bill_of_landing_sub_non_inventories_exps.ex_bc_id',
-    //             'bill_of_landing_sub_non_inventories_exps.ex_reserved_date',
-    //             'bill_of_landing_sub_non_inventories_exps.ex_shipper_date',
-    //             'bill_of_landing_sub_non_inventories_exps.exp_freight_charge',
-    //             'bill_of_landing_sub_non_inventories_exps.exp_dc_surcharge_in',
-    //             'bill_of_landing_sub_non_inventories_exps.exp_other_recovery',
-    //             'bill_of_landing_sub_non_inventories_exps.exp_other_recovery_remarks',
-    //             'bill_of_landing_sub_non_inventories_exps.exp_total_in',
-    //             'bill_of_landing_sub_non_inventories_exps.exp_slot_fees',
-    //             'bill_of_landing_sub_non_inventories_exps.exp_dc_surcharge_ex',
-    //             'bill_of_landing_sub_non_inventories_exps.exp_agent_comm',
-    //             'bill_of_landing_sub_non_inventories_exps.exp_phc',
-    //             'bill_of_landing_sub_non_inventories_exps.exp_total_expenses',
-    //             'bill_of_landing_sub_non_inventories_exps.exp_final_amount',
-    //             'bill_of_landing_sub_non_inventories_exps.exp_remarks',
-    //             'bill_of_landing_sub_non_inventories_exps.exp_created_date',
-    //             'bill_of_landing_sub_non_inventories_exps.exp_approved_by',
-    //             'bill_of_landing_sub_non_inventories_exps.exp_approved_date',
-    //             'booking_confirmations.booking_confirmation_number'
-    //         )
-    //         ->join('bill_of_landing_sub_non_inventories', 'bill_of_landing_sub_non_inventories_exps.blsn_invent_id', '=', 'bill_of_landing_sub_non_inventories_exps.id')
-    //         ->join('booking_confirmations', 'bill_of_landing_sub_non_inventories_exps.ex_bc_id', '=', 'booking_confirmations.id')
-    //             ->where(function ($q) use ($query) {
-    //                 $q->where('arrival_noticies.arrival_notice_no', 'like', '%' . $query . '%')
-    //                     ->orWhere('arrival_noticies.seal_no', 'like', '%' . $query . '%')
-    //                     ->orWhere('equipments.equipment_number', 'like', '%' . $query . '%')
-    //                     ->orWhere('type_of_units.type_of_unit', 'like', '%' . $query . '%');
-    //             })
-    //             ->get();
-    //     }
+        //     $billoflandingsubnoninventoriesexps = DB::table('bill_of_landing_sub_non_inventories_exps')
+        //     ->select(
+        //         'bill_of_landing_sub_non_inventories_exps.id',
+        //         'bill_of_landing_sub_non_inventories_exps.blsn_invent_id',
+        //         'bill_of_landing_sub_non_inventories_exps.ex_bc_id',
+        //         'bill_of_landing_sub_non_inventories_exps.ex_reserved_date',
+        //         'bill_of_landing_sub_non_inventories_exps.ex_shipper_date',
+        //         'bill_of_landing_sub_non_inventories_exps.exp_freight_charge',
+        //         'bill_of_landing_sub_non_inventories_exps.exp_dc_surcharge_in',
+        //         'bill_of_landing_sub_non_inventories_exps.exp_other_recovery',
+        //         'bill_of_landing_sub_non_inventories_exps.exp_other_recovery_remarks',
+        //         'bill_of_landing_sub_non_inventories_exps.exp_total_in',
+        //         'bill_of_landing_sub_non_inventories_exps.exp_slot_fees',
+        //         'bill_of_landing_sub_non_inventories_exps.exp_dc_surcharge_ex',
+        //         'bill_of_landing_sub_non_inventories_exps.exp_agent_comm',
+        //         'bill_of_landing_sub_non_inventories_exps.exp_phc',
+        //         'bill_of_landing_sub_non_inventories_exps.exp_total_expenses',
+        //         'bill_of_landing_sub_non_inventories_exps.exp_final_amount',
+        //         'bill_of_landing_sub_non_inventories_exps.exp_remarks',
+        //         'bill_of_landing_sub_non_inventories_exps.exp_created_date',
+        //         'bill_of_landing_sub_non_inventories_exps.exp_approved_by',
+        //         'bill_of_landing_sub_non_inventories_exps.exp_approved_date',
+        //         'booking_confirmations.booking_confirmation_number'
+        //     )
+        //     ->join('bill_of_landing_sub_non_inventories', 'bill_of_landing_sub_non_inventories_exps.blsn_invent_id', '=', 'bill_of_landing_sub_non_inventories_exps.id')
+        //     ->join('booking_confirmations', 'bill_of_landing_sub_non_inventories_exps.ex_bc_id', '=', 'booking_confirmations.id')
+        //         ->where(function ($q) use ($query) {
+        //             $q->where('arrival_noticies.arrival_notice_no', 'like', '%' . $query . '%')
+        //                 ->orWhere('arrival_noticies.seal_no', 'like', '%' . $query . '%')
+        //                 ->orWhere('equipments.equipment_number', 'like', '%' . $query . '%')
+        //                 ->orWhere('type_of_units.type_of_unit', 'like', '%' . $query . '%');
+        //         })
+        //         ->get();
+        // }
 
-    //     return $arrivalnoticecontainers;
-    // }
-
+        // return $arrivalnoticecontainers;
+    }
 
     public function store(Request $request)
     {

@@ -92,6 +92,56 @@ class SoaSubsController extends Controller
         return $soasubs;
     }
 
+    public function showByFilter(Request $request)
+    {
+        $fdate = isset($request->fdate) ? $request->fdate : date('Y-m-d');
+        $tdate = isset($request->tdate) ? $request->tdate : date('Y-m-d');
+
+        $soasubs = DB::table('soa_subs')
+            ->select(
+                'soa_subs.id',
+                'soa_subs.date',
+                'soa_subs.soa_id',
+                'soa_subs.client_id_agent',
+                'soa_subs.description',
+                'soa_subs.income',
+                'soa_subs.expenses',
+                'soas.date as soasDate',
+                'soas.status',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('soas', 'soa_subs.soa_id', '=', 'soas.id')
+            ->join('clients', 'soa_subs.client_id_agent', '=', 'clients.id')
+            ->where(DB::raw('DATE_FORMAT(soa_subs.date, "%Y-%m-%d")'), '>=', $fdate)
+            ->where(DB::raw('DATE_FORMAT(soa_subs.date, "%Y-%m-%d")'), '<=', $tdate);
+
+        if (!empty($request->soa_id) && !empty($request->client_id_agent)) {
+
+             $soasubs = $soasubs
+             ->where('soa_subs.soa_id', '=', $request->soa_id)
+             ->where('soa_subs.client_id_agent', '=', $request->client_id_agent);
+        }
+        elseif (!empty($request->soa_id) && empty($request->client_id_agent)) {
+
+            $soasubs = $soasubs->where('soa_subs.soa_id', '=', $request->soa_id);
+        }
+        elseif (empty($request->soa_id) && !empty($request->client_id_agent)) {
+
+            $soasubs = $soasubs
+            ->where('soa_subs.client_id_agent', '=', $request->client_id_agent);
+        }
+        else
+        {
+
+            $soasubs = $soasubs;
+        }
+
+        $result = $soasubs->orderBy('soa_subs.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

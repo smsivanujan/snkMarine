@@ -137,6 +137,90 @@ class ClientsController extends Controller
         return $clients;
     }
 
+    public function showByFilter(Request $request)
+    {
+
+        $clients = DB::table('clients')
+            ->select(
+                'clients.id',
+                'clients.client_code',
+                'clients.client_name',
+                'clients.sub_code',
+                'clients.country_id',
+                'clients.port_id',
+                'clients.email',
+                'clients.telephone_number',
+                'clients.fax',
+                'clients.mobile_number',
+                'clients.contact_name',
+                'clients.address',
+                'clients.image',
+                'clients.currency_id',
+                'clients.remarks',
+                'clients.is_active',
+                'countries.country_name',
+                'countries.capital_city_name',
+                'ports.port_code',
+                'ports.port_name',
+                'ports.sub_code',
+                'ports.country_id',
+                'currencies.currency_code',
+                'currencies.currency_name'
+            )
+            ->join('countries', 'clients.country_id', '=', 'countries.id')
+            ->join('ports', 'clients.port_id', '=', 'ports.id')
+            ->join('currencies', 'clients.currency_id', '=', 'currencies.id');
+
+        if (!empty($request->country_id) && !empty($request->port_id) && !empty($request->currency_id)) {
+
+             $clients = $clients
+             ->where('clients.country_id', '=', $request->country_id)
+             ->where('clients.port_id', '=', $request->port_id)
+             ->where('clients.currency_id', '=', $request->currency_id);
+        }
+        elseif (!empty($request->country_id) && empty($request->port_id) && !empty($request->currency_id)) {
+
+            $clients = $clients
+            ->where('clients.country_id', '=', $request->country_id)
+            ->where('clients.currency_id', '=', $request->currency_id);
+        }
+        elseif (!empty($request->country_id) && !empty($request->port_id) && empty($request->currency_id)) {
+
+            $clients = $clients
+            ->where('clients.country_id', '=', $request->country_id)
+            ->where('clients.port_id', '=', $request->port_id);
+        }
+        elseif (!empty($request->country_id) && empty($request->port_id) && empty($request->currency_id)) {
+
+            $clients = $clients
+            ->where('clients.country_id', '=', $request->country_id);
+        }
+        elseif (empty($request->country_id) && !empty($request->port_id) && !empty($request->currency_id)) {
+
+            $clients = $clients
+            ->where('clients.port_id', '=', $request->port_id)
+            ->where('clients.currency_id', '=', $request->currency_id);
+        }
+        elseif (!empty($request->country_id) && !empty($request->port_id) && empty($request->currency_id)) {
+
+            $clients = $clients
+            ->where('clients.port_id', '=', $request->port_id);
+        }
+        elseif (!empty($request->country_id) && empty($request->port_id) && !empty($request->currency_id)) {
+
+            $clients = $clients
+            ->where('clients.currency_id', '=', $request->currency_id);
+        }
+        else
+        {
+
+            $clients = $clients;
+        }
+
+        $result = $clients->orderBy('clients.id')
+            ->get();
+        return $result;
+    }
 
     public function store(Request $request)
     {

@@ -116,6 +116,100 @@ class EquipmentsController extends Controller
         return $equipments;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $equipments = DB::table('equipments')
+            ->select(
+                'equipments.id',
+                'equipments.equipment_number',
+                'equipments.owner_id',
+                'equipments.type_of_unit_id',
+                'equipments.grade',
+                'equipments.status',
+                'equipments.vendor_id_yard',
+                'equipments.client_id_agent',
+                'owners.owner_code',
+                'owners.owner_name',
+                'type_of_units.type_of_unit',
+                'vendors.vendor_code',
+                'vendors.vendor_name',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('owners', 'equipments.owner_id', '=', 'owners.id')
+            ->join('type_of_units', 'equipments.type_of_unit_id', '=', 'type_of_units.id')
+            ->join('vendors', 'equipments.vendor_id_yard', '=', 'vendors.id')
+            ->join('clients', 'equipments.client_id_agent', '=', 'clients.id');
+
+        if (!empty($request->owner_id) && !empty($request->type_of_unit_id) && !empty($request->vendor_id_yard) && !empty($request->client_id_agent)) {
+ 
+            $equipments = $equipments
+                ->where('equipments.owner_id', '=', $request->owner_id)
+                ->where('equipments.type_of_unit_id', '=', $request->type_of_unit_id)
+                ->where('equipments.vendor_id_yard', '=', $request->vendor_id_yard)
+                ->where('equipments.client_id_agent', '=', $request->client_id_agent);
+        } elseif (!empty($request->owner_id) && empty($request->type_of_unit_id) && !empty($request->vendor_id_yard) && !empty($request->client_id_agent)) {
+        
+            $equipments = $equipments
+                ->where('equipments.owner_id', '=', $request->owner_id)
+                ->where('equipments.vendor_id_yard', '=', $request->vendor_id_yard)
+                ->where('equipments.client_id_agent', '=', $request->client_id_agent);
+        } elseif (!empty($request->owner_id) && !empty($request->type_of_unit_id) && empty($request->vendor_id_yard) && !empty($request->client_id_agent)) {
+           
+            $equipments = $equipments
+                ->where('equipments.owner_id', '=', $request->owner_id)
+                ->where('equipments.type_of_unit_id', '=', $request->type_of_unit_id)
+                ->where('equipments.client_id_agent', '=', $request->client_id_agent);
+        } elseif (!empty($request->owner_id) && !empty($request->type_of_unit_id) && !empty($request->vendor_id_yard) && empty($request->client_id_agent)) {
+         
+            $equipments = $equipments
+                ->where('equipments.owner_id', '=', $request->owner_id)
+                ->where('equipments.type_of_unit_id', '=', $request->type_of_unit_id)
+                ->where('equipments.vendor_id_yard', '=', $request->vendor_id_yard);
+        } elseif (!empty($request->owner_id) && empty($request->type_of_unit_id) && empty($request->vendor_id_yard) && empty($request->client_id_agent)) {
+           
+            $equipments = $equipments
+                ->where('equipments.owner_id', '=', $request->owner_id);
+        } elseif (empty($request->owner_id) && !empty($request->type_of_unit_id) && !empty($request->vendor_id_yard) && !empty($request->client_id_agent)) {
+           
+            $equipments = $equipments
+                ->where('equipments.type_of_unit_id', '=', $request->type_of_unit_id)
+                ->where('equipments.vendor_id_yard', '=', $request->vendor_id_yard)
+                ->where('equipments.client_id_agent', '=', $request->client_id_agent);
+        } elseif (empty($request->owner_id) && !empty($request->type_of_unit_id) && empty($request->vendor_id_yard) && !empty($request->client_id_agent)) {
+           
+            $equipments = $equipments
+                ->where('equipments.type_of_unit_id', '=', $request->type_of_unit_id)
+                ->where('equipments.client_id_agent', '=', $request->client_id_agent);
+        } elseif (empty($request->owner_id) && !empty($request->type_of_unit_id) && empty($request->vendor_id_yard) && empty($request->client_id_agent)) {
+           
+            $equipments = $equipments
+                ->where('equipments.type_of_unit_id', '=', $request->type_of_unit_id);
+        } elseif (empty($request->owner_id) && empty($request->type_of_unit_id) && !empty($request->vendor_id_yard) && !empty($request->client_id_agent)) {
+           
+            $equipments = $equipments
+                ->where('equipments.vendor_id_yard', '=', $request->vendor_id_yard)
+                ->where('equipments.client_id_agent', '=', $request->client_id_agent);
+        } elseif (empty($request->owner_id) && empty($request->type_of_unit_id) && !empty($request->vendor_id_yard) && empty($request->client_id_agent)) {
+            
+            $equipments = $equipments
+                ->where('equipments.vendor_id_yard', '=', $request->vendor_id_yard);
+        } elseif (empty($request->owner_id) && empty($request->type_of_unit_id) && empty($request->vendor_id_yard) && !empty($request->client_id_agent)) {
+          
+            $equipments = $equipments
+                ->where('equipments.client_id_agent', '=', $request->client_id_agent);
+        } else {
+            
+            $equipments = $equipments;
+        }
+
+        $result = $equipments->orderBy('equipments.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

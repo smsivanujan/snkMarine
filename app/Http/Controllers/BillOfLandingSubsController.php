@@ -185,6 +185,124 @@ class BillOfLandingSubsController extends Controller
         return $billoflandingsubs;
     }
 
+    public function showByFilter(Request $request)
+    {
+        $fdate = isset($request->fdate) ? $request->fdate : date('Y-m-d');
+        $tdate = isset($request->tdate) ? $request->tdate : date('Y-m-d');
+
+        $billoflandingsubs = DB::table('bill_of_landing_subs')
+        ->select(
+            'bill_of_landing_subs.id',
+            'bill_of_landing_subs.date',
+            'bill_of_landing_subs.bill_of_landing_id',
+            'bill_of_landing_subs.equipment_id',
+            'bill_of_landing_subs.seal_no',
+            'bill_of_landing_subs.marks',
+            'bill_of_landing_subs.package_quantity',
+            'bill_of_landing_subs.description',
+            'bill_of_landing_subs.gross_weight',
+            'bill_of_landing_subs.measurement',
+            'bill_of_landing_subs.bill_confirmation_id',
+            'bill_of_landing_subs.status',
+            'bill_of_landing_subs.ignore_data',
+            'bill_of_landing_subs.reserved_date',
+            'bill_of_landing_subs.shipper_date',
+            'bill_of_landing_subs.on_job_date',
+            'bill_of_landing_subs.yard_in_date',
+            'bill_of_landing_subs.client_id_agent',
+            'bill_of_landing_subs.client_id_ex_agent',
+            'bill_of_landing_subs.vendor_id_yard',
+            'bill_of_landing_subs.free_days',
+            'bill_of_landing_subs.free_days_standard',
+            'bill_of_landing_subs.ata_fpd',
+            'bill_of_landing_subs.payed_till',
+            'bill_of_landing_subs.soa_status_exp',
+            'bill_of_landing_subs.soa_status_imp',
+            'bill_of_landing_subs.lift_on_off',
+            'bill_of_landing_subs.other_expenses',
+            'bill_of_landing_subs.other_expenses_remarks',
+            'bill_of_landing_subs.deleted',
+            'bill_of_landings.bill_of_landing_number',
+            'equipments.equipment_number',
+            'agent.client_code',
+            'agent.client_name',
+            'ex_agent.client_code',
+            'ex_agent.client_name',
+            'yard.vendor_code',
+            'yard.vendor_name'
+        )
+        ->join('bill_of_landings', 'bill_of_landing_subs.bill_of_landing_id', '=', 'bill_of_landings.id')
+        ->join('equipments', 'bill_of_landing_subs.equipment_id', '=', 'equipments.id')
+        ->join('clients as agent', 'bill_of_landing_subs.client_id_agent', '=', 'agent.id')
+        ->join('clients as ex_agent', 'bill_of_landing_subs.client_id_ex_agent', '=', 'ex_agent.id')
+        ->join('vendors as yard', 'bill_of_landing_subs.vendor_id_yard', '=', 'yard.id');
+
+        if (!empty($request->bill_of_landing_id) && !empty($request->equipment_id) && !empty($request->client_id_agent) && !empty($request->vendor_id_yard)) {
+ 
+            $billoflandingsubs = $billoflandingsubs
+                ->where('bill_of_landing_subs.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                ->where('bill_of_landing_subs.equipment_id', '=', $request->equipment_id)
+                ->where('bill_of_landing_subs.client_id_agent', '=', $request->client_id_agent)
+                ->where('bill_of_landing_subs.vendor_id_yard', '=', $request->vendor_id_yard);
+        } elseif (!empty($request->bill_of_landing_id) && empty($request->equipment_id) && !empty($request->client_id_agent) && !empty($request->vendor_id_yard)) {
+        
+            $billoflandingsubs = $billoflandingsubs
+                ->where('bill_of_landing_subs.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                ->where('bill_of_landing_subs.client_id_agent', '=', $request->client_id_agent)
+                ->where('bill_of_landing_subs.vendor_id_yard', '=', $request->vendor_id_yard);
+        } elseif (!empty($request->bill_of_landing_id) && !empty($request->equipment_id) && empty($request->client_id_agent) && !empty($request->vendor_id_yard)) {
+           
+            $billoflandingsubs = $billoflandingsubs
+                ->where('bill_of_landing_subs.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                ->where('bill_of_landing_subs.equipment_id', '=', $request->equipment_id)
+                ->where('bill_of_landing_subs.vendor_id_yard', '=', $request->vendor_id_yard);
+        } elseif (!empty($request->bill_of_landing_id) && !empty($request->equipment_id) && !empty($request->client_id_agent) && empty($request->vendor_id_yard)) {
+         
+            $billoflandingsubs = $billoflandingsubs
+                ->where('bill_of_landing_subs.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                ->where('bill_of_landing_subs.equipment_id', '=', $request->equipment_id)
+                ->where('bill_of_landing_subs.client_id_agent', '=', $request->client_id_agent);
+        } elseif (!empty($request->bill_of_landing_id) && empty($request->equipment_id) && empty($request->client_id_agent) && empty($request->vendor_id_yard)) {
+           
+            $billoflandingsubs = $billoflandingsubs
+                ->where('bill_of_landing_subs.bill_of_landing_id', '=', $request->bill_of_landing_id);
+        } elseif (empty($request->bill_of_landing_id) && !empty($request->equipment_id) && !empty($request->client_id_agent) && !empty($request->vendor_id_yard)) {
+           
+            $billoflandingsubs = $billoflandingsubs
+                ->where('bill_of_landing_subs.equipment_id', '=', $request->equipment_id)
+                ->where('bill_of_landing_subs.client_id_agent', '=', $request->client_id_agent)
+                ->where('bill_of_landing_subs.vendor_id_yard', '=', $request->vendor_id_yard);
+        } elseif (empty($request->bill_of_landing_id) && !empty($request->equipment_id) && empty($request->client_id_agent) && !empty($request->vendor_id_yard)) {
+           
+            $billoflandingsubs = $billoflandingsubs
+                ->where('bill_of_landing_subs.equipment_id', '=', $request->equipment_id)
+                ->where('bill_of_landing_subs.vendor_id_yard', '=', $request->vendor_id_yard);
+        } elseif (empty($request->bill_of_landing_id) && !empty($request->equipment_id) && empty($request->client_id_agent) && empty($request->vendor_id_yard)) {
+           
+            $billoflandingsubs = $billoflandingsubs
+                ->where('bill_of_landing_subs.equipment_id', '=', $request->equipment_id);
+        } elseif (empty($request->bill_of_landing_id) && empty($request->equipment_id) && !empty($request->client_id_agent) && !empty($request->vendor_id_yard)) {
+           
+            $billoflandingsubs = $billoflandingsubs
+                ->where('bill_of_landing_subs.client_id_agent', '=', $request->client_id_agent)
+                ->where('bill_of_landing_subs.vendor_id_yard', '=', $request->vendor_id_yard);
+        } elseif (empty($request->bill_of_landing_id) && empty($request->equipment_id) && !empty($request->client_id_agent) && empty($request->vendor_id_yard)) {
+            
+            $billoflandingsubs = $billoflandingsubs
+                ->where('bill_of_landing_subs.client_id_agent', '=', $request->client_id_agent);
+        } elseif (empty($request->bill_of_landing_id) && empty($request->equipment_id) && empty($request->client_id_agent) && !empty($request->vendor_id_yard)) {
+          
+            $billoflandingsubs = $billoflandingsubs
+                ->where('bill_of_landing_subs.vendor_id_yard', '=', $request->vendor_id_yard);
+        } else {
+            
+            $billoflandingsubs = $billoflandingsubs;
+        }
+
+        $result = $billoflandingsubs->orderBy('bill_of_landing_subs.id')
+            ->get();
+        return $result;
+    }
 
     public function store(Request $request)
     {

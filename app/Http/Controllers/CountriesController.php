@@ -45,7 +45,6 @@ class CountriesController extends Controller
         return $countries;
     }
 
-
     public function store(Request $request)
     {
         $id = $request->id;

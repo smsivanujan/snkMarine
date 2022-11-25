@@ -126,6 +126,60 @@ class VendorsController extends Controller
         return $vendors;
     }
 
+    public function showByFilter(Request $request)
+    {
+        $vendors = DB::table('vendors')
+        ->select(
+            'vendors.id',
+            'vendors.vendor_code',
+            'vendors.vendor_name',
+            'vendors.sub_code',
+            'vendors.country_id',
+            'vendors.port_id',
+            'vendors.email',
+            'vendors.telephone_number',
+            'vendors.fax',
+            'vendors.mobile_number',
+            'vendors.contact_name',
+            'vendors.address',
+            'vendors.image',
+            'vendors.remarks',
+            'vendors.is_active',
+            'countries.country_name',
+            'countries.capital_city_name',
+            'ports.port_code',
+            'ports.port_name',
+            'ports.sub_code',
+            'ports.country_id'
+        )
+        ->join('countries', 'vendors.country_id', '=', 'countries.id')
+        ->join('ports', 'vendors.port_id', '=', 'ports.id');
+
+        if (!empty($request->country_id) && !empty($request->port_id)) {
+
+             $vendors = $vendors
+             ->where('vendors.country_id', '=', $request->country_id)
+             ->where('vendors.port_id', '=', $request->port_id);
+        }
+        elseif (!empty($request->country_id) && empty($request->id)) {
+
+            $vendors = $vendors->where('vendors.country_id', '=', $request->country_id);
+        }
+        elseif (empty($request->country_id) && !empty($request->port_id)) {
+
+            $vendors = $vendors
+            ->where('vendors.port_id', '=', $request->port_id);
+        }
+        else
+        {
+
+            $vendors = $vendors;
+        }
+
+        $result = $vendors->orderBy('vendors.id')
+            ->get();
+        return $result;
+    }
 
     public function store(Request $request)
     {

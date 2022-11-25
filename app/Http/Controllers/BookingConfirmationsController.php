@@ -161,69 +161,69 @@ class BookingConfirmationsController extends Controller
             $query = $request->get('query');
 
             $bookingconfirmations = DB::table('booking_confirmations')
-            ->select(
-                'booking_confirmations.id',
-                'booking_confirmations.date',
-                'booking_confirmations.booking_confirmation_number',
-                'booking_confirmations.client_id_shipper',
-                'booking_confirmations.client_id',
-                'booking_confirmations.port_net_ref',
-                'booking_confirmations.vendor_id',
-                'booking_confirmations.port_id_loading',
-                'booking_confirmations.port_id_discharge',
-                'booking_confirmations.place_of_delivery',
-                'booking_confirmations.place_of_receipt',
-                'booking_confirmations.description',
-                'booking_confirmations.eta',
-                'booking_confirmations.closing_date',
-                'booking_confirmations.etd',
-                'booking_confirmations.eta_pod',
-                'booking_confirmations.igm_india_voyage_id',
-                'booking_confirmations.voyage_number',
-                'booking_confirmations.measurement',
-                'booking_confirmations.type_of_shipment',
-                'booking_confirmations.release_reference',
-                'booking_confirmations.gross_weight',
-                'booking_confirmations.type_of_unit_id',
-                'booking_confirmations.vendor_id_yard',
-                'booking_confirmations.quantity_of_unit',
-                'booking_confirmations.release_expire',
-                'booking_confirmations.remarks',
-                'booking_confirmations.status_1',
-                'booking_confirmations.status_2',
-                'shipper.client_code',
-                'shipper.client_name',
-                'clients.client_code',
-                'clients.client_name',
-                'vendors.vendor_code',
-                'vendors.vendor_name',
-                'portloading.port_code',
-                'portloading.port_name',
-                'portloading.sub_code',
-                'portloading.country_id',
-                'portdischarge.port_code',
-                'portdischarge.port_name',
-                'portdischarge.sub_code',
-                'portdischarge.country_id',
-                'Cload.country_name',
-                'Cload.capital_city_name',
-                'Cdischarge.country_name',
-                'Cdischarge.capital_city_name',
-                'igm_india_voyages.voyage',
-                'type_of_units.type_of_unit',
-                'yard.vendor_code',
-                'yard.vendor_name'
-            )
-            ->join('clients as shipper', 'booking_confirmations.client_id_shipper', '=', 'shipper.id')
-            ->join('clients', 'booking_confirmations.client_id', '=', 'clients.id')
-            ->join('vendors', 'booking_confirmations.vendor_id', '=', 'vendors.id')
-            ->join('ports as portloading', 'booking_confirmations.port_id_loading', '=', 'portloading.id')
-            ->join('ports as portdischarge', 'booking_confirmations.port_id_discharge', '=', 'portdischarge.id')
-            ->join('countries as Cload', 'portloading.country_id', '=', 'Cload.id')
-            ->join('countries as Cdischarge', 'portdischarge.country_id', '=', 'Cdischarge.id')
-            ->join('igm_india_voyages', 'booking_confirmations.igm_india_voyage_id', '=', 'igm_india_voyages.id')
-            ->join('type_of_units', 'booking_confirmations.type_of_unit_id', '=', 'type_of_units.id')
-            ->join('vendors as yard', 'booking_confirmations.vendor_id_yard', '=', 'yard.id')
+                ->select(
+                    'booking_confirmations.id',
+                    'booking_confirmations.date',
+                    'booking_confirmations.booking_confirmation_number',
+                    'booking_confirmations.client_id_shipper',
+                    'booking_confirmations.client_id',
+                    'booking_confirmations.port_net_ref',
+                    'booking_confirmations.vendor_id',
+                    'booking_confirmations.port_id_loading',
+                    'booking_confirmations.port_id_discharge',
+                    'booking_confirmations.place_of_delivery',
+                    'booking_confirmations.place_of_receipt',
+                    'booking_confirmations.description',
+                    'booking_confirmations.eta',
+                    'booking_confirmations.closing_date',
+                    'booking_confirmations.etd',
+                    'booking_confirmations.eta_pod',
+                    'booking_confirmations.igm_india_voyage_id',
+                    'booking_confirmations.voyage_number',
+                    'booking_confirmations.measurement',
+                    'booking_confirmations.type_of_shipment',
+                    'booking_confirmations.release_reference',
+                    'booking_confirmations.gross_weight',
+                    'booking_confirmations.type_of_unit_id',
+                    'booking_confirmations.vendor_id_yard',
+                    'booking_confirmations.quantity_of_unit',
+                    'booking_confirmations.release_expire',
+                    'booking_confirmations.remarks',
+                    'booking_confirmations.status_1',
+                    'booking_confirmations.status_2',
+                    'shipper.client_code',
+                    'shipper.client_name',
+                    'clients.client_code',
+                    'clients.client_name',
+                    'vendors.vendor_code',
+                    'vendors.vendor_name',
+                    'portloading.port_code',
+                    'portloading.port_name',
+                    'portloading.sub_code',
+                    'portloading.country_id',
+                    'portdischarge.port_code',
+                    'portdischarge.port_name',
+                    'portdischarge.sub_code',
+                    'portdischarge.country_id',
+                    'Cload.country_name',
+                    'Cload.capital_city_name',
+                    'Cdischarge.country_name',
+                    'Cdischarge.capital_city_name',
+                    'igm_india_voyages.voyage',
+                    'type_of_units.type_of_unit',
+                    'yard.vendor_code',
+                    'yard.vendor_name'
+                )
+                ->join('clients as shipper', 'booking_confirmations.client_id_shipper', '=', 'shipper.id')
+                ->join('clients', 'booking_confirmations.client_id', '=', 'clients.id')
+                ->join('vendors', 'booking_confirmations.vendor_id', '=', 'vendors.id')
+                ->join('ports as portloading', 'booking_confirmations.port_id_loading', '=', 'portloading.id')
+                ->join('ports as portdischarge', 'booking_confirmations.port_id_discharge', '=', 'portdischarge.id')
+                ->join('countries as Cload', 'portloading.country_id', '=', 'Cload.id')
+                ->join('countries as Cdischarge', 'portdischarge.country_id', '=', 'Cdischarge.id')
+                ->join('igm_india_voyages', 'booking_confirmations.igm_india_voyage_id', '=', 'igm_india_voyages.id')
+                ->join('type_of_units', 'booking_confirmations.type_of_unit_id', '=', 'type_of_units.id')
+                ->join('vendors as yard', 'booking_confirmations.vendor_id_yard', '=', 'yard.id')
                 ->where(function ($q) use ($query) {
                     $q->where('booking_confirmations.booking_confirmation_number', 'like', '%' . $query . '%')
                         ->orWhere('booking_confirmations.date', 'like', '%' . $query . '%')
@@ -248,6 +248,107 @@ class BookingConfirmationsController extends Controller
         return $bookingconfirmations;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $fdate = isset($request->fdate) ? $request->fdate : date('Y-m-d');
+        // $tdate = isset($request->tdate) ? $request->tdate : date('Y-m-d');
+
+        // $bookingconfirmations = DB::table('booking_confirmations')
+        //     ->select(
+        //         'booking_confirmations.id',
+        //         'booking_confirmations.date',
+        //         'booking_confirmations.booking_confirmation_number',
+        //         'booking_confirmations.client_id_shipper',
+        //         'booking_confirmations.client_id',
+        //         'booking_confirmations.port_net_ref',
+        //         'booking_confirmations.vendor_id',
+        //         'booking_confirmations.port_id_loading',
+        //         'booking_confirmations.port_id_discharge',
+        //         'booking_confirmations.place_of_delivery',
+        //         'booking_confirmations.place_of_receipt',
+        //         'booking_confirmations.description',
+        //         'booking_confirmations.eta',
+        //         'booking_confirmations.closing_date',
+        //         'booking_confirmations.etd',
+        //         'booking_confirmations.eta_pod',
+        //         'booking_confirmations.igm_india_voyage_id',
+        //         'booking_confirmations.voyage_number',
+        //         'booking_confirmations.measurement',
+        //         'booking_confirmations.type_of_shipment',
+        //         'booking_confirmations.release_reference',
+        //         'booking_confirmations.gross_weight',
+        //         'booking_confirmations.type_of_unit_id',
+        //         'booking_confirmations.vendor_id_yard',
+        //         'booking_confirmations.quantity_of_unit',
+        //         'booking_confirmations.release_expire',
+        //         'booking_confirmations.remarks',
+        //         'booking_confirmations.status_1',
+        //         'booking_confirmations.status_2',
+        //         'shipper.client_code',
+        //         'shipper.client_name',
+        //         'clients.client_code',
+        //         'clients.client_name',
+        //         'vendors.vendor_code',
+        //         'vendors.vendor_name',
+        //         'portloading.port_code',
+        //         'portloading.port_name',
+        //         'portloading.sub_code',
+        //         'portloading.country_id',
+        //         'portdischarge.port_code',
+        //         'portdischarge.port_name',
+        //         'portdischarge.sub_code',
+        //         'portdischarge.country_id',
+        //         'Cload.country_name',
+        //         'Cload.capital_city_name',
+        //         'Cdischarge.country_name',
+        //         'Cdischarge.capital_city_name',
+        //         'igm_india_voyages.voyage',
+        //         'type_of_units.type_of_unit',
+        //         'yard.vendor_code',
+        //         'yard.vendor_name'
+        //     )
+        //     ->join('clients as shipper', 'booking_confirmations.client_id_shipper', '=', 'shipper.id')
+        //     ->join('clients', 'booking_confirmations.client_id', '=', 'clients.id')
+        //     ->join('vendors', 'booking_confirmations.vendor_id', '=', 'vendors.id')
+        //     ->join('ports as portloading', 'booking_confirmations.port_id_loading', '=', 'portloading.id')
+        //     ->join('ports as portdischarge', 'booking_confirmations.port_id_discharge', '=', 'portdischarge.id')
+        //     ->join('countries as Cload', 'portloading.country_id', '=', 'Cload.id')
+        //     ->join('countries as Cdischarge', 'portdischarge.country_id', '=', 'Cdischarge.id')
+        //     ->join('igm_india_voyages', 'booking_confirmations.igm_india_voyage_id', '=', 'igm_india_voyages.id')
+        //     ->join('type_of_units', 'booking_confirmations.type_of_unit_id', '=', 'type_of_units.id')
+        //     ->join('vendors as yard', 'booking_confirmations.vendor_id_yard', '=', 'yard.id')
+        //     ->where(DB::raw('DATE_FORMAT(booking_confirmations.date, "%Y-%m-%d")'), '>=', $fdate)
+        //     ->where(DB::raw('DATE_FORMAT(booking_confirmations.date, "%Y-%m-%d")'), '<=', $tdate);
+
+        // if (!empty($request->access_model_id) && empty($request->id) && !empty($request->access_model_id) && empty($request->id)) {
+        //     // return "1";
+        //     // id empty
+        //      $accesspoints = $accesspoints
+        //      ->where('access_models.id', '=', $request->access_model_id);
+        // }
+        // elseif (empty($request->access_model_id) && !empty($request->id)) {
+        //     // return "2";
+        //     // access_model_id empty
+        //     $accesspoints = $accesspoints->where('access_points.id', '=', $request->id);
+        // }
+        // elseif (!empty($request->access_model_id) && !empty($request->id)) {
+        //     // return "3";
+        //     // no empty
+        //     $accesspoints = $accesspoints
+        //     ->where('access_models.id', '=', $request->access_model_id)
+        //     ->where('access_points.id', '=', $request->id);
+        // }
+        // else
+        // {
+        //     // return "4";
+        //     //all empty
+        //     $accesspoints = $accesspoints;
+        // }
+
+        // $result = $accesspoints->orderBy('access_points.id')
+        //     ->get();
+        // return $result;
+    }
 
     public function store(Request $request)
     {

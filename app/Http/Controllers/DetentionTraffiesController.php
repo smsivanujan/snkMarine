@@ -78,7 +78,39 @@ class DetentionTraffiesController extends Controller
         return $detentiontraffies;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
 
+        $detentiontraffies = DB::table('detention_traffies')
+            ->select(
+                'detention_traffies.id',
+                'detention_traffies.client_id_agent',
+                'detention_traffies.currency_id',
+                'detention_traffies.free_days',
+                'detention_traffies.comm',
+                'detention_traffies.deleted',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('clients', 'detention_traffies.client_id_agent', '=', 'clients.id');
+
+        if (!empty($request->client_id_agent)) {
+
+             $detentiontraffies = $detentiontraffies
+             ->where('detention_traffies.client_id_agent', '=', $request->client_id_agent);
+        }
+        else
+        {
+
+            $detentiontraffies = $detentiontraffies;
+        }
+
+        $result = $detentiontraffies->orderBy('detention_traffies.id')
+            ->get();
+        return $result;
+    }
+    
     public function store(Request $request)
     {
         $id = $request->id;

@@ -116,6 +116,58 @@ class UsersController extends Controller
         return $users;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $users = DB::table('users')
+            ->select(
+                'users.id',
+                'users.client_id',
+                'users.full_name',
+                'users.user_name',
+                'users.email',
+                'users.user_group',
+                'users.own_bc',
+                'users.password',
+                'users.timezone_id',
+                'users.is_active',
+                'users.last_login',
+                'users.last_logout',
+                'users.is_online',
+                'users.is_delete',
+                'clients.client_code',
+                'clients.client_name',
+                'timezones.timezone_data_name',
+                'timezones.timezone_data_value'
+            )
+            ->join('clients', 'users.client_id', '=', 'clients.id')
+            ->join('timezones', 'users.timezone_id', '=', 'timezones.id');
+
+        if (!empty($request->client_id) && !empty($request->timezone_id)) {
+
+             $users = $users
+             ->where('users.client_id', '=', $request->client_id)
+            ->where('users.timezone_id', '=', $request->timezone_id);
+        }
+        elseif (!empty($request->client_id) && empty($request->timezone_id)) {
+
+            $users = $users->where('users.client_id', '=', $request->client_id);
+        }
+        elseif (empty($request->client_id) && !empty($request->timezone_id)) {
+
+            $users = $users
+            ->where('users.timezone_id', '=', $request->timezone_id);
+        }
+        else
+        {
+            $users = $users;
+        }
+
+        $result = $users->orderBy('users.id')
+            ->get();
+        return $result;
+    }
 
     public function store(Request $request)
     {

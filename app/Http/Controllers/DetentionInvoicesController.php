@@ -165,88 +165,88 @@ class DetentionInvoicesController extends Controller
             $query = $request->get('query');
 
             $detentioninvoices = DB::table('detention_invoices')
-            ->select(
-                'detention_invoices.id',
-                'detention_invoices.date',
-                'detention_invoices.detention_no',
-                'detention_invoices.bill_of_landing_id',
-                'detention_invoices.client_id_shipper',
-                'detention_invoices.client_id_consignee',
-                'detention_invoices.client_id',
-                'detention_invoices.port_id_loading',
-                'detention_invoices.port_id_discharge',
-                'detention_invoices.igm_india_voyage_id',
-                'detention_invoices.etd_pol',
-                'detention_invoices.eta_pod',
-                'detention_invoices.st_expire',
-                'detention_invoices.ata_fpd',
-                'detention_invoices.obl_no',
-                'detention_invoices.remarks',
-                'detention_invoices.total_days_detention',
-                'detention_invoices.discount_type',
-                'detention_invoices.discount_input',
-                'detention_invoices.previous_bill',
-                'detention_invoices.total_amount',
-                'detention_invoices.final_amount',
-                'detention_invoices.nos_units',
-                'detention_invoices.grand_total',
-                'detention_invoices.grand_total_this_invoice_unit',
-                'detention_invoices.payed',
-                'detention_invoices.yard_suppose_date',
-                'detention_invoices.forign_currency_id',
-                'detention_invoices.tariff_id',
-                'detention_invoices.bl_free_days',
-                'detention_invoices.exchange_rate',
-                'detention_invoices.final_amount_tarrif',
-                'detention_invoices.local_currency_id',
-                'detention_invoices.comm',
-                'detention_invoices.status',
-                'detention_invoices.status2',
-                'detention_invoices.deleted',
-                'shipper.client_code',
-                'shipper.client_name',
-                'consignee.client_code',
-                'consignee.client_name',
-                'clients.client_code',
-                'clients.client_name',
-                'portloading.port_code',
-                'portloading.port_name',
-                'discharge.port_code',
-                'discharge.port_name',
-                'igm_india_voyages.voyage',
-                'forign.currency_code',
-                'forign.currency_name',
-                'bill_of_landings.bill_of_landing_number'
-                // 'local.currency_code',
-                // 'local.currency_name'
+                ->select(
+                    'detention_invoices.id',
+                    'detention_invoices.date',
+                    'detention_invoices.detention_no',
+                    'detention_invoices.bill_of_landing_id',
+                    'detention_invoices.client_id_shipper',
+                    'detention_invoices.client_id_consignee',
+                    'detention_invoices.client_id',
+                    'detention_invoices.port_id_loading',
+                    'detention_invoices.port_id_discharge',
+                    'detention_invoices.igm_india_voyage_id',
+                    'detention_invoices.etd_pol',
+                    'detention_invoices.eta_pod',
+                    'detention_invoices.st_expire',
+                    'detention_invoices.ata_fpd',
+                    'detention_invoices.obl_no',
+                    'detention_invoices.remarks',
+                    'detention_invoices.total_days_detention',
+                    'detention_invoices.discount_type',
+                    'detention_invoices.discount_input',
+                    'detention_invoices.previous_bill',
+                    'detention_invoices.total_amount',
+                    'detention_invoices.final_amount',
+                    'detention_invoices.nos_units',
+                    'detention_invoices.grand_total',
+                    'detention_invoices.grand_total_this_invoice_unit',
+                    'detention_invoices.payed',
+                    'detention_invoices.yard_suppose_date',
+                    'detention_invoices.forign_currency_id',
+                    'detention_invoices.tariff_id',
+                    'detention_invoices.bl_free_days',
+                    'detention_invoices.exchange_rate',
+                    'detention_invoices.final_amount_tarrif',
+                    'detention_invoices.local_currency_id',
+                    'detention_invoices.comm',
+                    'detention_invoices.status',
+                    'detention_invoices.status2',
+                    'detention_invoices.deleted',
+                    'shipper.client_code',
+                    'shipper.client_name',
+                    'consignee.client_code',
+                    'consignee.client_name',
+                    'clients.client_code',
+                    'clients.client_name',
+                    'portloading.port_code',
+                    'portloading.port_name',
+                    'discharge.port_code',
+                    'discharge.port_name',
+                    'igm_india_voyages.voyage',
+                    'forign.currency_code',
+                    'forign.currency_name',
+                    'bill_of_landings.bill_of_landing_number'
+                    // 'local.currency_code',
+                    // 'local.currency_name'
 
-            )
-            ->join('bill_of_landings', 'detention_invoices.bill_of_landing_id', '=', 'bill_of_landings.id')
-            ->join('clients as shipper', 'detention_invoices.client_id_shipper', '=', 'shipper.id')
-            ->join('clients as consignee', 'detention_invoices.client_id_consignee', '=', 'consignee.id')
-            ->join('clients', 'detention_invoices.client_id', '=', 'clients.id')
-            ->join('ports as portloading', 'detention_invoices.port_id_loading', '=', 'portloading.id')
-            ->join('ports as discharge', 'detention_invoices.port_id_discharge', '=', 'discharge.id')
-            ->join('igm_india_voyages', 'detention_invoices.igm_india_voyage_id', '=', 'igm_india_voyages.id')
-            ->join('detention_traffies', 'detention_invoices.tariff_id', '=', 'detention_traffies.id')
-            ->join('currencies as forign', 'detention_invoices.forign_currency_id', '=', 'forign.id')
+                )
+                ->join('bill_of_landings', 'detention_invoices.bill_of_landing_id', '=', 'bill_of_landings.id')
+                ->join('clients as shipper', 'detention_invoices.client_id_shipper', '=', 'shipper.id')
+                ->join('clients as consignee', 'detention_invoices.client_id_consignee', '=', 'consignee.id')
+                ->join('clients', 'detention_invoices.client_id', '=', 'clients.id')
+                ->join('ports as portloading', 'detention_invoices.port_id_loading', '=', 'portloading.id')
+                ->join('ports as discharge', 'detention_invoices.port_id_discharge', '=', 'discharge.id')
+                ->join('igm_india_voyages', 'detention_invoices.igm_india_voyage_id', '=', 'igm_india_voyages.id')
+                ->join('detention_traffies', 'detention_invoices.tariff_id', '=', 'detention_traffies.id')
+                ->join('currencies as forign', 'detention_invoices.forign_currency_id', '=', 'forign.id')
                 ->where(function ($q) use ($query) {
                     $q->where('detention_invoices.detention_no', 'like', '%' . $query . '%')
-                    ->orWhere('bill_of_landings.bill_of_landing_number', 'like', '%' . $query . '%')
-                    ->orWhere('shipper.client_name', 'like', '%' . $query . '%')
-                    ->orWhere('shipper.client_name', 'like', '%' . $query . '%')
-                    ->orWhere('consignee.client_name', 'like', '%' . $query . '%')
-                    ->orWhere('consignee.client_name', 'like', '%' . $query . '%')
-                    ->orWhere('clients.client_name', 'like', '%' . $query . '%')
-                    ->orWhere('clients.client_name', 'like', '%' . $query . '%')
-                    ->orWhere('portloading.port_code', 'like', '%' . $query . '%')
-                    ->orWhere('portloading.port_name', 'like', '%' . $query . '%')
-                    ->orWhere('discharge.port_code', 'like', '%' . $query . '%')
-                    ->orWhere('discharge.port_name', 'like', '%' . $query . '%')
-                    ->orWhere('igm_india_voyages.voyage', 'like', '%' . $query . '%')
-                    ->orWhere('detention_traffies.comm', 'like', '%' . $query . '%')
-                    ->orWhere('forign.currency_code', 'like', '%' . $query . '%')
-                    ->orWhere('forign.currency_name', 'like', '%' . $query . '%');
+                        ->orWhere('bill_of_landings.bill_of_landing_number', 'like', '%' . $query . '%')
+                        ->orWhere('shipper.client_name', 'like', '%' . $query . '%')
+                        ->orWhere('shipper.client_name', 'like', '%' . $query . '%')
+                        ->orWhere('consignee.client_name', 'like', '%' . $query . '%')
+                        ->orWhere('consignee.client_name', 'like', '%' . $query . '%')
+                        ->orWhere('clients.client_name', 'like', '%' . $query . '%')
+                        ->orWhere('clients.client_name', 'like', '%' . $query . '%')
+                        ->orWhere('portloading.port_code', 'like', '%' . $query . '%')
+                        ->orWhere('portloading.port_name', 'like', '%' . $query . '%')
+                        ->orWhere('discharge.port_code', 'like', '%' . $query . '%')
+                        ->orWhere('discharge.port_name', 'like', '%' . $query . '%')
+                        ->orWhere('igm_india_voyages.voyage', 'like', '%' . $query . '%')
+                        ->orWhere('detention_traffies.comm', 'like', '%' . $query . '%')
+                        ->orWhere('forign.currency_code', 'like', '%' . $query . '%')
+                        ->orWhere('forign.currency_name', 'like', '%' . $query . '%');
                 })
                 ->get();
         }
@@ -254,6 +254,108 @@ class DetentionInvoicesController extends Controller
         return $detentioninvoices;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $fdate = isset($request->fdate) ? $request->fdate : date('Y-m-d');
+        // $tdate = isset($request->tdate) ? $request->tdate : date('Y-m-d');
+
+        // $detentioninvoices = DB::table('detention_invoices')
+        // ->select(
+        //     'detention_invoices.id',
+        //     'detention_invoices.date',
+        //     'detention_invoices.detention_no',
+        //     'detention_invoices.bill_of_landing_id',
+        //     'detention_invoices.client_id_shipper',
+        //     'detention_invoices.client_id_consignee',
+        //     'detention_invoices.client_id',
+        //     'detention_invoices.port_id_loading',
+        //     'detention_invoices.port_id_discharge',
+        //     'detention_invoices.igm_india_voyage_id',
+        //     'detention_invoices.etd_pol',
+        //     'detention_invoices.eta_pod',
+        //     'detention_invoices.st_expire',
+        //     'detention_invoices.ata_fpd',
+        //     'detention_invoices.obl_no',
+        //     'detention_invoices.remarks',
+        //     'detention_invoices.total_days_detention',
+        //     'detention_invoices.discount_type',
+        //     'detention_invoices.discount_input',
+        //     'detention_invoices.previous_bill',
+        //     'detention_invoices.total_amount',
+        //     'detention_invoices.final_amount',
+        //     'detention_invoices.nos_units',
+        //     'detention_invoices.grand_total',
+        //     'detention_invoices.grand_total_this_invoice_unit',
+        //     'detention_invoices.payed',
+        //     'detention_invoices.yard_suppose_date',
+        //     'detention_invoices.forign_currency_id',
+        //     'detention_invoices.tariff_id',
+        //     'detention_invoices.bl_free_days',
+        //     'detention_invoices.exchange_rate',
+        //     'detention_invoices.final_amount_tarrif',
+        //     'detention_invoices.local_currency_id',
+        //     'detention_invoices.comm',
+        //     'detention_invoices.status',
+        //     'detention_invoices.status2',
+        //     'detention_invoices.deleted',
+        //     'shipper.client_code',
+        //     'shipper.client_name',
+        //     'consignee.client_code',
+        //     'consignee.client_name',
+        //     'clients.client_code',
+        //     'clients.client_name',
+        //     'portloading.port_code',
+        //     'portloading.port_name',
+        //     'discharge.port_code',
+        //     'discharge.port_name',
+        //     'igm_india_voyages.voyage',
+        //     'forign.currency_code',
+        //     'forign.currency_name'
+        //     // 'local.currency_code',
+        //     // 'local.currency_name'
+
+        // )
+        // ->join('bill_of_landings', 'detention_invoices.bill_of_landing_id', '=', 'bill_of_landings.id')
+        // ->join('clients as shipper', 'detention_invoices.client_id_shipper', '=', 'shipper.id')
+        // ->join('clients as consignee', 'detention_invoices.client_id_consignee', '=', 'consignee.id')
+        // ->join('clients', 'detention_invoices.client_id', '=', 'clients.id')
+        // ->join('ports as portloading', 'detention_invoices.port_id_loading', '=', 'portloading.id')
+        // ->join('ports as discharge', 'detention_invoices.port_id_discharge', '=', 'discharge.id')
+        // ->join('igm_india_voyages', 'detention_invoices.igm_india_voyage_id', '=', 'igm_india_voyages.id')
+        // ->join('detention_traffies', 'detention_invoices.tariff_id', '=', 'detention_traffies.id')
+        // ->join('currencies as forign', 'detention_invoices.forign_currency_id', '=', 'forign.id')
+        // ->where(DB::raw('DATE_FORMAT(detention_invoices.date, "%Y-%m-%d")'), '>=', $fdate)
+        // ->where(DB::raw('DATE_FORMAT(detention_invoices.date, "%Y-%m-%d")'), '<=', $tdate);
+
+        // if (!empty($request->access_model_id) && empty($request->id) && !empty($request->access_model_id) && empty($request->id)) {
+        //     // return "1";
+        //     // id empty
+        //      $accesspoints = $accesspoints
+        //      ->where('access_models.id', '=', $request->access_model_id);
+        // }
+        // elseif (empty($request->access_model_id) && !empty($request->id)) {
+        //     // return "2";
+        //     // access_model_id empty
+        //     $accesspoints = $accesspoints->where('access_points.id', '=', $request->id);
+        // }
+        // elseif (!empty($request->access_model_id) && !empty($request->id)) {
+        //     // return "3";
+        //     // no empty
+        //     $accesspoints = $accesspoints
+        //     ->where('access_models.id', '=', $request->access_model_id)
+        //     ->where('access_points.id', '=', $request->id);
+        // }
+        // else
+        // {
+        //     // return "4";
+        //     //all empty
+        //     $accesspoints = $accesspoints;
+        // }
+
+        // $result = $accesspoints->orderBy('access_points.id')
+        //     ->get();
+        // return $result;
+    }
 
     public function store(Request $request)
     {
@@ -335,9 +437,9 @@ class DetentionInvoicesController extends Controller
         $status = $request->status;
 
         if ($status == 1) {
-            $status = 0;//inactive
+            $status = 0; //inactive
         } else {
-            $status = 1;//active
+            $status = 1; //active
         }
 
         $detentioninvoice = detention_invoices::find($id);

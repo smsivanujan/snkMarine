@@ -182,6 +182,122 @@ class BillOfLandingSubSwitchesController extends Controller
         return $billoflandingsubswitches;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $billoflandingsubswitches = DB::table('bill_of_landing_sub_switches')
+            ->select(
+                'bill_of_landing_sub_switches.id',
+                'bill_of_landing_sub_switches.bill_of_landing_id',
+                'bill_of_landing_sub_switches.equipment_id',
+                'bill_of_landing_sub_switches.seal_no',
+                'bill_of_landing_sub_switches.marks',
+                'bill_of_landing_sub_switches.package_quantity',
+                'bill_of_landing_sub_switches.description',
+                'bill_of_landing_sub_switches.gross_weight',
+                'bill_of_landing_sub_switches.measurement',
+                'bill_of_landing_sub_switches.bill_confirmation_id',
+                'bill_of_landing_sub_switches.status',
+                'bill_of_landing_sub_switches.ignore_data',
+                'bill_of_landing_sub_switches.reserved_date',
+                'bill_of_landing_sub_switches.shipper_date',
+                'bill_of_landing_sub_switches.on_job_date',
+                'bill_of_landing_sub_switches.yard_in_date',
+                'bill_of_landing_sub_switches.client_id_agent',
+                'bill_of_landing_sub_switches.client_id_ex_agent',
+                'bill_of_landing_sub_switches.vendor_id_yard',
+                'bill_of_landing_sub_switches.free_days',
+                'bill_of_landing_sub_switches.free_days_standard',
+                'bill_of_landing_sub_switches.ata_fpd',
+                'bill_of_landing_sub_switches.payed_till',
+                'bill_of_landing_sub_switches.soa_status_exp',
+                'bill_of_landing_sub_switches.soa_status_imp',
+                'bill_of_landing_sub_switches.lift_on_off',
+                'bill_of_landing_sub_switches.other_expenses',
+                'bill_of_landing_sub_switches.other_expenses_remarks',
+                'bill_of_landing_sub_switches.deleted',
+                'bill_of_landings.bill_of_landing_number',
+                'equipments.equipment_number',
+                'agent.client_code',
+                'agent.client_name',
+                'ex_agent.client_code',
+                'ex_agent.client_name',
+                'yard.vendor_code',
+                'yard.vendor_name'
+            )
+            ->join('bill_of_landings', 'bill_of_landing_sub_switches.bill_of_landing_id', '=', 'bill_of_landings.id')
+            ->join('equipments', 'bill_of_landing_sub_switches.equipment_id', '=', 'equipments.id')
+            ->join('clients as agent', 'bill_of_landing_sub_switches.client_id_agent', '=', 'agent.id')
+            ->join('clients as ex_agent', 'bill_of_landing_sub_switches.client_id_ex_agent', '=', 'ex_agent.id')
+            ->join('vendors as yard', 'bill_of_landing_sub_switches.vendor_id_yard', '=', 'yard.id');
+
+            if (!empty($request->bill_of_landing_id) && !empty($request->equipment_id) && !empty($request->client_id_agent) && !empty($request->vendor_id_yard)) {
+ 
+                $billoflandingsubswitches = $billoflandingsubswitches
+                    ->where('bill_of_landing_sub_switches.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                    ->where('bill_of_landing_sub_switches.equipment_id', '=', $request->equipment_id)
+                    ->where('bill_of_landing_sub_switches.client_id_agent', '=', $request->client_id_agent)
+                    ->where('bill_of_landing_sub_switches.vendor_id_yard', '=', $request->vendor_id_yard);
+            } elseif (!empty($request->bill_of_landing_id) && empty($request->equipment_id) && !empty($request->client_id_agent) && !empty($request->vendor_id_yard)) {
+            
+                $billoflandingsubswitches = $billoflandingsubswitches
+                    ->where('bill_of_landing_sub_switches.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                    ->where('bill_of_landing_sub_switches.client_id_agent', '=', $request->client_id_agent)
+                    ->where('bill_of_landing_sub_switches.vendor_id_yard', '=', $request->vendor_id_yard);
+            } elseif (!empty($request->bill_of_landing_id) && !empty($request->equipment_id) && empty($request->client_id_agent) && !empty($request->vendor_id_yard)) {
+               
+                $billoflandingsubswitches = $billoflandingsubswitches
+                    ->where('bill_of_landing_sub_switches.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                    ->where('bill_of_landing_sub_switches.equipment_id', '=', $request->equipment_id)
+                    ->where('bill_of_landing_sub_switches.vendor_id_yard', '=', $request->vendor_id_yard);
+            } elseif (!empty($request->bill_of_landing_id) && !empty($request->equipment_id) && !empty($request->client_id_agent) && empty($request->vendor_id_yard)) {
+             
+                $billoflandingsubswitches = $billoflandingsubswitches
+                    ->where('bill_of_landing_sub_switches.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                    ->where('bill_of_landing_sub_switches.equipment_id', '=', $request->equipment_id)
+                    ->where('bill_of_landing_sub_switches.client_id_agent', '=', $request->client_id_agent);
+            } elseif (!empty($request->bill_of_landing_id) && empty($request->equipment_id) && empty($request->client_id_agent) && empty($request->vendor_id_yard)) {
+               
+                $billoflandingsubswitches = $billoflandingsubswitches
+                    ->where('bill_of_landing_sub_switches.bill_of_landing_id', '=', $request->bill_of_landing_id);
+            } elseif (empty($request->bill_of_landing_id) && !empty($request->equipment_id) && !empty($request->client_id_agent) && !empty($request->vendor_id_yard)) {
+               
+                $billoflandingsubswitches = $billoflandingsubswitches
+                    ->where('bill_of_landing_sub_switches.equipment_id', '=', $request->equipment_id)
+                    ->where('bill_of_landing_sub_switches.client_id_agent', '=', $request->client_id_agent)
+                    ->where('bill_of_landing_sub_switches.vendor_id_yard', '=', $request->vendor_id_yard);
+            } elseif (empty($request->bill_of_landing_id) && !empty($request->equipment_id) && empty($request->client_id_agent) && !empty($request->vendor_id_yard)) {
+               
+                $billoflandingsubswitches = $billoflandingsubswitches
+                    ->where('bill_of_landing_sub_switches.equipment_id', '=', $request->equipment_id)
+                    ->where('bill_of_landing_sub_switches.vendor_id_yard', '=', $request->vendor_id_yard);
+            } elseif (empty($request->bill_of_landing_id) && !empty($request->equipment_id) && empty($request->client_id_agent) && empty($request->vendor_id_yard)) {
+               
+                $billoflandingsubswitches = $billoflandingsubswitches
+                    ->where('bill_of_landing_sub_switches.equipment_id', '=', $request->equipment_id);
+            } elseif (empty($request->bill_of_landing_id) && empty($request->equipment_id) && !empty($request->client_id_agent) && !empty($request->vendor_id_yard)) {
+               
+                $billoflandingsubswitches = $billoflandingsubswitches
+                    ->where('bill_of_landing_sub_switches.client_id_agent', '=', $request->client_id_agent)
+                    ->where('bill_of_landing_sub_switches.vendor_id_yard', '=', $request->vendor_id_yard);
+            } elseif (empty($request->bill_of_landing_id) && empty($request->equipment_id) && !empty($request->client_id_agent) && empty($request->vendor_id_yard)) {
+                
+                $billoflandingsubswitches = $billoflandingsubswitches
+                    ->where('bill_of_landing_sub_switches.client_id_agent', '=', $request->client_id_agent);
+            } elseif (empty($request->bill_of_landing_id) && empty($request->equipment_id) && empty($request->client_id_agent) && !empty($request->vendor_id_yard)) {
+              
+                $billoflandingsubswitches = $billoflandingsubswitches
+                    ->where('bill_of_landing_sub_switches.vendor_id_yard', '=', $request->vendor_id_yard);
+            } else {
+                
+                $billoflandingsubswitches = $billoflandingsubswitches;
+            }
+
+        $result = $billoflandingsubswitches->orderBy('bill_of_landing_sub_switches.id')
+            ->get();
+        return $result;
+    }
 
     public function store(Request $request)
     {

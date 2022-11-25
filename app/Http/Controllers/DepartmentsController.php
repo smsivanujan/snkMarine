@@ -69,6 +69,36 @@ class DepartmentsController extends Controller
         return $departments;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $departments = DB::table('departments')
+            ->select(
+                'departments.id',
+                'departments.department_name',
+                'departments.description',
+                'departments.property_id',
+                'properties.property_name'
+            )
+            ->join('properties', 'departments.property_id', '=', 'properties.id');
+
+        if (!empty($request->property_id)) {
+
+             $departments = $departments
+             ->where('departments.property_id', '=', $request->property_id);
+        }
+        else
+        {
+
+            $departments = $departments;
+        }
+
+        $result = $departments->orderBy('departments.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

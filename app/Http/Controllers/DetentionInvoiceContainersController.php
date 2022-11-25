@@ -103,6 +103,75 @@ class DetentionInvoiceContainersController extends Controller
         return $detentioninvoicecontainers;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $detentioninvoicecontainers = DB::table('detention_invoice_containers')
+            ->select(
+                'detention_invoice_containers.id',
+                'detention_invoice_containers.arrival_notice_id',
+                'detention_invoice_containers.equipment_id',
+                'detention_invoice_containers.seal_no',
+                'detention_invoice_containers.marks',
+                'detention_invoice_containers.type_of_unit_id',
+                'detention_invoice_containers.payed',
+                'detention_invoice_containers.other_recovery',
+                'detention_invoice_containers.remarks',
+                'detention_invoice_containers.status',
+                'detention_invoice_containers.deleted',
+                'arrival_noticies.arrival_notice_no',
+                'type_of_units.type_of_unit',
+                'equipments.equipment_number'
+            )
+            ->join('arrival_noticies', 'detention_invoice_containers.arrival_notice_id', '=', 'arrival_noticies.id')
+            ->join('equipments', 'detention_invoice_containers.equipment_id', '=', 'equipments.id')
+            ->join('type_of_units', 'detention_invoice_containers.type_of_unit_id', '=', 'type_of_units.id');
+            
+
+            if (!empty($request->arrival_notice_id) && !empty($request->equipment_id) && !empty($request->type_of_unit_id)) {
+
+                $detentioninvoicecontainers = $detentioninvoicecontainers
+                    ->where('detention_invoice_containers.arrival_notice_id', '=', $request->arrival_notice_id)
+                    ->where('detention_invoice_containers.equipment_id', '=', $request->equipment_id)
+                    ->where('detention_invoice_containers.type_of_unit_id', '=', $request->type_of_unit_id);
+            } elseif (!empty($request->arrival_notice_id) && empty($request->equipment_id) && !empty($request->type_of_unit_id)) {
+    
+                $detentioninvoicecontainers = $detentioninvoicecontainers
+                    ->where('detention_invoice_containers.arrival_notice_id', '=', $request->arrival_notice_id)
+                    ->where('detention_invoice_containers.type_of_unit_id', '=', $request->type_of_unit_id);
+            } elseif (!empty($request->arrival_notice_id) && !empty($request->equipment_id) && empty($request->type_of_unit_id)) {
+    
+                $detentioninvoicecontainers = $detentioninvoicecontainers
+                ->where('detention_invoice_containers.arrival_notice_id', '=', $request->arrival_notice_id)
+                ->where('detention_invoice_containers.equipment_id', '=', $request->equipment_id);
+            }
+            elseif (!empty($request->arrival_notice_id) && empty($request->equipment_id) && empty($request->type_of_unit_id)) {
+    
+                $detentioninvoicecontainers = $detentioninvoicecontainers
+                ->where('detention_invoice_containers.arrival_notice_id', '=', $request->arrival_notice_id);
+            } elseif (empty($request->arrival_notice_id) && !empty($request->equipment_id) && !empty($request->type_of_unit_id)) {
+    
+                $detentioninvoicecontainers = $detentioninvoicecontainers
+                ->where('detention_invoice_containers.equipment_id', '=', $request->equipment_id)
+                ->where('detention_invoice_containers.type_of_unit_id', '=', $request->type_of_unit_id);
+            } elseif (empty($request->arrival_notice_id) && !empty($request->equipment_id) && empty($request->type_of_unit_id)) {
+        
+                $detentioninvoicecontainers = $detentioninvoicecontainers
+                ->where('detention_invoice_containers.equipment_id', '=', $request->equipment_id);
+            } elseif (empty($request->arrival_notice_id) && empty($request->equipment_id) && !empty($request->type_of_unit_id)) {
+    
+                $detentioninvoicecontainers = $detentioninvoicecontainers
+                ->where('detention_invoice_containers.type_of_unit_id', '=', $request->type_of_unit_id);
+            } else {
+    
+                $detentioninvoicecontainers = $detentioninvoicecontainers;
+            }
+
+        $result = $detentioninvoicecontainers->orderBy('detention_invoice_containers.id')
+            ->get();
+        return $result;
+    }
 
     public function store(Request $request)
     {

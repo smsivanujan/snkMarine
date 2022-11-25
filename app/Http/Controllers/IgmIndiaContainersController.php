@@ -116,6 +116,62 @@ class IgmIndiaContainersController extends Controller
         return $igm_india_containers;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $igm_india_containers = DB::table('igm_india_containers')
+        ->select(
+            'igm_india_containers.id',
+            'igm_india_containers.igm_id',
+            'igm_india_containers.cargo_info_number',
+            'igm_india_containers.pod',
+            'igm_india_containers.imo',
+            'igm_india_containers.vessel',
+            'igm_india_containers.voyage',
+            'igm_india_containers.line',
+            'igm_india_containers.sub_line',
+            'igm_india_containers.equipment_id',
+            'igm_india_containers.seal',
+            'igm_india_containers.pan',
+            'igm_india_containers.type',
+            'igm_india_containers.pkgs',
+            'igm_india_containers.gross_weight',
+            'igm_india_containers.con_code',
+            'igms.customs_office_code',
+            'equipments.equipment_number'
+        )
+        ->join('igms', 'igm_india_containers.igm_id', '=', 'igms.id')
+        ->join('equipments', 'igm_india_containers.equipment_id', '=', 'equipments.id');
+
+        if (!empty($request->igm_id) && !empty($request->equipment_id)) {
+
+            $igm_india_containers = $igm_india_containers
+            ->where('igm_india_containers.igm_id', '=', $request->igm_id)
+            ->where('igm_india_containers.equipment_id', '=', $request->equipment_id);
+       }
+       elseif (!empty($request->igm_id) && empty($request->equipment_id)) {
+
+           $igm_india_containers = $igm_india_containers
+           ->where('igm_india_containers.igm_id', '=', $request->igm_id);
+       }
+       elseif (empty($request->igm_id) && !empty($request->equipment_id)) {
+
+           $igm_india_containers = $igm_india_containers
+           ->where('igm_india_containers.equipment_id', '=', $request->equipment_id);
+       }
+        else
+        {
+            // return "4";
+            //all empty
+            $igm_india_containers = $igm_india_containers;
+        }
+
+        $result = $igm_india_containers->orderBy('igm_india_containers.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

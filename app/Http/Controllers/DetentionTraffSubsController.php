@@ -71,7 +71,6 @@ class DetentionTraffSubsController extends Controller
         return $detentiontraffsubs;
     }
 
-
     public function store(Request $request)
     {
         $id = $request->id;

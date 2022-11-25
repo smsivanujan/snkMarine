@@ -70,6 +70,39 @@ class SoasController extends Controller
         return $soas;
     }
 
+    public function showByFilter(Request $request)
+    {
+        $fdate = isset($request->fdate) ? $request->fdate : date('Y-m-d');
+        $tdate = isset($request->tdate) ? $request->tdate : date('Y-m-d');
+
+        $soas = DB::table('soas')
+            ->select(
+                'soas.id',
+                'soas.date',
+                'soas.client_id_agent',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('clients', 'soas.client_id_agent', '=', 'clients.id')
+            ->where(DB::raw('DATE_FORMAT(soas.date, "%Y-%m-%d")'), '>=', $fdate)
+            ->where(DB::raw('DATE_FORMAT(soas.date, "%Y-%m-%d")'), '<=', $tdate);
+
+        if (!empty($request->client_id_agent) ) {
+
+             $soas = $soas
+             ->where('soas.client_id_agent', '=', $request->client_id_agent);
+        }
+        else
+        {
+
+            $soas = $soas;
+        }
+
+        $result = $soas->orderBy('soas.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

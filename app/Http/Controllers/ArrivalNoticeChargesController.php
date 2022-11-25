@@ -138,7 +138,6 @@ class ArrivalNoticeChargesController extends Controller
 
     public function showByFilter(Request $request)
     {
-        // $id = $request->id;
 
         $arrivalnoticechargess = DB::table('arrival_notice_charges')
                 ->select(
@@ -172,24 +171,21 @@ class ArrivalNoticeChargesController extends Controller
                 ->join('currencies', 'arrival_notice_charges.currency_id', '=', 'currencies.id')
                 ->join('currencies as mycurrency', 'arrival_notice_charges.currency_id_mycurrency', '=', 'mycurrency.id');
 
-        if (!empty($request->arrival_notice_id) && empty($request->currency_id)) {
-            // return "1";
-            // id empty
+        if (!empty($request->arrival_notice_id) && !empty($request->currency_id)) {
+
             $arrivalnoticechargess = $arrivalnoticechargess
-                ->where('arrival_notice_charges.arrival_notice_id', '=', $request->access_model_id);
+                ->where('arrival_notice_charges.arrival_notice_id', '=', $request->access_model_id)
+                ->where('arrival_notice_charges.currency_id', '=', $request->currency_id);
+        } elseif (!empty($request->arrival_notice_id) && empty($request->currency_id)) {
+
+            $arrivalnoticechargess = $arrivalnoticechargess
+            ->where('arrival_notice_charges.arrival_notice_id', '=', $request->arrival_notice_id);
         } elseif (empty($request->arrival_notice_id) && !empty($request->currency_id)) {
-            // return "2";
-            // access_model_id empty
-            $arrivalnoticechargess = $arrivalnoticechargess->where('arrival_notice_charges.currency_id', '=', $request->id);
-        } elseif (!empty($request->arrival_notice_id) && !empty($request->currency_id)) {
-            // return "3";
-            // no empty
+
             $arrivalnoticechargess = $arrivalnoticechargess
-                ->where('arrival_notice_charges.arrival_notice_id', '=', $request->arrival_notice_id)
                 ->where('arrival_notice_charges.currency_id', '=', $request->currency_id);
         } else {
-            // return "4";
-            //all empty
+
             $arrivalnoticechargess = $arrivalnoticechargess;
         }
 

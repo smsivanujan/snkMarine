@@ -69,40 +69,39 @@ class BillOfLandingSubsImpsController extends Controller
         return $billoflanding_subsimps;
     }
 
-    // public function showBySearch(Request $request)
-    // {
-    //     $query = "";
+    public function showBySearch(Request $request)
+    {
+        // $query = "";
 
-    //     if ($request->get('query')) {
-    //         $query = $request->get('query');
+        // if ($request->get('query')) {
+        //     $query = $request->get('query');
 
-    //         $arrivalnoticecontainers = DB::table('arrival_notice_containers')
-    //         ->select(
-    //             'arrival_notice_containers.id',
-    //             'arrival_notice_containers.arrival_notice_id',
-    //             'arrival_notice_containers.equipment_id',
-    //             'arrival_notice_containers.seal_no',
-    //             'arrival_notice_containers.marks',
-    //             'arrival_notice_containers.type_of_unit_id',
-    //             'arrival_noticies.arrival_notice_no',
-    //             'equipments.equipment_number',
-    //             'type_of_units.type_of_unit',
-    //         )
-    //         ->join('arrival_noticies', 'arrival_notice_containers.arrival_notice_id', '=', 'arrival_noticies.id')
-    //         ->join('equipments', 'arrival_notice_containers.equipment_id', '=', 'equipments.id')
-    //         ->join('type_of_units', 'arrival_notice_containers.type_of_unit_id', '=', 'type_of_units.id')
-    //             ->where(function ($q) use ($query) {
-    //                 $q->where('arrival_noticies.arrival_notice_no', 'like', '%' . $query . '%')
-    //                     ->orWhere('arrival_noticies.seal_no', 'like', '%' . $query . '%')
-    //                     ->orWhere('equipments.equipment_number', 'like', '%' . $query . '%')
-    //                     ->orWhere('type_of_units.type_of_unit', 'like', '%' . $query . '%');
-    //             })
-    //             ->get();
-    //     }
+        //     $arrivalnoticecontainers = DB::table('arrival_notice_containers')
+        //     ->select(
+        //         'arrival_notice_containers.id',
+        //         'arrival_notice_containers.arrival_notice_id',
+        //         'arrival_notice_containers.equipment_id',
+        //         'arrival_notice_containers.seal_no',
+        //         'arrival_notice_containers.marks',
+        //         'arrival_notice_containers.type_of_unit_id',
+        //         'arrival_noticies.arrival_notice_no',
+        //         'equipments.equipment_number',
+        //         'type_of_units.type_of_unit',
+        //     )
+        //     ->join('arrival_noticies', 'arrival_notice_containers.arrival_notice_id', '=', 'arrival_noticies.id')
+        //     ->join('equipments', 'arrival_notice_containers.equipment_id', '=', 'equipments.id')
+        //     ->join('type_of_units', 'arrival_notice_containers.type_of_unit_id', '=', 'type_of_units.id')
+        //         ->where(function ($q) use ($query) {
+        //             $q->where('arrival_noticies.arrival_notice_no', 'like', '%' . $query . '%')
+        //                 ->orWhere('arrival_noticies.seal_no', 'like', '%' . $query . '%')
+        //                 ->orWhere('equipments.equipment_number', 'like', '%' . $query . '%')
+        //                 ->orWhere('type_of_units.type_of_unit', 'like', '%' . $query . '%');
+        //         })
+        //         ->get();
+        // }
 
-    //     return $arrivalnoticecontainers;
-    // }
-
+        // return $arrivalnoticecontainers;
+    }
 
     public function store(Request $request)
     {

@@ -119,7 +119,8 @@ class VouchersController extends Controller
 
     public function showByFilter(Request $request)
     {
-        // $id = $request->id;
+        $fdate = isset($request->fdate) ? $request->fdate : date('Y-m-d');
+        $tdate = isset($request->tdate) ? $request->tdate : date('Y-m-d');
 
         $vouchers = DB::table('vouchers')
             ->select(
@@ -143,54 +144,73 @@ class VouchersController extends Controller
             ->join('booking_confirmations', 'vouchers.booking_confirmation_id', '=', 'booking_confirmations.id')
             ->join('bill_of_landings', 'vouchers.bill_of_landing_id', '=', 'bill_of_landings.id')
             ->join('vendors', 'vouchers.vendor_id', '=', 'vendors.id')
-            ->join('currencies', 'vouchers.currency_id', '=', 'currencies.id');
+            ->join('currencies', 'vouchers.currency_id', '=', 'currencies.id')
+            ->where(DB::raw('DATE_FORMAT(vouchers.date, "%Y-%m-%d")'), '>=', $fdate)
+            ->where(DB::raw('DATE_FORMAT(vouchers.date, "%Y-%m-%d")'), '<=', $tdate);
 
         if (!empty($request->booking_confirmation_id) && !empty($request->bill_of_landing_id) && !empty($request->vendor_id) && !empty($request->currency_id)) {
-            // return "1";
-            // id empty
+ 
             $vouchers = $vouchers
-                ->where('access_models.id', '=', $request->access_model_id);
+                ->where('vouchers.booking_confirmation_id', '=', $request->booking_confirmation_id)
+                ->where('vouchers.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                ->where('vouchers.vendor_id', '=', $request->vendor_id)
+                ->where('vouchers.currency_id', '=', $request->currency_id);
         } elseif (!empty($request->booking_confirmation_id) && empty($request->bill_of_landing_id) && !empty($request->vendor_id) && !empty($request->currency_id)) {
-            // return "2";
-            // access_model_id empty
-            $vouchers = $vouchers->where('access_points.id', '=', $request->id);
+        
+            $vouchers = $vouchers
+                ->where('vouchers.booking_confirmation_id', '=', $request->booking_confirmation_id)
+                ->where('vouchers.vendor_id', '=', $request->vendor_id)
+                ->where('vouchers.currency_id', '=', $request->currency_id);
         } elseif (!empty($request->booking_confirmation_id) && !empty($request->bill_of_landing_id) && empty($request->vendor_id) && !empty($request->currency_id)) {
-            // return "3";
-            // no empty
+           
             $vouchers = $vouchers
-                ->where('access_models.id', '=', $request->access_model_id)
-                ->where('access_points.id', '=', $request->id);
+                ->where('vouchers.booking_confirmation_id', '=', $request->booking_confirmation_id)
+                ->where('vouchers.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                ->where('vouchers.currency_id', '=', $request->currency_id);
         } elseif (!empty($request->booking_confirmation_id) && !empty($request->bill_of_landing_id) && !empty($request->vendor_id) && empty($request->currency_id)) {
-            // return "3";
-            // no empty
+         
             $vouchers = $vouchers
-                ->where('access_models.id', '=', $request->access_model_id)
-                ->where('access_points.id', '=', $request->id);
-        } elseif (!empty($request->booking_confirmation_id) && !empty($request->bill_of_landing_id) && !empty($request->vendor_id) && !empty($request->currency_id)) {
-            // return "3";
-            // no empty
+                ->where('vouchers.booking_confirmation_id', '=', $request->booking_confirmation_id)
+                ->where('vouchers.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                ->where('vouchers.vendor_id', '=', $request->vendor_id);
+        } elseif (!empty($request->booking_confirmation_id) && empty($request->bill_of_landing_id) && empty($request->vendor_id) && empty($request->currency_id)) {
+           
             $vouchers = $vouchers
-                ->where('access_models.id', '=', $request->access_model_id)
-                ->where('access_points.id', '=', $request->id);
-        } elseif (!empty($request->booking_confirmation_id) && !empty($request->bill_of_landing_id) && !empty($request->vendor_id) && !empty($request->currency_id)) {
-            // return "3";
-            // no empty
+                ->where('vouchers.booking_confirmation_id', '=', $request->booking_confirmation_id);
+        } elseif (empty($request->booking_confirmation_id) && !empty($request->bill_of_landing_id) && !empty($request->vendor_id) && !empty($request->currency_id)) {
+           
             $vouchers = $vouchers
-                ->where('access_models.id', '=', $request->access_model_id)
-                ->where('access_points.id', '=', $request->id);
-        } elseif (!empty($request->booking_confirmation_id) && !empty($request->bill_of_landing_id) && !empty($request->vendor_id) && !empty($request->currency_id)) {
-            // return "3";
-            // no empty
+                ->where('vouchers.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                ->where('vouchers.vendor_id', '=', $request->vendor_id)
+                ->where('vouchers.currency_id', '=', $request->currency_id);
+        } elseif (empty($request->booking_confirmation_id) && !empty($request->bill_of_landing_id) && empty($request->vendor_id) && !empty($request->currency_id)) {
+           
             $vouchers = $vouchers
-                ->where('access_models.id', '=', $request->access_model_id)
-                ->where('access_points.id', '=', $request->id);
+                ->where('vouchers.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                ->where('vouchers.currency_id', '=', $request->currency_id);
+        } elseif (empty($request->booking_confirmation_id) && !empty($request->bill_of_landing_id) && empty($request->vendor_id) && empty($request->currency_id)) {
+           
+            $vouchers = $vouchers
+                ->where('vouchers.bill_of_landing_id', '=', $request->bill_of_landing_id);
+        } elseif (empty($request->booking_confirmation_id) && empty($request->bill_of_landing_id) && !empty($request->vendor_id) && !empty($request->currency_id)) {
+           
+            $vouchers = $vouchers
+                ->where('vouchers.vendor_id', '=', $request->vendor_id)
+                ->where('vouchers.currency_id', '=', $request->currency_id);
+        } elseif (empty($request->booking_confirmation_id) && empty($request->bill_of_landing_id) && !empty($request->vendor_id) && empty($request->currency_id)) {
+            
+            $vouchers = $vouchers
+                ->where('vouchers.vendor_id', '=', $request->vendor_id);
+        } elseif (empty($request->booking_confirmation_id) && empty($request->bill_of_landing_id) && empty($request->vendor_id) && !empty($request->currency_id)) {
+          
+            $vouchers = $vouchers
+                ->where('vouchers.currency_id', '=', $request->currency_id);
         } else {
-            // return "4";
-            //all empty
+            
             $vouchers = $vouchers;
         }
 
-        $result = $vouchers->orderBy('access_points.id')
+        $result = $vouchers->orderBy('vouchers.id')
             ->get();
         return $result;
     }

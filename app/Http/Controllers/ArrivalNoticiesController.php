@@ -211,6 +211,143 @@ class ArrivalNoticiesController extends Controller
         }
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $fdate = isset($request->fdate) ? $request->fdate : date('Y-m-d');
+        // $tdate = isset($request->tdate) ? $request->tdate : date('Y-m-d');
+
+        // $arrivalnoticies = DB::table('arrival_noticies')
+        //     ->select(
+        //         'arrival_noticies.id',
+        //         'arrival_noticies.date',
+        //         'arrival_noticies.arrival_notice_no',
+        //         'arrival_noticies.bill_of_landing_id',
+        //         'arrival_noticies.client_id_shipper',
+        //         'arrival_noticies.client_id_consignee',
+        //         'arrival_noticies.client_id',
+        //         'arrival_noticies.port_id_loading',
+        //         'arrival_noticies.port_id_discharge',
+        //         'arrival_noticies.igm_india_voyage_id',
+        //         'arrival_noticies.etd_pol',
+        //         'arrival_noticies.eta_pod',
+        //         'arrival_noticies.st_expire',
+        //         'arrival_noticies.ata_fpd',
+        //         'arrival_noticies.obl_no',
+        //         'arrival_noticies.shipment_type',
+        //         'arrival_noticies.hbl_no',
+        //         'arrival_noticies.carrier',
+        //         'arrival_noticies.nos_units',
+        //         'arrival_noticies.weight',
+        //         'arrival_noticies.vendor_id_yard',
+        //         'arrival_noticies.remarks',
+        //         'arrival_noticies.status',
+        //         'arrival_noticies.usd_rate',
+        //         'arrival_noticies.usd_tot',
+        //         'arrival_noticies.deleted',
+        //         'bill_of_landings.bill_of_landing_number',
+        //         'shipper.client_code',
+        //         'shipper.client_name',
+        //         'consignee.client_code',
+        //         'consignee.client_name',
+        //         'clients.client_code',
+        //         'clients.client_name',
+        //         'portloading.port_code',
+        //         'portloading.port_name',
+        //         'discharge.port_code',
+        //         'discharge.port_name',
+        //         'igm_india_voyages.voyage',
+        //         'yard.vendor_code',
+        //         'yard.vendor_name'
+        //     )
+        //     ->join('bill_of_landings', 'arrival_noticies.bill_of_landing_id', '=', 'bill_of_landings.id')
+        //     ->join('clients as shipper', 'arrival_noticies.client_id_shipper', '=', 'shipper.id')
+        //     ->join('clients as consignee', 'arrival_noticies.client_id_consignee', '=', 'consignee.id')
+        //     ->join('clients', 'arrival_noticies.client_id', '=', 'clients.id')
+        //     ->join('ports as portloading', 'arrival_noticies.port_id_loading', '=', 'portloading.id')
+        //     ->join('ports as discharge', 'arrival_noticies.port_id_discharge', '=', 'discharge.id')
+        //     ->join('igm_india_voyages', 'arrival_noticies.igm_india_voyage_id', '=', 'igm_india_voyages.id')
+        //     ->join('vendors as yard', 'arrival_noticies.vendor_id_yard', '=', 'yard.id')
+        //     ->where(DB::raw('DATE_FORMAT(arrival_noticies.date, "%Y-%m-%d")'), '>=', $fdate)
+        //     ->where(DB::raw('DATE_FORMAT(arrival_noticies.date, "%Y-%m-%d")'), '<=', $tdate)
+
+        // if (!empty($request->bill_of_landing_id) && !empty($request->client_id) && !empty($request->port_id_loading) && !empty($request->igm_india_voyage_id) && !empty($request->vendor_id_yard)) {
+
+        //     $arrivalnoticies = $arrivalnoticies
+        //         ->where('arrivalnoticies.bill_of_landing_id', '=', $request->bill_of_landing_id)
+        //         ->where('arrivalnoticies.client_id', '=', $request->client_id)
+        //         ->where('arrivalnoticies.port_id_loading', '=', $request->port_id_loading)
+        //         ->where('arrivalnoticies.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        // } elseif (!empty($request->bill_of_landing_id) && empty($request->client_id) && !empty($request->port_id_loading) && !empty($request->igm_india_voyage_id) && !empty($request->vendor_id_yard)) {
+
+        //     $arrivalnoticies = $arrivalnoticies
+        //         ->where('arrivalnoticies.bill_of_landing_id', '=', $request->bill_of_landing_id)
+        //         ->where('arrivalnoticies.port_id_loading', '=', $request->port_id_loading)
+        //         ->where('arrivalnoticies.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        // } elseif (!empty($request->bill_of_landing_id) && !empty($request->client_id) && empty($request->port_id_loading) && !empty($request->igm_india_voyage_id) && !empty($request->vendor_id_yard)) {
+
+        //     $arrivalnoticies = $arrivalnoticies
+        //         ->where('arrivalnoticies.bill_of_landing_id', '=', $request->bill_of_landing_id)
+        //         ->where('arrivalnoticies.client_id', '=', $request->client_id)
+        //         ->where('arrivalnoticies.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        // } elseif (!empty($request->bill_of_landing_id) && !empty($request->client_id) && !empty($request->port_id_loading) && empty($request->igm_india_voyage_id) && !empty($request->vendor_id_yard)) {
+
+        //     $arrivalnoticies = $arrivalnoticies
+        //         ->where('arrivalnoticies.bill_of_landing_id', '=', $request->bill_of_landing_id)
+        //         ->where('arrivalnoticies.client_id', '=', $request->client_id)
+        //         ->where('arrivalnoticies.port_id_loading', '=', $request->port_id_loading);
+        // } elseif (!empty($request->bill_of_landing_id) && !empty($request->client_id) && !empty($request->port_id_loading) && !empty($request->igm_india_voyage_id) && empty($request->vendor_id_yard)) {
+
+        //     $arrivalnoticies = $arrivalnoticies
+        //         ->where('arrivalnoticies.bill_of_landing_id', '=', $request->bill_of_landing_id);
+        // } elseif (!empty($request->bill_of_landing_id) && !empty($request->client_id) && !empty($request->port_id_loading) && !empty($request->igm_india_voyage_id) && !empty($request->vendor_id_yard)) {
+
+        //     $arrivalnoticies = $arrivalnoticies
+        //         ->where('arrivalnoticies.client_id', '=', $request->client_id)
+        //         ->where('arrivalnoticies.port_id_loading', '=', $request->port_id_loading)
+        //         ->where('arrivalnoticies.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        // } elseif (!empty($request->bill_of_landing_id) && !empty($request->client_id) && !empty($request->port_id_loading) && !empty($request->igm_india_voyage_id) && !empty($request->vendor_id_yard)) {
+
+        //     $arrivalnoticies = $arrivalnoticies
+        //         ->where('arrivalnoticies.client_id', '=', $request->client_id)
+        //         ->where('arrivalnoticies.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        // } elseif (!empty($request->bill_of_landing_id) && !empty($request->client_id) && !empty($request->port_id_loading) && !empty($request->igm_india_voyage_id) && !empty($request->vendor_id_yard)) {
+
+        //     $arrivalnoticies = $arrivalnoticies
+        //         ->where('arrivalnoticies.client_id', '=', $request->client_id);
+        // } elseif (!empty($request->bill_of_landing_id) && !empty($request->client_id) && !empty($request->port_id_loading) && !empty($request->igm_india_voyage_id) && !empty($request->vendor_id_yard)) {
+
+        //     $arrivalnoticies = $arrivalnoticies
+        //         ->where('arrivalnoticies.port_id_loading', '=', $request->port_id_loading)
+        //         ->where('arrivalnoticies.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        // } elseif (!empty($request->bill_of_landing_id) && !empty($request->client_id) && !empty($request->port_id_loading) && !empty($request->igm_india_voyage_id) && !empty($request->vendor_id_yard)) {
+
+        //     $arrivalnoticies = $arrivalnoticies
+        //         ->where('arrivalnoticies.port_id_loading', '=', $request->port_id_loading);
+        // } elseif (!empty($request->bill_of_landing_id) && !empty($request->client_id) && !empty($request->port_id_loading) && !empty($request->igm_india_voyage_id) && !empty($request->vendor_id_yard)) {
+
+        //     $arrivalnoticies = $arrivalnoticies
+        //         ->where('arrivalnoticies.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        // } elseif (!empty($request->bill_of_landing_id) && !empty($request->client_id) && !empty($request->port_id_loading) && !empty($request->igm_india_voyage_id) && !empty($request->vendor_id_yard)) {
+
+        //     $arrivalnoticies = $arrivalnoticies
+        //         ->where('arrivalnoticies.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        // } elseif (!empty($request->bill_of_landing_id) && !empty($request->client_id) && !empty($request->port_id_loading) && !empty($request->igm_india_voyage_id) && !empty($request->vendor_id_yard)) {
+
+        //     $arrivalnoticies = $arrivalnoticies
+        //         ->where('arrivalnoticies.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        // } elseif (!empty($request->bill_of_landing_id) && !empty($request->client_id) && !empty($request->port_id_loading) && !empty($request->igm_india_voyage_id) && !empty($request->vendor_id_yard)) {
+
+        //     $arrivalnoticies = $arrivalnoticies
+        //         ->where('arrivalnoticies.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        // } else {
+
+        //     $arrivalnoticies = $arrivalnoticies;
+        // }
+
+        // $result = $arrivalnoticies->orderBy('access_points.id')
+        //     ->get();
+        // return $result;
+    }
 
     public function store(Request $request)
     {

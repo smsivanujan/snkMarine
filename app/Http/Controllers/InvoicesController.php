@@ -204,6 +204,130 @@ class InvoicesController extends Controller
         return $invoices;
     }
 
+    public function showByFilter(Request $request)
+    {
+        $fdate = isset($request->fdate) ? $request->fdate : date('Y-m-d');
+        $tdate = isset($request->tdate) ? $request->tdate : date('Y-m-d');
+
+        $invoices = DB::table('invoices')
+            ->select(
+                'invoices.id',
+                'invoices.date',
+                'invoices.invoice_no',
+                'invoices.bill_of_landing_id',
+                'invoices.client_id_shipper',
+                'invoices.client_id_consignee',
+                'invoices.client_id',
+                'invoices.port_id_loading',
+                'invoices.port_id_discharge',
+                'invoices.igm_india_voyage_id',
+                'invoices.etd_pol',
+                'invoices.eta_pod',
+                'invoices.st_expire',
+                'invoices.ata_fpd',
+                'invoices.obl_no',
+                'invoices.shipment_type',
+                'invoices.hbl_no',
+                'invoices.carrier',
+                'invoices.nos_units',
+                'invoices.weight',
+                'invoices.cbm',
+                'invoices.remarks',
+                'invoices.usd_rate',
+                'invoices.usd_tot',
+                'invoices.status',
+                'invoices.tax_invoice',
+                'invoices.deleted',
+                'bill_of_landings.bill_of_landing_number',
+                'shipper.client_code',
+                'shipper.client_name',
+                'consignee.client_code',
+                'consignee.client_name',
+                'clients.client_code',
+                'clients.client_name',
+                'portloading.port_code',
+                'portloading.port_name',
+                'discharge.port_code',
+                'discharge.port_name',
+                'igm_india_voyages.voyage'
+            )
+            ->join('bill_of_landings', 'invoices.bill_of_landing_id', '=', 'bill_of_landings.id')
+            ->join('clients as shipper', 'invoices.client_id_shipper', '=', 'shipper.id')
+            ->join('clients as consignee', 'invoices.client_id_consignee', '=', 'consignee.id')
+            ->join('clients', 'invoices.client_id', '=', 'clients.id')
+            ->join('ports as portloading', 'invoices.port_id_loading', '=', 'portloading.id')
+            ->join('ports as discharge', 'invoices.port_id_discharge', '=', 'discharge.id')
+            ->join('igm_india_voyages', 'invoices.igm_india_voyage_id', '=', 'igm_india_voyages.id')
+            ->where(DB::raw('DATE_FORMAT(invoices.date, "%Y-%m-%d")'), '>=', $fdate)
+            ->where(DB::raw('DATE_FORMAT(invoices.date, "%Y-%m-%d")'), '<=', $tdate);
+
+       if (!empty($request->bill_of_landing_id) && !empty($request->client_id) && !empty($request->port_id_loading) && !empty($request->igm_india_voyage_id)) {
+ 
+            $invoices = $invoices
+                ->where('invoices.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                ->where('invoices.client_id', '=', $request->client_id)
+                ->where('invoices.port_id_loading', '=', $request->port_id_loading)
+                ->where('invoices.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        } elseif (!empty($request->bill_of_landing_id) && empty($request->client_id) && !empty($request->port_id_loading) && !empty($request->igm_india_voyage_id)) {
+        
+            $invoices = $invoices
+                ->where('invoices.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                ->where('invoices.port_id_loading', '=', $request->port_id_loading)
+                ->where('invoices.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        } elseif (!empty($request->bill_of_landing_id) && !empty($request->client_id) && empty($request->port_id_loading) && !empty($request->igm_india_voyage_id)) {
+           
+            $invoices = $invoices
+                ->where('invoices.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                ->where('invoices.client_id', '=', $request->client_id)
+                ->where('invoices.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        } elseif (!empty($request->bill_of_landing_id) && !empty($request->client_id) && !empty($request->port_id_loading) && empty($request->igm_india_voyage_id)) {
+         
+            $invoices = $invoices
+                ->where('invoices.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                ->where('invoices.client_id', '=', $request->client_id)
+                ->where('invoices.port_id_loading', '=', $request->port_id_loading);
+        } elseif (!empty($request->bill_of_landing_id) && empty($request->client_id) && empty($request->port_id_loading) && empty($request->igm_india_voyage_id)) {
+           
+            $invoices = $invoices
+                ->where('invoices.bill_of_landing_id', '=', $request->bill_of_landing_id);
+        } elseif (empty($request->bill_of_landing_id) && !empty($request->client_id) && !empty($request->port_id_loading) && !empty($request->igm_india_voyage_id)) {
+           
+            $invoices = $invoices
+                ->where('invoices.client_id', '=', $request->client_id)
+                ->where('invoices.port_id_loading', '=', $request->port_id_loading)
+                ->where('invoices.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        } elseif (empty($request->bill_of_landing_id) && !empty($request->client_id) && empty($request->port_id_loading) && !empty($request->igm_india_voyage_id)) {
+           
+            $invoices = $invoices
+                ->where('invoices.client_id', '=', $request->client_id)
+                ->where('invoices.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        } elseif (empty($request->bill_of_landing_id) && !empty($request->client_id) && empty($request->port_id_loading) && empty($request->igm_india_voyage_id)) {
+           
+            $invoices = $invoices
+                ->where('invoices.client_id', '=', $request->client_id);
+        } elseif (empty($request->bill_of_landing_id) && empty($request->client_id) && !empty($request->port_id_loading) && !empty($request->igm_india_voyage_id)) {
+           
+            $invoices = $invoices
+                ->where('invoices.port_id_loading', '=', $request->port_id_loading)
+                ->where('invoices.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        } elseif (empty($request->bill_of_landing_id) && empty($request->client_id) && !empty($request->port_id_loading) && empty($request->igm_india_voyage_id)) {
+            
+            $invoices = $invoices
+                ->where('invoices.port_id_loading', '=', $request->port_id_loading);
+        } elseif (empty($request->bill_of_landing_id) && empty($request->client_id) && empty($request->port_id_loading) && !empty($request->igm_india_voyage_id)) {
+          
+            $invoices = $invoices
+                ->where('invoices.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+        } else {
+            
+            $invoices = $invoices;
+        }
+
+        $result = $invoices->orderBy('invoices.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

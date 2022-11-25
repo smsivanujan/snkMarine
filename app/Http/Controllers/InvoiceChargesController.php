@@ -32,6 +32,9 @@ class InvoiceChargesController extends Controller
                 'invoice_charges.total_cost_in',
                 'invoice_charges.profit',
                 'invoice_charges.profit_in',
+                'invoices.id',
+                'invoices.date',
+                'invoices.invoice_no',
                 'currencies.currency_code',
                 'currencies.currency_name',
                 'mycurrency.currency_code',
@@ -69,6 +72,9 @@ class InvoiceChargesController extends Controller
                 'invoice_charges.total_cost_in',
                 'invoice_charges.profit',
                 'invoice_charges.profit_in',
+                'invoices.id',
+                'invoices.date',
+                'invoices.invoice_no',
                 'currencies.currency_code',
                 'currencies.currency_name',
                 'mycurrency.currency_code',
@@ -111,6 +117,9 @@ class InvoiceChargesController extends Controller
                 'invoice_charges.total_cost_in',
                 'invoice_charges.profit',
                 'invoice_charges.profit_in',
+                'invoices.id',
+                'invoices.date',
+                'invoices.invoice_no',
                 'currencies.currency_code',
                 'currencies.currency_name',
                 'mycurrency.currency_code',
@@ -131,6 +140,70 @@ class InvoiceChargesController extends Controller
         }
 
         return $invoicecharges;
+    }
+
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $invoicecharges = DB::table('invoice_charges')
+            ->select(
+                'invoice_charges.id',
+                'invoice_charges.invoice_id',
+                'invoice_charges.description',
+                'invoice_charges.unit',
+                'invoice_charges.unit_cost',
+                'invoice_charges.unit_charge',
+                'invoice_charges.amount',
+                'invoice_charges.currency_id',
+                'invoice_charges.currency_id_mycurrency',
+                'invoice_charges.exchange_rate',
+                'invoice_charges.amount_in',
+                'invoice_charges.tax_description',
+                'invoice_charges.tax',
+                'invoice_charges.tax_amount',
+                'invoice_charges.amount_final',
+                'invoice_charges.total_cost',
+                'invoice_charges.total_cost_in',
+                'invoice_charges.profit',
+                'invoice_charges.profit_in',
+                'invoices.id',
+                'invoices.date',
+                'invoices.invoice_no',
+                'currencies.currency_code',
+                'currencies.currency_name',
+                'mycurrency.currency_code',
+                'mycurrency.currency_name',
+            )
+            ->join('invoices', 'invoice_charges.invoice_id', '=', 'invoices.id')
+            ->join('currencies', 'invoice_charges.currency_id', '=', 'currencies.id')
+            ->join('currencies as mycurrency', 'invoice_charges.currency_id_mycurrency', '=', 'mycurrency.id');
+
+        if (!empty($request->invoice_id) && !empty($request->currency_id)) {
+ 
+             $invoicecharges = $invoicecharges
+             ->where('invoice_charges.invoice_id', '=', $request->invoice_id)
+             ->where('invoice_charges.currency_id', '=', $request->currency_id);
+        }
+        elseif (!empty($request->invoice_id) && empty($request->currency_id)) {
+
+            $invoicecharges = $invoicecharges
+            ->where('invoice_charges.invoice_id', '=', $request->invoice_id);
+        }
+        elseif (empty($request->invoice_id) && !empty($request->currency_id)) {
+
+            $invoicecharges = $invoicecharges
+            ->where('invoice_charges.currency_id', '=', $request->currency_id);
+        }
+        else
+        {
+
+            $invoicecharges = $invoicecharges;
+        }
+
+        $result = $invoicecharges->orderBy('invoice_charges.id')
+            ->get();
+        return $result;
     }
 
     public function store(Request $request)

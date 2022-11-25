@@ -123,6 +123,63 @@ class OwnersController extends Controller
         return $owners;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $owners = DB::table('owners')
+        ->select(
+            'owners.id',
+            'owners.owner_code',
+            'owners.owner_name',
+            'owners.sub_code',
+            'owners.country_id',
+            'owners.port_id',
+            'owners.email',
+            'owners.telephone_number',
+            'owners.fax',
+            'owners.mobile_number',
+            'owners.contact_name',
+            'owners.address',
+            'owners.image',
+            'owners.remarks',
+            'owners.is_active',
+            'countries.country_name',
+            'countries.capital_city_name',
+            'ports.port_code',
+            'ports.port_name',
+            'ports.country_id'
+        )
+        ->join('countries', 'owners.country_id', '=', 'countries.id')
+        ->join('ports', 'owners.port_id', '=', 'ports.id');
+
+        if (!empty($request->country_id) && !empty($request->port_id)) {
+
+             $owners = $owners
+             ->where('owners.country_id', '=', $request->country_id)
+             ->where('owners.port_id', '=', $request->port_id);
+        }
+        elseif (!empty($request->country_id) && empty($request->port_id)) {
+
+            $owners = $owners
+            ->where('owners.country_id', '=', $request->country_id);
+        }
+        elseif (empty($request->country_id) && !empty($request->port_id)) {
+
+            $owners = $owners
+            ->where('owners.port_id', '=', $request->port_id);
+        }
+        else
+        {
+
+            $owners = $owners;
+        }
+
+        $result = $owners->orderBy('owners.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

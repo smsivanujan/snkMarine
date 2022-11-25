@@ -83,6 +83,53 @@ class SwapsController extends Controller
         return $swaps;
     }
 
+    public function showByFilter(Request $request)
+    {
+        $fdate = isset($request->fdate) ? $request->fdate : date('Y-m-d');
+        $tdate = isset($request->tdate) ? $request->tdate : date('Y-m-d');
+
+        $swaps = DB::table('swaps')
+            ->select(
+                'swaps.id',
+                'swaps.date',
+                'swaps.equipment_id',
+                'swaps.description',
+                'swaps.client_id_agent',
+                'equipments.equipment_number',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('equipments', 'swaps.equipment_id', '=', 'equipments.id')
+            ->join('clients', 'swaps.client_id_agent', '=', 'clients.id')
+            ->where(DB::raw('DATE_FORMAT(swaps.date, "%Y-%m-%d")'), '>=', $fdate)
+            ->where(DB::raw('DATE_FORMAT(swaps.date, "%Y-%m-%d")'), '<=', $tdate);
+
+        if (!empty($request->equipment_id) && !empty($request->client_id_agent)) {
+
+             $swaps = $swaps
+             ->where('swaps.equipment_id', '=', $request->equipment_id)
+            ->where('swaps.client_id_agent', '=', $request->client_id_agent);
+        }
+        elseif (!empty($request->equipment_id) && empty($request->client_id_agent)) {
+
+            $swaps = $swaps->where('swaps.equipment_id', '=', $request->equipment_id);
+        }
+        elseif (empty($request->equipment_id) && !empty($request->client_id_agent)) {
+
+            $swaps = $swaps
+            ->where('swaps.client_id_agent', '=', $request->client_id_agent);
+        }
+        else
+        {
+
+            $swaps = $swaps;
+        }
+
+        $result = $swaps->orderBy('swaps.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

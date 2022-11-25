@@ -19,9 +19,12 @@ class SwapHistoriesController extends Controller
                 'swap_histories.equipment_id',
                 'swap_histories.client_id_agent',
                 'equipments.equipment_number',
+                'swaps.id',
+                'swaps.date',
                 'clients.client_code',
                 'clients.client_name'
             )
+            ->join('swaps', 'swap_histories.swap_id', '=', 'swaps.id')
             ->join('equipments', 'swap_histories.equipment_id', '=', 'equipments.id')
             ->join('clients', 'swap_histories.client_id_agent', '=', 'clients.id')
             ->paginate(50);
@@ -39,10 +42,13 @@ class SwapHistoriesController extends Controller
                 'swap_histories.status',
                 'swap_histories.equipment_id',
                 'swap_histories.client_id_agent',
+                'swaps.id',
+                'swaps.date',
                 'equipments.equipment_number',
                 'clients.client_code',
                 'clients.client_name'
             )
+            ->join('swaps', 'swap_histories.swap_id', '=', 'swaps.id')
             ->join('equipments', 'swap_histories.equipment_id', '=', 'equipments.id')
             ->join('clients', 'swap_histories.client_id_agent', '=', 'clients.id')
             ->where('clients.id', '=', $id)
@@ -65,10 +71,13 @@ class SwapHistoriesController extends Controller
                 'swap_histories.status',
                 'swap_histories.equipment_id',
                 'swap_histories.client_id_agent',
+                'swaps.id',
+                'swaps.date',
                 'equipments.equipment_number',
                 'clients.client_code',
                 'clients.client_name'
             )
+            ->join('swaps', 'swap_histories.swap_id', '=', 'swaps.id')
             ->join('equipments', 'swap_histories.equipment_id', '=', 'equipments.id')
             ->join('clients', 'swap_histories.client_id_agent', '=', 'clients.id')
                 ->where(function ($q) use ($query) {
@@ -81,6 +90,72 @@ class SwapHistoriesController extends Controller
         }
 
         return $swaphistories;
+    }
+
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $swaphistories = DB::table('swap_histories')
+            ->select(
+                'swap_histories.id',
+                'swap_histories.swap_id',
+                'swap_histories.status',
+                'swap_histories.equipment_id',
+                'swap_histories.client_id_agent',
+                'swaps.id',
+                'swaps.date',
+                'equipments.equipment_number',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('swaps', 'swap_histories.swap_id', '=', 'swaps.id')
+            ->join('equipments', 'swap_histories.equipment_id', '=', 'equipments.id')
+            ->join('clients', 'swap_histories.client_id_agent', '=', 'clients.id');
+
+            if (!empty($request->swap_id) && !empty($request->equipment_id) && !empty($request->client_id_agent)) {
+
+                $swaphistories = $swaphistories
+                    ->where('swap_histories.swap_id', '=', $request->swap_id)
+                    ->where('swap_histories.equipment_id', '=', $request->equipment_id)
+                    ->where('swap_histories.client_id_agent', '=', $request->client_id_agent);
+            } elseif (!empty($request->swap_id) && empty($request->equipment_id) && !empty($request->client_id_agent)) {
+    
+                $swaphistories = $swaphistories
+                    ->where('swap_histories.swap_id', '=', $request->swap_id)
+                    ->where('swap_histories.client_id_agent', '=', $request->client_id_agent);
+            } elseif (!empty($request->swap_id) && !empty($request->equipment_id) && empty($request->client_id_agent)) {
+    
+                $swaphistories = $swaphistories
+                ->where('swap_histories.swap_id', '=', $request->swap_id)
+                ->where('swap_histories.equipment_id', '=', $request->equipment_id);
+            }
+            elseif (!empty($request->swap_id) && empty($request->equipment_id) && empty($request->client_id_agent)) {
+    
+                $swaphistories = $swaphistories
+                ->where('swap_histories.swap_id', '=', $request->swap_id);
+            } elseif (empty($request->swap_id) && !empty($request->equipment_id) && !empty($request->client_id_agent)) {
+    
+                $swaphistories = $swaphistories
+                ->where('swap_histories.equipment_id', '=', $request->equipment_id)
+                ->where('swap_histories.client_id_agent', '=', $request->client_id_agent);
+            } elseif (empty($request->swap_id) && !empty($request->equipment_id) && empty($request->client_id_agent)) {
+        
+                $swaphistories = $swaphistories
+                ->where('swap_histories.equipment_id', '=', $request->equipment_id);
+            } elseif (empty($request->swap_id) && empty($request->equipment_id) && !empty($request->client_id_agent)) {
+    
+                $swaphistories = $swaphistories
+                ->where('swap_histories.client_id_agent', '=', $request->client_id_agent);
+            } else {
+    
+                $swaphistories = $swaphistories;
+            }
+
+
+        $result = $swaphistories->orderBy('swap_histories.id')
+            ->get();
+        return $result;
     }
 
     public function store(Request $request)

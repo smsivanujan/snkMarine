@@ -101,6 +101,44 @@ class IgmCarriersController extends Controller
         return $igmcarriers;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $igmcarriers = DB::table('igm_carriers')
+            ->select(
+                'igm_carriers.id',
+                'igm_carriers.client_id',
+                'igm_carriers.customs_office_code',
+                'igm_carriers.place_of_destination_code',
+                'igm_carriers.sender_id',
+                'igm_carriers.pan_number',
+                'igm_carriers.receiver_id',
+                'igm_carriers.version_no',
+                'igm_carriers.client_id_shipper',
+                'clients.client_code',
+                'clients.client_name',
+                'shipper.client_code',
+                'shipper.client_name'
+            )
+            ->join('clients', 'igm_carriers.client_id', '=', 'clients.id')
+            ->join('clients as shipper', 'igm_carriers.client_id_shipper', '=', 'clients.id');
+
+        if (!empty($request->client_id)) {
+
+             $igmcarriers = $igmcarriers
+             ->where('igm_carriers.client_id', '=', $request->client_id);
+        }
+        else
+        {
+            $igmcarriers = $igmcarriers;
+        }
+
+        $result = $igmcarriers->orderBy('igm_carriers.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

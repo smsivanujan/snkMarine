@@ -424,6 +424,8 @@ Route::POST('/igms/store', [IgmsController::class,'store']);
 // -------------------------------------------------------
 // -----------------------------------------
 
+
+////////////STATUS/////////////////////////////////////////////
 Route::get('arivalnotices/status-change', [ArrivalNoticiesController::class, 'statusChange']);
 Route::get('billoflandingsubnoninventories/status-change', [BillOfLandingSubNonInventoriesController::class, 'statusChange']);
 Route::get('billoflandingsubs/status-change', [BillOfLandingSubsController::class, 'statusChange']);
@@ -446,11 +448,54 @@ Route::get('users/status-online-change', [UsersController::class, 'statusOnlineC
 Route::get('vendors/status-change', [VendorsController::class, 'statusChange']);
 Route::get('vouchers/status-change', [VouchersController::class, 'statusChange']);
 
-/////////////////////////////////////////////////////////
-Route::GET('/accesspoints/filter/{id}', [AccesspointsController::class,'showByFilter']);
+////////////FILTER/////////////////////////////////////////////
+Route::GET('/accesspoints/filter/{id}', [AccessPointsController::class,'showByFilter']);
+Route::GET('/activitylogs/filter/{id}', [ActivityLogsController::class,'showByFilter']);
+Route::GET('/arrivalnoticecharges/filter/{id}', [ArrivalNoticeChargesController::class,'showByFilter']);
+Route::GET('/arrivalnoticecontainers/filter/{id}', [ArrivalNoticeContainersController::class,'showByFilter']);
+Route::GET('/billoflandingsubnoninventories/filter/{id}', [BillOfLandingSubNonInventoriesController::class,'showByFilter']);
+Route::GET('/billoflandingsubs/filter/{id}', [BillOfLandingSubsController::class,'showByFilter']);
+Route::GET('/billoflandingsubswitches/filter/{id}', [BillOfLandingSubSwitchesController::class,'showByFilter']);
+Route::GET('/billremotelogs/filter/{id}', [BillRemoteLogsController::class,'showByFilter']);
+Route::GET('/clients/filter/{id}', [ClientsController::class,'showByFilter']);
+Route::GET('/currencies/filter/{id}', [CurrenciesController::class,'showByFilter']);
+Route::GET('/departments/filter/{id}', [DepartmentsController::class,'showByFilter']);
+Route::GET('/detentioninvoicecontainers/filter/{id}', [DetentionInvoiceContainersController::class,'showByFilter']);
+Route::GET('/detentiontraffies/filter/{id}', [DetentionTraffiesController::class,'showByFilter']);
+Route::GET('/equipmentsaledetails/filter/{id}', [EquipmentSaleDetailsController::class,'showByFilter']);
+Route::GET('/equipmentsales/filter/{id}', [EquipmentSalesController::class,'showByFilter']);
+Route::GET('/equipments/filter/{id}', [EquipmentsController::class,'showByFilter']);
+Route::GET('/igmcarriers/filter/{id}', [IgmCarriersController::class,'showByFilter']);
+Route::GET('/igmindiacargoinfos/filter/{id}', [IgmIndiaCargoInfosController::class,'showByFilter']);
+Route::GET('/igmindiacontainers/filter/{id}', [IgmIndiaContainersController::class,'showByFilter']);
+Route::GET('/igmindias/filter/{id}', [IgmIndiasController::class,'showByFilter']);
+Route::GET('/igmlankadodcontainers/filter/{id}', [IgmLankaDoContainersController::class,'showByFilter']);
+Route::GET('/igms/filter/{id}', [IgmsController::class,'showByFilter']);
+Route::GET('/invoicecharges/filter/{id}', [InvoiceChargesController::class,'showByFilter']);
+Route::GET('/detentioninvoice/filter/{id}', [InvoicesController::class,'showByFilter']);
+Route::GET('/loginlogs/filter/{id}', [LoginLogsController::class,'showByFilter']);
+Route::GET('/owners/filter/{id}', [OwnersController::class,'showByFilter']);
+Route::GET('/permissions/filter/{id}', [PermissionsController::class,'showByFilter']);
+Route::GET('/ports/filter/{id}', [PortsController::class,'showByFilter']);
+Route::GET('/remotebl/filter/{id}', [RemoteBlController::class,'showByFilter']);
+Route::GET('/soas/filter/{id}', [SoasController::class,'showByFilter']);
+Route::GET('/soasubs/filter/{id}', [SoaSubsController::class,'showByFilter']);
+Route::GET('/swaphistories/filter/{id}', [SwapHistoriesController::class,'showByFilter']);
+Route::GET('/swaps/filter/{id}', [SwapsController::class,'showByFilter']);
+Route::GET('/users/filter/{id}', [UsersController::class,'showByFilter']);
+Route::GET('/vendors/filter/{id}', [VendorsController::class,'showByFilter']);
+Route::GET('/vouchers/filter/{id}', [VouchersController::class,'showByFilter']);
 
+// Route::GET('/arivalnotices/filter/{id}', [ArrivalNoticiesController::class,'showByFilter']);
+// Route::GET('/billoflandingnoninventories/filter/{id}', [BillOfLandingNonInventoriesController::class,'showByFilter']);
+// Route::GET('/billoflandings/filter/{id}', [BillOfLandingsController::class,'showByFilter']);
+// Route::GET('/billoflandingswitches/filter/{id}', [BillOfLandingSwitchesController::class,'showByFilter']);
+// Route::GET('/bookingconfirmations/filter/{id}', [BookingConfirmationsController::class,'showByFilter']);
+// Route::GET('/detentioninvoice/filter/{id}', [DetentionInvoicesController::class,'showByFilter']);
+// Route::GET('/igmlankados/filter/{id}', [IgmLankaDosController::class,'showByFilter']);
+// Route::GET('/receipts/filter/{id}', [ReceiptsController::class,'showByFilter']);
 
-//////SEARCH/////////////////
+////////////SEARCH/////////////////////////////////////////////
 Route::GET('/accessmodels/search/{query}', [AccessModelsController::class,'showBySearch']);
 Route::GET('/accesspoints/search/{query}', [AccesspointsController::class,'showBySearch']);
 Route::GET('/activitylogs/search/{query}', [ActivityLogsController::class,'showBySearch']);
@@ -460,14 +505,8 @@ Route::GET('/arivalnotices/search/{query}', [ArrivalNoticiesController::class,'s
 Route::GET('/billoflandingnoninventories/search/{query}', [BillOfLandingNonInventoriesController::class,'showBySearch']);
 Route::GET('/billoflandings/search/{query}', [BillOfLandingsController::class,'showBySearch']);
 Route::GET('/billoflandingsubnoninventories/search/{query}', [BillOfLandingSubNonInventoriesController::class,'showBySearch']);
-// Route::GET('/billoflandingsubnoninventoriesexps/search/{query}', [BillOfLandingSubNonInventoriesExpsController::class,'showBySearch']);
-// Route::GET('/billoflandingsubnoninventoriesimps/search/{query}', [BillOfLandingSubNonInventoriesImpsController::class,'showBySearch']);
 Route::GET('/billoflandingsubs/search/{query}', [BillOfLandingSubsController::class,'showBySearch']);
 Route::GET('/billoflandingsubsexps/search/{query}', [BillOfLandingSubsExpsController::class,'showBySearch']);
-// Route::GET('/billoflandingsubsimps/search/{query}', [BillOfLandingSubsImpsController::class,'showBySearch']);
-// Route::GET('/billoflandingsubswitches/search/{query}', [BillOfLandingSubSwitchesController::class,'showBySearch']);
-// Route::GET('/billoflandingsubswitchesexps/search/{query}', [BillOfLandingSubSwitchesExpsController::class,'showBySearch']);
-// Route::GET('/billoflandingsubswitchesimps/search/{query}', [BillOfLandingSubSwitchesImpsController::class,'showBySearch']);
 Route::GET('/billoflandingswitches/search/{query}', [BillOfLandingSwitchesController::class,'showBySearch']);
 Route::GET('/billremotelogs/search/{query}', [BillRemoteLogsController::class,'showBySearch']);
 Route::GET('/bookingconfirmations/search/{query}', [BookingConfirmationsController::class,'showBySearch']);
@@ -519,3 +558,10 @@ Route::GET('/users/search/{query}', [UsersController::class,'showBySearch']);
 Route::GET('/vendors/search/{query}', [VendorsController::class,'showBySearch']);
 Route::GET('/voucherpayments/search/{query}', [VoucherPaymentsController::class,'showBySearch']);
 Route::GET('/vouchers/search/{query}', [VouchersController::class,'showBySearch']);
+
+// Route::GET('/billoflandingsubnoninventoriesexps/search/{query}', [BillOfLandingSubNonInventoriesExpsController::class,'showBySearch']);
+// Route::GET('/billoflandingsubnoninventoriesimps/search/{query}', [BillOfLandingSubNonInventoriesImpsController::class,'showBySearch']);
+// Route::GET('/billoflandingsubsimps/search/{query}', [BillOfLandingSubsImpsController::class,'showBySearch']);
+// Route::GET('/billoflandingsubswitches/search/{query}', [BillOfLandingSubSwitchesController::class,'showBySearch']);
+// Route::GET('/billoflandingsubswitchesexps/search/{query}', [BillOfLandingSubSwitchesExpsController::class,'showBySearch']);
+// Route::GET('/billoflandingsubswitchesimps/search/{query}', [BillOfLandingSubSwitchesImpsController::class,'showBySearch']);

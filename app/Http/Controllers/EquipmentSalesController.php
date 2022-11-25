@@ -93,6 +93,45 @@ class EquipmentSalesController extends Controller
         return $equipmentsales;
     }
 
+    public function showByFilter(Request $request)
+    {
+        $fdate = isset($request->fdate) ? $request->fdate : date('Y-m-d');
+        $tdate = isset($request->tdate) ? $request->tdate : date('Y-m-d');
+
+        $equipmentsales = DB::table('equipment_sales')
+        ->select(
+            'equipment_sales.id',
+            'equipment_sales.date',
+            'equipment_sales.client_id',
+            'equipment_sales.no_unit',
+            'equipment_sales.sale_type',
+            'equipment_sales.description',
+            'equipment_sales.client_id_agent',
+            'clients.client_code',
+            'clients.client_name',
+            'agent.client_code',
+            'agent.client_name'
+        )
+        ->join('clients', 'equipment_sales.client_id', '=', 'clients.id')
+        ->join('clients as agent', 'equipment_sales.client_id_agent', '=', 'agent.id')
+        ->where(DB::raw('DATE_FORMAT(equipment_sales.date, "%Y-%m-%d")'), '>=', $fdate)
+        ->where(DB::raw('DATE_FORMAT(equipment_sales.date, "%Y-%m-%d")'), '<=', $tdate);
+
+        if (!empty($request->client_id)) {
+
+             $equipmentsales = $equipmentsales
+             ->where('equipment_sales.client_id', '=', $request->client_id);
+        }
+        else
+        {
+            $equipmentsales = $equipmentsales;
+        }
+
+        $result = $equipmentsales->orderBy('equipment_sales.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

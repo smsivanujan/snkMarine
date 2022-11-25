@@ -183,6 +183,101 @@ class IgmIndiasController extends Controller
         return $igm_indias;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $igm_indias = DB::table('igm_indias')
+            ->select(
+                'igm_indias.id',
+                'igm_indias.bill_of_landing_id',
+                'igm_indias.sender_id',
+                'igm_indias.version_no',
+                'igm_indias.message_id',
+                'igm_indias.sequence',
+                'igm_indias.date1',
+                'igm_indias.time1',
+                'igm_indias.pod1',
+                'igm_indias.imo1',
+                'igm_indias.call_sign1',
+                'igm_indias.igm_india_voyage_id',
+                'igm_indias.line_code',
+                'igm_indias.line_pan',
+                'igm_indias.master_name',
+                'igm_indias.pod_code',
+                'igm_indias.last_port1',
+                'igm_indias.last_port2',
+                'igm_indias.last_port3',
+                'igm_indias.vessel_type1',
+                'igm_indias.poa',
+                'igm_indias.cargo_des1',
+                'igm_indias.date_time',
+                'igm_indias.light_house',
+                'igm_indias.igm_india_terminal_id',
+                'igm_indias.same_bottom',
+                'igm_indias.passenger_list',
+                'igm_indias.ship_stores',
+                'igm_indias.crew_effect',
+                'igm_indias.crew_list',
+                'igm_indias.maritime',
+                'igm_indias.vessel_name',
+                'igm_indias.arrival_date',
+                'igm_indias.igm_number',
+                'igm_indias.nationality',
+                'igm_indias.deleted',
+                'bill_of_landings.bill_of_landing_number',
+                'igm_india_voyages.voyage',
+                'igm_india_terminals.terminal',
+                'igm_india_terminals.code'
+            )
+            ->join('bill_of_landings', 'igm_indias.bill_of_landing_id', '=', 'bill_of_landings.id')
+            ->join('igm_india_voyages', 'igm_indias.igm_india_voyage_id', '=', 'igm_india_voyages.id')
+            ->join('igm_india_terminals', 'igm_indias.igm_india_terminal_id', '=', 'igm_india_terminals.id');
+
+            if (!empty($request->bill_of_landing_id) && !empty($request->igm_india_voyage_id) && !empty($request->igm_india_terminal_id)) {
+
+                $igm_indias = $igm_indias
+                    ->where('igm_indias.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                    ->where('igm_indias.igm_india_voyage_id', '=', $request->igm_india_voyage_id)
+                    ->where('igm_indias.igm_india_terminal_id', '=', $request->igm_india_terminal_id);
+            } elseif (!empty($request->bill_of_landing_id) && empty($request->igm_india_voyage_id) && !empty($request->igm_india_terminal_id)) {
+    
+                $igm_indias = $igm_indias
+                    ->where('igm_indias.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                    ->where('igm_indias.igm_india_terminal_id', '=', $request->igm_india_terminal_id);
+            } elseif (!empty($request->bill_of_landing_id) && !empty($request->igm_india_voyage_id) && empty($request->igm_india_terminal_id)) {
+    
+                $igm_indias = $igm_indias
+                ->where('igm_indias.bill_of_landing_id', '=', $request->bill_of_landing_id)
+                ->where('igm_indias.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+            }
+            elseif (!empty($request->bill_of_landing_id) && empty($request->igm_india_voyage_id) && empty($request->igm_india_terminal_id)) {
+    
+                $igm_indias = $igm_indias
+                ->where('igm_indias.bill_of_landing_id', '=', $request->bill_of_landing_id);
+            } elseif (empty($request->bill_of_landing_id) && !empty($request->igm_india_voyage_id) && !empty($request->igm_india_terminal_id)) {
+    
+                $igm_indias = $igm_indias
+                ->where('igm_indias.igm_india_voyage_id', '=', $request->igm_india_voyage_id)
+                ->where('igm_indias.igm_india_terminal_id', '=', $request->igm_india_terminal_id);
+            } elseif (empty($request->bill_of_landing_id) && !empty($request->igm_india_voyage_id) && empty($request->igm_india_terminal_id)) {
+        
+                $igm_indias = $igm_indias
+                ->where('igm_indias.igm_india_voyage_id', '=', $request->igm_india_voyage_id);
+            } elseif (empty($request->bill_of_landing_id) && empty($request->igm_india_voyage_id) && !empty($request->igm_india_terminal_id)) {
+    
+                $igm_indias = $igm_indias
+                ->where('igm_indias.igm_india_terminal_id', '=', $request->igm_india_terminal_id);
+            } else {
+    
+                $igm_indias = $igm_indias;
+            }
+
+        $result = $igm_indias->orderBy('igm_indias.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

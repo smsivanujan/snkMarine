@@ -73,7 +73,37 @@ class CurrenciesController extends Controller
         return $currencies;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
 
+        $currencies = DB::table('currencies')
+            ->select(
+                'currencies.id',
+                'currencies.currency_code',
+                'currencies.currency_name',
+                'currencies.country_id',
+                'countries.country_name',
+                'countries.capital_city_name'
+            )
+            ->join('countries', 'currencies.country_id', '=', 'countries.id');
+
+            if (!empty($request->country_id)) {
+
+                $currencies = $currencies
+                ->where('currencies.country_id', '=', $request->country_id);
+           }
+           else
+           {
+   
+               $currencies = $currencies;
+           }
+
+        $result = $currencies->orderBy('currencies.id')
+            ->get();
+        return $result;
+    }
+    
     public function store(Request $request)
     {
         $id = $request->id;

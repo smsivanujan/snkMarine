@@ -82,13 +82,11 @@ class ActivityLogsController extends Controller
             ->where(DB::raw('DATE_FORMAT(activity_logs.date, "%Y-%m-%d")'), '<=', $tdate);
 
         if (!empty($request->client_id) ) {
-            // return "1";
-            // id empty
+
             $activitylogs = $activitylogs
                 ->where('users.client_id', '=', $request->client_id);
         } else {
-            // return "4";
-            //all empty
+
             $activitylogs = $activitylogs;
         }
 

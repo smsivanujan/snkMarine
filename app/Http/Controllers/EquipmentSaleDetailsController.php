@@ -85,6 +85,41 @@ class EquipmentSaleDetailsController extends Controller
         return $equipmentsaledetails;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $equipmentsaledetails = DB::table('equipment_sale_details')
+            ->select(
+                'equipment_sale_details.id',
+                'equipment_sale_details.equipment_sale_id',
+                'equipment_sale_details.equipment_id',
+                'equipment_sale_details.amount',
+                'equipment_sale_details.destination',
+                'equipment_sales.date',
+                'equipment_sales.no_unit',
+                'equipment_sales.sale_type',
+                'equipments.equipment_number'
+            )
+            ->join('equipment_sales', 'equipment_sale_details.equipment_sale_id', '=', 'equipment_sales.id')
+            ->join('equipments', 'equipment_sale_details.equipment_id', '=', 'equipments.id');
+
+        if (!empty($request->equipment_id)) {
+
+             $equipmentsaledetails = $equipmentsaledetails
+             ->where('quipment_sale_details.equipment_id', '=', $request->equipment_id);
+        }
+        else
+        {
+
+            $equipmentsaledetails = $equipmentsaledetails;
+        }
+
+        $result = $equipmentsaledetails->orderBy('equipment_sale_details.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

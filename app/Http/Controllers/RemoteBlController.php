@@ -89,6 +89,50 @@ class RemoteBlController extends Controller
         return $remotebls;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $remotebls = DB::table('remote_bls')
+            ->select(
+                'remote_bls.id',
+                'remote_bls.bill_of_landing_id',
+                'remote_bls.bl_string',
+                'remote_bls.client_id_agent',
+                'bill_of_landings.bill_of_landing_number',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('bill_of_landings', 'remote_bls.bill_of_landing_id', '=', 'bill_of_landings.id')
+            ->join('clients', 'remote_bls.client_id_agent', '=', 'clients.id');
+
+        if (!empty($request->bill_of_landing_id) && !empty($request->client_id_agent)) {
+
+             $remotebls = $remotebls
+             ->where('remote_bls.bill_of_landing_id', '=', $request->bill_of_landing_id)
+             ->where('remote_bls.client_id_agent', '=', $request->client_id_agent);
+        }
+        elseif (!empty($request->bill_of_landing_id) && empty($request->client_id_agent)) {
+
+            $remotebls = $remotebls
+            ->where('remote_bls.bill_of_landing_id', '=', $request->bill_of_landing_id);
+        }
+        elseif (empty($request->bill_of_landing_id) && !empty($request->client_id_agent)) {
+
+            $remotebls = $remotebls
+            ->where('remote_bls.client_id_agent', '=', $request->client_id_agent);
+        }
+        else
+        {
+
+            $remotebls = $remotebls;
+        }
+
+        $result = $remotebls->orderBy('remote_bls.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

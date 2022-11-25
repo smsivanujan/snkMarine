@@ -83,6 +83,51 @@ class IgmLankaDoContainersController extends Controller
         return $igm_lanka_do_containers;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $igm_lanka_do_containers = DB::table('igm_lanka_do_containers')
+            ->select(
+                'igm_lanka_do_containers.id',
+                'igm_lanka_do_containers.igm_id',
+                'igm_lanka_do_containers.equipment_id',
+                'igm_lanka_do_containers.seal_no',
+                'igm_lanka_do_containers.description',
+                'igm_lanka_do_containers.weight',
+                'igm_lanka_do_containers.measurement',
+                'equipments.equipment_number'
+            )
+            ->join('igms', 'igm_lanka_do_containers.igm_id', '=', 'igms.id')
+            ->join('equipments', 'igm_lanka_do_containers.equipment_id', '=', 'equipments.id');
+
+        if (!empty($request->igm_id) && !empty($request->equipment_id)) {
+
+             $igm_lanka_do_containers = $igm_lanka_do_containers
+             ->where('igm_lanka_do_containers.igm_id', '=', $request->igm_id)
+             ->where('igm_lanka_do_containers.equipment_id', '=', $request->equipment_id);
+        }
+        elseif (!empty($request->igm_id) && empty($request->equipment_id)) {
+
+            $igm_lanka_do_containers = $igm_lanka_do_containers
+            ->where('igm_lanka_do_containers.igm_id', '=', $request->igm_id);
+        }
+        elseif (empty($request->igm_id) && !empty($request->equipment_id)) {
+
+            $igm_lanka_do_containers = $igm_lanka_do_containers
+            ->where('igm_lanka_do_containers.equipment_id', '=', $request->equipment_id);
+        }
+        else
+        {
+
+            $igm_lanka_do_containers = $igm_lanka_do_containers;
+        }
+
+        $result = $igm_lanka_do_containers->orderBy('igm_lanka_do_containers.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;

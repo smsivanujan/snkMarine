@@ -70,6 +70,36 @@ class PermissionsController extends Controller
         return $permissions;
     }
 
+    public function showByFilter(Request $request)
+    {
+        // $id = $request->id;
+
+        $permissions = DB::table('permissions')
+            ->select(
+                'permissions.id',
+                'permissions.client_id',
+                'permissions.permisions',
+                'clients.client_code',
+                'clients.client_name'
+            )
+            ->join('clients', 'permissions.client_id', '=', 'clients.id');
+
+        if (!empty($request->client_id)) {
+
+             $permissions = $permissions
+             ->where('permissions.client_id', '=', $request->client_id);
+        }
+        else
+        {
+
+            $permissions = $permissions;
+        }
+
+        $result = $permissions->orderBy('permissions.id')
+            ->get();
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $id = $request->id;
