@@ -31,8 +31,7 @@ class OwnersController extends Controller
                 'countries.country_name',
                 'countries.capital_city_name',
                 'ports.port_code',
-                'ports.port_name',
-                'ports.country_id'
+                'ports.port_name'
             )
             ->join('countries', 'owners.country_id', '=', 'countries.id')
             ->join('ports', 'owners.port_id', '=', 'ports.id')
@@ -64,8 +63,7 @@ class OwnersController extends Controller
                 'countries.country_name',
                 'countries.capital_city_name',
                 'ports.port_code',
-                'ports.port_name',
-                'ports.country_id'
+                'ports.port_name'
             )
             ->join('countries', 'owners.country_id', '=', 'countries.id')
             ->join('ports', 'owners.port_id', '=', 'ports.id')
@@ -102,8 +100,7 @@ class OwnersController extends Controller
                 'countries.country_name',
                 'countries.capital_city_name',
                 'ports.port_code',
-                'ports.port_name',
-                'ports.country_id'
+                'ports.port_name'
             )
             ->join('countries', 'owners.country_id', '=', 'countries.id')
             ->join('ports', 'owners.port_id', '=', 'ports.id')
@@ -147,8 +144,7 @@ class OwnersController extends Controller
             'countries.country_name',
             'countries.capital_city_name',
             'ports.port_code',
-            'ports.port_name',
-            'ports.country_id'
+            'ports.port_name'
         )
         ->join('countries', 'owners.country_id', '=', 'countries.id')
         ->join('ports', 'owners.port_id', '=', 'ports.id');

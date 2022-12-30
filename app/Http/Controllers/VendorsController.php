@@ -32,8 +32,7 @@ class VendorsController extends Controller
                 'countries.capital_city_name',
                 'ports.port_code',
                 'ports.port_name',
-                'ports.sub_code',
-                'ports.country_id'
+                'ports.sub_code'
             )
             ->join('countries', 'vendors.country_id', '=', 'countries.id')
             ->join('ports', 'vendors.port_id', '=', 'ports.id')
@@ -66,8 +65,7 @@ class VendorsController extends Controller
                 'countries.capital_city_name',
                 'ports.port_code',
                 'ports.port_name',
-                'ports.sub_code',
-                'ports.country_id'
+                'ports.sub_code'
             )
             ->join('countries', 'vendors.country_id', '=', 'countries.id')
             ->join('ports', 'vendors.port_id', '=', 'ports.id')
@@ -105,8 +103,7 @@ class VendorsController extends Controller
                 'countries.capital_city_name',
                 'ports.port_code',
                 'ports.port_name',
-                'ports.sub_code',
-                'ports.country_id'
+                'ports.sub_code'
             )
             ->join('countries', 'vendors.country_id', '=', 'countries.id')
             ->join('ports', 'vendors.port_id', '=', 'ports.id')
@@ -149,8 +146,7 @@ class VendorsController extends Controller
             'countries.capital_city_name',
             'ports.port_code',
             'ports.port_name',
-            'ports.sub_code',
-            'ports.country_id'
+            'ports.sub_code'
         )
         ->join('countries', 'vendors.country_id', '=', 'countries.id')
         ->join('ports', 'vendors.port_id', '=', 'ports.id');

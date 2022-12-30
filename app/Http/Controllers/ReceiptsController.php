@@ -14,6 +14,7 @@ class ReceiptsController extends Controller
         $receipts = DB::table('receipts')
             ->select(
                 'receipts.id',
+                'receipts.date',
                 'receipts.receipt_no',
                 'receipts.description',
                 'receipts.client_id',
@@ -21,6 +22,7 @@ class ReceiptsController extends Controller
                 'receipts.invoice_id',
                 'receipts.detention_invoice_id',
                 'receipts.currency_id',
+                'receipts.status',
                 'receipts.deleted',
                 'arrival_noticies.arrival_notice_no',
                 'invoices.invoice_no',
@@ -44,6 +46,7 @@ class ReceiptsController extends Controller
         $receipts = DB::table('receipts')
             ->select(
                 'receipts.id',
+                'receipts.date',
                 'receipts.receipt_no',
                 'receipts.description',
                 'receipts.client_id',
@@ -51,6 +54,7 @@ class ReceiptsController extends Controller
                 'receipts.invoice_id',
                 'receipts.detention_invoice_id',
                 'receipts.currency_id',
+                'receipts.status',
                 'receipts.deleted',
                 'arrival_noticies.arrival_notice_no',
                 'invoices.invoice_no',
@@ -79,19 +83,21 @@ class ReceiptsController extends Controller
             $receipts = DB::table('receipts')
                 ->select(
                     'receipts.id',
-                    'receipts.receipt_no',
-                    'receipts.description',
-                    'receipts.client_id',
-                    'receipts.arrival_notice_id',
-                    'receipts.invoice_id',
-                    'receipts.detention_invoice_id',
-                    'receipts.currency_id',
-                    'receipts.deleted',
-                    'arrival_noticies.arrival_notice_no',
-                    'invoices.invoice_no',
-                    'detention_invoices.detention_no',
-                    'currencies.currency_code',
-                    'currencies.currency_name'
+                'receipts.date',
+                'receipts.receipt_no',
+                'receipts.description',
+                'receipts.client_id',
+                'receipts.arrival_notice_id',
+                'receipts.invoice_id',
+                'receipts.detention_invoice_id',
+                'receipts.currency_id',
+                'receipts.status',
+                'receipts.deleted',
+                'arrival_noticies.arrival_notice_no',
+                'invoices.invoice_no',
+                'detention_invoices.detention_no',
+                'currencies.currency_code',
+                'currencies.currency_name'
                 )
                 ->join('clients', 'receipts.client_id', '=', 'clients.id')
                 ->join('arrival_noticies', 'receipts.arrival_notice_id', '=', 'arrival_noticies.id')

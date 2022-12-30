@@ -34,7 +34,6 @@ class ClientsController extends Controller
                 'ports.port_code',
                 'ports.port_name',
                 'ports.sub_code',
-                'ports.country_id',
                 'currencies.currency_code',
                 'currencies.currency_name'
             )
@@ -72,7 +71,6 @@ class ClientsController extends Controller
                 'ports.port_code',
                 'ports.port_name',
                 'ports.sub_code',
-                'ports.country_id',
                 'currencies.currency_code',
                 'currencies.currency_name'
             )
@@ -115,7 +113,6 @@ class ClientsController extends Controller
                 'ports.port_code',
                 'ports.port_name',
                 'ports.sub_code',
-                'ports.country_id',
                 'currencies.currency_code',
                 'currencies.currency_name'
             )
@@ -163,7 +160,6 @@ class ClientsController extends Controller
                 'ports.port_code',
                 'ports.port_name',
                 'ports.sub_code',
-                'ports.country_id',
                 'currencies.currency_code',
                 'currencies.currency_name'
             )
